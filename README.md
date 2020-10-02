@@ -1,7 +1,11 @@
 # oci-auditing
-Oracle Cloud Infrastructure Auditing Tool: analysis of different OCI resources. Windows GUI to select just what you needed. multiple tenancies, schedule, email reports.
+Oracle Cloud Infrastructure Auditing Tool
+* automated auditing process, analyzes different OCI resources.
+* Windows GUI to select just what you needed.
+* multiple tenancies, schedule, email reports & lot more.
 
-USE GUI MODE TO GET ALL OPTIONS ACCESSIBLE, command-line mode is with limited options required for schedulers/automations.
+USE GUI MODE TO GET ALL OPTIONS ACCESSIBLE,
+command-line mode is with limited options required for schedulers/automations.
 
 COMMANDLINE USAGE OF "OCI AUDITING TOOL"
 
@@ -32,14 +36,10 @@ Note:
    
    
   GUI options self-explorable, person who manages OCI, can understand UI easily.
-  Further how to provide tenancies list into configuration, and all other simple steps are explained in:
+  Further how to provide tenancies list into configuration, and all other simple steps are explained below:
   
-  
-<div class="WordSection1">
 
-## Contents
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Introduction</span>](#_Toc52579460)</span>
+###### Table of further contents
 
 <span class="MsoHyperlink">[<span lang="EN-GB">Background</span>](#_Toc52579461)</span>
 
@@ -63,19 +63,17 @@ Note:
 
 <span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52579471)</span>
 
-## <a name="_Toc52579460"></a><a name="_Toc52573350"></a><a name="_Toc417386207"></a><a name="_Toc51353161"></a><a name="_Toc32325022"></a><a name="_Toc32324876"></a><span lang="EN-GB">Introduction</span>
 
-<span lang="EN-GB">The purpose of this document is to provide you the steps to configure and use the tool for automated auditing process of Oracle Cloud Infrastructure.</span>
 
 ## <a name="_Toc52579461"></a><a name="_Toc52573351"></a><a name="_Toc32324877"></a><a name="_Toc51353162"></a><a name="_Toc32325023"></a><span lang="EN-GB">Background</span>
 
 <a name="_Toc423096135"></a><a name="_Toc423096130"></a><span lang="EN-GB">With the increasing demand for scale of operations in OCI, visibility in managing the resources is becoming as important. While the Audit service provides the necessary governance, however, managing it manually becomes difficult for large and ever-changing infrastructures.</span>
 
-<span class="e24kjd">**<span lang="EN-IN">OCI Audit Tool</span> **</span><span class="e24kjd"><span lang="EN-IN">helps us in mitigating the manual work and provide an automated way to govern the infrastructure with minimal effort.</span></span>
+<span class="e24kjd">"OCI Audit Tool" </span><span class="e24kjd"><span lang="EN-IN">helps us in mitigating the manual work and provide an automated way to govern the infrastructure with minimal effort.</span></span>
 
 ## <a name="_Toc52579462"></a><a name="_Toc52573352"></a><a name="_Toc32324878"></a><a name="_Toc51353163"></a><a name="_Toc32325024"></a><span lang="EN-GB">High-Level Steps</span>
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Install OCI Audit Tool in OCI compute or local Windows system.</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Place OCI Audit Tool in OCI compute or local Windows system.</span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Get authentication details: Tenancy OCID, Region, User OCID, API fingerprint.</span>
 
@@ -112,15 +110,11 @@ Note:
 
 ## <a name="_Toc52579464"></a><a name="_Toc51353165"></a><a name="_Toc52573354"><span lang="EN-GB">Installation</span></a>
 
-<span lang="EN-GB">Download link: <<Link>></span>
+<span lang="EN-GB">Download the windows executable directly from here [compressed with 7zip format], both stable and recent beta versions will be available.</span>
 
 <span lang="EN-GB"> </span>
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Navigate to the link.</span>
-
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Select the recent version.</span>
-
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Download the files "OCI Auditing Tool - vX.X" and "tool.ini".</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Download the files "OCI Auditing Tool - vX.X" and "configurations\tool.ini".</span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Extract exe to your preferred local folder.</span>
 
