@@ -35,22 +35,32 @@ Note:
    * selected analysis will always list all respective OCI components in to the report, along with auditing, unless if some components are avoided by user configurations.
    
    
-  GUI options self-explorable, person who manages OCI, can understand UI easily.
-  Further how to provide tenancies list into configuration, and all other simple steps are explained below:
+GUI options self-explorable, person who manages OCI, can understand UI easily.
+Further how to provide tenancies list into configuration, and all other simple steps are explained below:
   
 
 ###### Table of further contents
 
 <span>[<span lang="EN-GB">Background</span>](#_Toc52579461)</span>
+
 <span>[<span lang="EN-GB">High-Level Steps</span>](#_Toc52579462)</span>
+
 <span>[<span lang="EN-GB">Prerequisite</span>](#_Toc52579463)</span>
+
 <span>[<span lang="EN-GB">Installation</span>](#_Toc52579464)</span>
+
 <span>[<span lang="EN-GB">Configurations</span>](#_Toc52579465)</span>
+
 <span>[<span lang="EN-GB">Tool Demo</span>](#_Toc52579466)</span>
+
 <span>[<span lang="EN-GB">Report Details</span>](#_Toc52579467)</span>
+
 <span>[<span lang="EN-GB">Email Notifications</span>](#_Toc52579468)</span>
+
 <span>[<span lang="EN-GB">Appendix</span>](#_Toc52579469)</span>
+
 <span>[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52579470)</span>
+
 <span>[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52579471)</span>
 
 
@@ -134,10 +144,17 @@ _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </
 <span lang="EN-GB"> </span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Copy the private key "</span>oci_api_key.pem" <span lang="EN-GB">under the "configurations" folder created during installation.</span>
-
+    
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Open the "tool.ini" file in an editor and add the tenancy details.</span>
 
-<span style="font-size:8.0pt" lang="EN-GB"> </span>
+    tenancy_name= <name of your tenancy>
+    tenancy_ocid= <OCID of your tenancy>
+    user_ocid = <OCID of the user>
+    fingerprint = <fingerprint of the user>
+    Region = <any subscribed region identifier>
+    key_file = <private key local path>
+
+
 
 <code style="margin-left:20pt">tenancy_name= &lt;name of your tenancy&gt;</code><br />
 <code style="margin-left:20pt">tenancy_ocid= &lt;OCID of your tenancy&gt;</code><br />
