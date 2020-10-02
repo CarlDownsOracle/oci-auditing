@@ -1,13 +1,13 @@
 # oci-auditing
 Oracle Cloud Infrastructure Auditing Tool
-* automated auditing process, analyzes different OCI resources.
+* automated auditing process of analysing different OCI resources.
 * Windows GUI to select just what you needed.
 * multiple tenancies, schedule, email reports & lot more.
 
 USE GUI MODE TO GET ALL OPTIONS ACCESSIBLE,
 command-line mode is with limited options required for schedulers/automations.
 
-COMMANDLINE USAGE OF "OCI AUDITING TOOL"
+    Commandline Usage Of "OCI Auditing Tool":
 
     Arg 1 = Tenancy Names, each separated by a space
             complete list should be as single argument, so use double-quotes to cover the complete list
@@ -41,27 +41,17 @@ Note:
 
 ###### Table of further contents
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Background</span>](#_Toc52579461)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">High-Level Steps</span>](#_Toc52579462)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Prerequisite</span>](#_Toc52579463)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Installation</span>](#_Toc52579464)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Configurations</span>](#_Toc52579465)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Tool Demo</span>](#_Toc52579466)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Report Details</span>](#_Toc52579467)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Email Notifications</span>](#_Toc52579468)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Appendix</span>](#_Toc52579469)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52579470)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52579471)</span>
+<span>[<span lang="EN-GB">Background</span>](#_Toc52579461)</span>
+<span>[<span lang="EN-GB">High-Level Steps</span>](#_Toc52579462)</span>
+<span>[<span lang="EN-GB">Prerequisite</span>](#_Toc52579463)</span>
+<span>[<span lang="EN-GB">Installation</span>](#_Toc52579464)</span>
+<span>[<span lang="EN-GB">Configurations</span>](#_Toc52579465)</span>
+<span>[<span lang="EN-GB">Tool Demo</span>](#_Toc52579466)</span>
+<span>[<span lang="EN-GB">Report Details</span>](#_Toc52579467)</span>
+<span>[<span lang="EN-GB">Email Notifications</span>](#_Toc52579468)</span>
+<span>[<span lang="EN-GB">Appendix</span>](#_Toc52579469)</span>
+<span>[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52579470)</span>
+<span>[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52579471)</span>
 
 
 
@@ -102,12 +92,6 @@ Note:
 
 <span lang="EN-GB"> </span>
 
-<span lang="EN-GB"> </span>
-
-<span lang="EN-GB"> </span>
-
-<span lang="EN-GB"> </span>
-
 ## <a name="_Toc52579464"></a><a name="_Toc51353165"></a><a name="_Toc52573354"><span lang="EN-GB">Installation</span></a>
 
 <span lang="EN-GB">Download the windows executable directly from here [compressed with 7zip format], both stable and recent beta versions will be available.</span>
@@ -135,7 +119,7 @@ letter-spacing:-.05pt" lang="EN-GB"> </span>
 
 ###### <span lang="EN-GB">Configuring "tool.ini"</span>
 
-<span lang="EN-GB">Get User configurations on all tenancies following as steps in:</span> <span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52579470)</span>
+<span lang="EN-GB">Get User configurations on all tenancies following as steps in:</span> <span>[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52579470)</span>
 
 <span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">Note: All lines starting with Hash or colon [</span> _**<span style="font-size:12.0pt;font-family:&quot;Calibri Light&quot;,sans-serif;color:red" lang="EN-GB">#</span>**_ <span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"></span>_**<span style="font-size:12.0pt;font-family:&quot;Calibri Light&quot;,sans-serif;
@@ -155,18 +139,13 @@ _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </
 
 <span style="font-size:8.0pt" lang="EN-GB"> </span>
 
-#       tenancy_name= <name of your tenancy>
-#       tenancy_ocid= <OCID of your tenancy>
-#       user_ocid   = <OCID of the user>
-#       fingerprint = <fingerprint of the user>
-# Region = <any subscribed region identifier>
-key_file = <private key local path>
+<code style="margin-left:20pt">tenancy_name= &lt;name of your tenancy&gt;</code><br />
+<code style="margin-left:20pt">tenancy_ocid= &lt;OCID of your tenancy&gt;</code><br />
+<code style="margin-left:20pt">user_ocid   = &lt;OCID of the user&gt;</code><br />
+<code style="margin-left:20pt">fingerprint = &lt;fingerprint of the user&gt;</code><br />
+<code style="margin-left:20pt">Region = &lt;any subscribed region identifier&gt;</code><br />
+<code style="margin-left:20pt">key_file = &lt;private key local path&gt;</code><br />
 
-<span style="font-family:
-&quot;Courier New&quot;" lang="EN-GB">tenancy_name, tenancy_ocid, user_ocid, fingerprint, region, key_file<name of your tenancy></span>
-
-
-<span lang="EN-GB"> </span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">For multiple tenancies, add multiple sets of entries as below.</span>
 
@@ -641,7 +620,7 @@ font-family:&quot;Times New Roman&quot;,serif;color:#FF7700"></span> Rows are co
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Upload the public key "</span>oci_api_key_public.pem" generated.
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">................................................................................</span> [How to generate: <span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52573072)]</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">................................................................................</span> [How to generate: <span>[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52573072)]</span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;line-height:150%;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">On the User Details page, scroll down to Resources and click on API Keys > Add Public Key.</span>
@@ -701,8 +680,4 @@ color:#FF7700"></span> <span style="font-family:&quot;Courier New&quot;">chmod g
 
 <span lang="EN-GB">Generate the public key:</span>
 
-<span style="font-family:
-Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"></span> <span style="font-family:&quot;Courier New&quot;">openssl rsa -pubout -in ~/.oci/oci_api_key.pem -out ~/.oci/oci_api_key_public.pem</span>
-
-</div>
+<code style="margin-left:20pt">openssl rsa -pubout -in ~/.oci/oci_api_key.pem -out ~/.oci/oci_api_key_public.pem</code>
