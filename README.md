@@ -37,42 +37,29 @@ Note:
   
 <div class="WordSection1">
 
-Contents
+#Contents
 
 <span class="MsoHyperlink">[<span lang="EN-GB">Introduction</span>](#_Toc52579460)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Introduction</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579460)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Background</span>](#_Toc52579461)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Background</span><span style="color:#5F5F5F;display:none;text-decoration:
-none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579461)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">High-Level Steps</span>](#_Toc52579462)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">High-Level Steps</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579462)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Prerequisite</span>](#_Toc52579463)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Prerequisite</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579463)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Installation</span>](#_Toc52579464)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Installation</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579464)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Configurations</span>](#_Toc52579465)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Configurations</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579465)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Tool Demo</span>](#_Toc52579466)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Tool Demo</span><span style="color:#5F5F5F;display:none;text-decoration:
-none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579466)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Report Details</span>](#_Toc52579467)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Report Details</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579467)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Email Notifications</span>](#_Toc52579468)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Email Notifications</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579468)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Appendix</span>](#_Toc52579469)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Appendix</span><span style="color:#5F5F5F;display:none;text-decoration:
-none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579469)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span> <span style="color:#5F5F5F;
-display:none;text-decoration:none"></span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579470)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52579470)</span>
 
 <span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span><span style="color:#5F5F5F;display:
 none;text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579471)</span>
@@ -80,38 +67,27 @@ none;text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text
 <span class="MsoHyperlink">[<span lang="EN-GB">Introduction</span><span style="color:#5F5F5F;display:none;
 text-decoration:none">......</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573350)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Background</span><span style="color:#5F5F5F;display:none;text-decoration:
-none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573351)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Background</span>](#_Toc52573351)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">High-Level Steps</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573352)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">High-Level Steps</span>](#_Toc52573352)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Prerequisite</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573353)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Prerequisite</span>](#_Toc52573353)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Installation</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573354)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Installation</span>](#_Toc52573354)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Configurations</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573355)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Configurations</span>](#_Toc52573355)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Tool Demo</span><span style="color:#5F5F5F;display:none;text-decoration:
-none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573356)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Tool Demo</span>](#_Toc52573356)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Report Details</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573357)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Report Details</span>](#_Toc52573357)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Email Notifications</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573358)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Email Notifications</span>](#_Toc52573358)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">Appendix</span><span style="color:#5F5F5F;display:none;text-decoration:
-none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573359)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">Appendix</span>](#_Toc52573359)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span> <span style="color:#5F5F5F;
-display:none;text-decoration:none"></span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573360)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52573360)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span><span style="color:#5F5F5F;display:
-none;text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573361)</span>
+<span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span>>](#_Toc52573361)</span>
 
 <span lang="EN-GB"> </span>
 
@@ -715,8 +691,7 @@ font-family:&quot;Times New Roman&quot;,serif;color:#FF7700"></span> Rows are co
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Upload the public key �</span>oci_api_key_public.pem� generated.
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">................................................................................</span> [How to generate: <span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span><span style="color:#5F5F5F;display:none;text-decoration:
-none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573072)]</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">................................................................................</span> [How to generate: <span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52573072)]</span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;line-height:150%;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">On the User Details page, scroll down to Resources and click on API Keys > Add Public Key.</span>
