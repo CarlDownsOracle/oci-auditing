@@ -137,12 +137,11 @@ color:#5F5F5F" lang="EN-GB">
 <span style="font-size:24.0pt;color:#8DA6B1;
 letter-spacing:-.05pt" lang="EN-GB"> </span>
 
-## <a name="_Toc52579465"></a><a name="_Toc51353166"></a><a name="_Toc52573355"><span lang="EN-GB">Configurations</span></a>_<span style="font-family:
-&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </span>_
+## <a name="_Toc52579465"></a><a name="_Toc51353166"></a><a name="_Toc52573355"><span lang="EN-GB">Configurations</span></a>
 
 ###### <span lang="EN-GB">Configuring "tool.ini"</span>
 
-<span lang="EN-GB">Get User configurations on all tenancies following as steps in:</span> <span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span> <span style="color:#5F5F5F;display:none;text-decoration:none"></span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573071)</span>
+<span lang="EN-GB">Get User configurations on all tenancies following as steps in:</span> <span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52579470)</span>
 
 <span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">Note: All lines starting with Hash or colon [</span> _**<span style="font-size:12.0pt;font-family:&quot;Calibri Light&quot;,sans-serif;color:red" lang="EN-GB">#</span>**_ <span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"></span>_**<span style="font-size:12.0pt;font-family:&quot;Calibri Light&quot;,sans-serif;
@@ -162,23 +161,16 @@ _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </
 
 <span style="font-size:8.0pt" lang="EN-GB"> </span>
 
-<span style="font-family:
-&quot;Courier New&quot;" lang="EN-GB">tenancy_name= <name of your tenancy></span>
+#       tenancy_name= <name of your tenancy>
+#       tenancy_ocid= <OCID of your tenancy>
+#       user_ocid   = <OCID of the user>
+#       fingerprint = <fingerprint of the user>
+# Region = <any subscribed region identifier>
+key_file = <private key local path>
 
 <span style="font-family:
-&quot;Courier New&quot;" lang="EN-GB">tenancy_ocid= <OCID of your tenancy></span>
+&quot;Courier New&quot;" lang="EN-GB">tenancy_name, tenancy_ocid, user_ocid, fingerprint, region, key_file<name of your tenancy></span>
 
-<span style="font-family:
-&quot;Courier New&quot;" lang="EN-GB">user_ocid   = <OCID of the user></span>
-
-<span style="font-family:
-&quot;Courier New&quot;" lang="EN-GB">fingerprint = <fingerprint of the user></span>
-
-<span style="font-family:
-&quot;Courier New&quot;" lang="EN-GB">Region = <any subscribed region identifier></span>
-
-<span style="font-family:
-&quot;Courier New&quot;" lang="EN-GB">key_file = <private key local path></span>
 
 <span lang="EN-GB"> </span>
 
