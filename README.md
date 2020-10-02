@@ -37,7 +37,7 @@ Note:
   
 <div class="WordSection1">
 
-#Contents
+## Contents
 
 <span class="MsoHyperlink">[<span lang="EN-GB">Introduction</span>](#_Toc52579460)</span>
 
@@ -61,43 +61,7 @@ Note:
 
 <span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52579470)</span>
 
-<span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span><span style="color:#5F5F5F;display:
-none;text-decoration:none">.</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52579471)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Introduction</span><span style="color:#5F5F5F;display:none;
-text-decoration:none">......</span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573350)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Background</span>](#_Toc52573351)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">High-Level Steps</span>](#_Toc52573352)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Prerequisite</span>](#_Toc52573353)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Installation</span>](#_Toc52573354)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Configurations</span>](#_Toc52573355)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Tool Demo</span>](#_Toc52573356)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Report Details</span>](#_Toc52573357)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Email Notifications</span>](#_Toc52573358)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">Appendix</span>](#_Toc52573359)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52573360)</span>
-
-<span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span>>](#_Toc52573361)</span>
-
-<span lang="EN-GB"> </span>
-
-<span lang="EN-GB"> </span>
-
-<span lang="EN-GB"> </span>
-
-<span lang="EN-GB"> </span>
-
-<span lang="EN-GB"> </span>
+<span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52579471)</span>
 
 ## <a name="_Toc52579460"></a><a name="_Toc52573350"></a><a name="_Toc417386207"></a><a name="_Toc51353161"></a><a name="_Toc32325022"></a><a name="_Toc32324876"></a><span lang="EN-GB">Introduction</span>
 
@@ -113,7 +77,7 @@ text-decoration:none">......</span> <span style="color:#5F5F5F;display:none;text
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Install OCI Audit Tool in OCI compute or local Windows system.</span>
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Get authentication details � Tenancy OCID, Region, User OCID, API fingerprint.</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Get authentication details: Tenancy OCID, Region, User OCID, API fingerprint.</span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Configure the tool to authenticate the required tenancy.</span>
 
@@ -156,13 +120,13 @@ text-decoration:none">......</span> <span style="color:#5F5F5F;display:none;text
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Select the recent version.</span>
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Download the files �OCI Auditing Tool - vX.X� and �tool.ini�.</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Download the files "OCI Auditing Tool - vX.X" and "tool.ini".</span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Extract exe to your preferred local folder.</span>
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Move �tool.ini� file inside a subfolder named �configurations�.</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Move "tool.ini" file inside a subfolder named "configurations".</span>
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Add all configurations and credentials in �tool.ini� (explained in the following section).</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Add all configurations and credentials in "tool.ini" (explained in the following section).</span>
 
 <span lang="EN-GB"> </span>
 
@@ -176,7 +140,7 @@ letter-spacing:-.05pt" lang="EN-GB"> </span>
 ## <a name="_Toc52579465"></a><a name="_Toc51353166"></a><a name="_Toc52573355"><span lang="EN-GB">Configurations</span></a>_<span style="font-family:
 &quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </span>_
 
-###### <span lang="EN-GB">Configuring �tool.ini�</span>
+###### <span lang="EN-GB">Configuring "tool.ini"</span>
 
 <span lang="EN-GB">Get User configurations on all tenancies following as steps in:</span> <span class="MsoHyperlink">[<span lang="EN-GB">User configurations on OCI</span> <span style="color:#5F5F5F;display:none;text-decoration:none"></span> <span style="color:#5F5F5F;display:none;text-decoration:none">1</span>](#_Toc52573071)</span>
 
@@ -184,17 +148,17 @@ letter-spacing:-.05pt" lang="EN-GB"> </span>
 color:#FF7700" lang="EN-GB"></span> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">Note: All lines starting with Hash or colon [</span> _**<span style="font-size:12.0pt;font-family:&quot;Calibri Light&quot;,sans-serif;color:red" lang="EN-GB">#</span>**_ <span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"></span>_**<span style="font-size:12.0pt;font-family:&quot;Calibri Light&quot;,sans-serif;
 color:red" lang="EN-GB">;</span>**_ <span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">] are comment lines.</span>_
 
-_<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">These comment lines are just for user�s reference.</span>_
+_<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">These comment lines are just for user"s reference.</span>_
 
 _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </span>_
 
-![](OCI-Auditing-Tool-Document_files/image009.jpg)
+![image-mouse-hover-text](./doc/images/image009.jpg)
 
 <span lang="EN-GB"> </span>
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Copy the private key �</span>oci_api_key.pem� <span lang="EN-GB">under the �configurations� folder created during installation.</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Copy the private key "</span>oci_api_key.pem" <span lang="EN-GB">under the "configurations" folder created during installation.</span>
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Open the �tool.ini� file in an editor and add the tenancy details.</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Open the "tool.ini" file in an editor and add the tenancy details.</span>
 
 <span style="font-size:8.0pt" lang="EN-GB"> </span>
 
@@ -222,7 +186,7 @@ _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </
 
 <span lang="EN-GB"> </span>
 
-![](OCI-Auditing-Tool-Document_files/image010.png)
+![](./doc/images/image010.png)
 
 <span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;
 color:#5F5F5F" lang="EN-GB">  
@@ -233,21 +197,21 @@ letter-spacing:-.05pt" lang="EN-GB"> </span>
 
 ## <a name="_Toc52579466"></a><a name="_Toc51353167"></a><a name="_Toc52573356"><span lang="EN-GB">Tool Demo</span></a>
 
-<span lang="EN-GB">Once the configuration is complete, open �OCI_Auditing_Tool.exe� to launch the tool.</span>
+<span lang="EN-GB">Once the configuration is complete, open "OCI_Auditing_Tool.exe" to launch the tool.</span>
 
-<span lang="EN-GB">The interface would look like this �</span>
-
-<span lang="EN-GB"> </span>
-
-![](OCI-Auditing-Tool-Document_files/image011.jpg)
+<span lang="EN-GB">The interface would look like this "</span>
 
 <span lang="EN-GB"> </span>
 
+![](./doc/images/image011.jpg)
+
 <span lang="EN-GB"> </span>
 
-<span lang="EN-GB">To test the connectivity, select required tenancies, click on �Options > Connection Check�</span>
+<span lang="EN-GB"> </span>
 
-![](OCI-Auditing-Tool-Document_files/image012.jpg)
+<span lang="EN-GB">To test the connectivity, select required tenancies, click on "Options > Connection Check"</span>
+
+![](./doc/images/image012.jpg)
 
 <span lang="EN-GB"> </span>
 
@@ -271,12 +235,12 @@ font-family:&quot;Segoe UI&quot;,sans-serif;color:black;background:white"></span
 
 This will fetch the <span lang="EN-GB">required information from OCI</span> and generate an audit report in .xlsx format.
 
- ![](OCI-Auditing-Tool-Document_files/image013.jpg)
+ ![](./doc/images/image013.jpg)
 
 <span lang="EN-GB"> </span>
 
 <span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">The audit report along with an execution log will be stored in �results� folder.</span>
+color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">The audit report along with an execution log will be stored in "results" folder.</span>
 
 <span lang="EN-GB"> </span>
 
@@ -318,7 +282,7 @@ The Audit Report tabs are outlined below.
 
 <span lang="EN-GB">Shows basic details of tenancies like name, OCID, home-region, subscribed-regions and all Availability Domains.</span>
 
-![](OCI-Auditing-Tool-Document_files/image014.jpg)
+![](./doc/images/image014.jpg)
 
 <span lang="EN-GB"> </span>
 
@@ -336,13 +300,13 @@ color:#5F5F5F" lang="EN-GB">
 
 <span lang="EN-GB">Shows all user details fetched from selected tenancies.</span>
 
-![](OCI-Auditing-Tool-Document_files/image015.jpg)
+![](./doc/images/image015.jpg)
 
 <span lang="EN-GB"> </span>
 
 **<u><span lang="EN-GB">Optional configurations:</span></u>**
 
-**![](OCI-Auditing-Tool-Document_files/image016.png)**
+**![](./doc/images/image016.png)**
 
 **<span lang="EN-GB"> </span>**
 
@@ -358,11 +322,11 @@ color:#FF7700"></span> <span style="font-family:&quot;Courier New&quot;">allowed
 
 Shows all group details fetched from selected tenancies.
 
-![](OCI-Auditing-Tool-Document_files/image017.jpg)
+![](./doc/images/image017.jpg)
 
 **<u><span lang="EN-GB">Optional configurations:</span></u>**
 
-![](OCI-Auditing-Tool-Document_files/image018.png)
+![](./doc/images/image018.png)
 
 <span style="font-family:
 Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
@@ -381,11 +345,11 @@ color:#FF7700"></span> <span style="font-family:&quot;Courier New&quot;">allowed
 
 Shows all compartments, sub-compartments up to any level.
 
-![](OCI-Auditing-Tool-Document_files/image019.jpg)
+![](./doc/images/image019.jpg)
 
 **<u><span lang="EN-GB">Optional configurations:</span></u>**
 
-![](OCI-Auditing-Tool-Document_files/image020.png)
+![](./doc/images/image020.png)
 
 <span style="font-family:
 Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
@@ -400,11 +364,11 @@ Shows all service-limits, scanning through all available services, and diving de
 
 also, shows limit usage and availability if required.
 
-![](OCI-Auditing-Tool-Document_files/image021.jpg)
+![](./doc/images/image021.jpg)
 
 **<u><span lang="EN-GB">Optional configurations:</span></u>**
 
-![](OCI-Auditing-Tool-Document_files/image022.png)
+![](./doc/images/image022.png)
 
 <span style="font-family:
 Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
@@ -434,7 +398,7 @@ Shows all policies present in each compartment.
 
 Scans through every policy and all of its statements, and shows as policy statement per row format.
 
-![](OCI-Auditing-Tool-Document_files/image023.jpg)
+![](./doc/images/image023.jpg)
 
 <span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#5F5F5F">  
 </span>
@@ -510,11 +474,11 @@ color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">MySQL DB System</span>
 <span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">You can send request for additional services to get added in to the Tool</span>_
 
-![](OCI-Auditing-Tool-Document_files/image024.jpg)
+![](./doc/images/image024.jpg)
 
 **<u><span lang="EN-GB">Optional configurations:</span></u>**
 
-![](OCI-Auditing-Tool-Document_files/image025.png)
+![](./doc/images/image025.png)
 
 <span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">These options are for tool runtime optimization only.</span>_
@@ -530,7 +494,7 @@ color:#172B4D">Events</span></u>
 
 Shows all OCI Audit Events like creating or updating instances, listing security lists, route tables, etc.
 
-![](OCI-Auditing-Tool-Document_files/image026.jpg)
+![](./doc/images/image026.jpg)
 
 Marks row,
 
@@ -574,38 +538,38 @@ color:#172B4D">Networking</span></u>
 
 <u>Virtual Cloud Network</u>: Shows VCN details such as VCN name, OCID, CIDR, etc.
 
-![](OCI-Auditing-Tool-Document_files/image027.jpg)
+![](./doc/images/image027.jpg)
 
 <u>Route Table</u>: Shows Route Tables available along with the implemented route rules.
 
-![](OCI-Auditing-Tool-Document_files/image028.jpg)
+![](./doc/images/image028.jpg)
 
-![](OCI-Auditing-Tool-Document_files/image029.jpg)
+![](./doc/images/image029.jpg)
 
 <u>Subnet</u>: Shows a list of all the subnets configured.
 
-![](OCI-Auditing-Tool-Document_files/image030.jpg)
+![](./doc/images/image030.jpg)
 
 <span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#5F5F5F">  
 </span>
 
 <u>Security List:</u>
 
-![](OCI-Auditing-Tool-Document_files/image031.jpg)
+![](./doc/images/image031.jpg)
 
-![](OCI-Auditing-Tool-Document_files/image032.jpg)
+![](./doc/images/image032.jpg)
 
 <u>Network Security Groups:</u>
 
-![](OCI-Auditing-Tool-Document_files/image033.jpg)
+![](./doc/images/image033.jpg)
 
-![](OCI-Auditing-Tool-Document_files/image034.jpg)
+![](./doc/images/image034.jpg)
 
 <span style="font-family:&quot;Courier New&quot;;
 color:#FF7700">-</span><span style="font-size:7.0pt;line-height:150%;
 font-family:&quot;Times New Roman&quot;,serif;color:#FF7700"></span> Rows are color coded as below:
 
-![](OCI-Auditing-Tool-Document_files/image035.png)
+![](./doc/images/image035.png)
 
 <span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#5F5F5F">  
 </span>
@@ -620,7 +584,7 @@ font-family:&quot;Times New Roman&quot;,serif;color:#FF7700"></span> Rows are co
 
 <span lang="EN-GB"> </span>
 
-![](OCI-Auditing-Tool-Document_files/image036.png)
+![](./doc/images/image036.png)
 
 <span lang="EN-GB"> </span>
 
@@ -654,7 +618,7 @@ font-family:&quot;Times New Roman&quot;,serif;color:#FF7700"></span> Rows are co
 
 <span lang="EN-GB"> </span>
 
-![](OCI-Auditing-Tool-Document_files/image003.jpg)
+![](./doc/images/image003.jpg)
 
 <span lang="EN-GB"> </span>
 
@@ -664,32 +628,32 @@ font-family:&quot;Times New Roman&quot;,serif;color:#FF7700"></span> Rows are co
 
 <span lang="EN-GB"> </span>
 
-<span lang="EN-GB">On the Tenancy Details page, find the OCID and click on �Show� to view the complete OCID or click on �Copy� to copy it into clipboard and paste on a notepad.</span>
+<span lang="EN-GB">On the Tenancy Details page, find the OCID and click on "Show" to view the complete OCID or click on "Copy" to copy it into clipboard and paste on a notepad.</span>
 
 <span lang="EN-GB"> </span>
 
-![](OCI-Auditing-Tool-Document_files/image004.jpg)
+![](./doc/images/image004.jpg)
 
 <span lang="EN-GB">In the OCI console, click on the Profile button > Username.</span>
 
 <span lang="EN-GB"> </span>
 
-![](OCI-Auditing-Tool-Document_files/image005.jpg)
+![](./doc/images/image005.jpg)
 
 <span lang="EN-GB"> </span>
 
-<span lang="EN-GB">On the User Details page, find the user OCID and click on �Show� to view the complete OCID or click on �Copy� to copy it into clipboard and paste on a notepad.</span>
+<span lang="EN-GB">On the User Details page, find the user OCID and click on "Show" to view the complete OCID or click on "Copy" to copy it into clipboard and paste on a notepad.</span>
 
 <span lang="EN-GB"> </span>
 
-![](OCI-Auditing-Tool-Document_files/image006.jpg)
+![](./doc/images/image006.jpg)
 
 <span lang="EN-GB"> </span>
 
 <span lang="EN-GB"> </span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Upload the public key �</span>oci_api_key_public.pem� generated.
+color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Upload the public key "</span>oci_api_key_public.pem" generated.
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">................................................................................</span> [How to generate: <span class="MsoHyperlink">[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52573072)]</span>
 
@@ -697,11 +661,11 @@ color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Upload the public key �
 color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">On the User Details page, scroll down to Resources and click on API Keys > Add Public Key.</span>
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;line-height:150%;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Select or drop the public key and hit �Add�.</span>
+color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Select or drop the public key and hit "Add".</span>
 
 <span lang="EN-GB"> </span>
 
-![](OCI-Auditing-Tool-Document_files/image007.jpg)
+![](./doc/images/image007.jpg)
 
 <span lang="EN-GB"> </span>
 
@@ -709,7 +673,7 @@ color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Select or drop the public
 
 <span lang="EN-GB"> </span>
 
-![](OCI-Auditing-Tool-Document_files/image008.jpg)
+![](./doc/images/image008.jpg)
 
 <span lang="EN-GB"> </span>
 
