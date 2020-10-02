@@ -7,7 +7,7 @@ Oracle Cloud Infrastructure Auditing Tool
 USE GUI MODE TO GET ALL OPTIONS ACCESSIBLE,
 command-line mode is with limited options required for schedulers/automations.
 
-    Commandline Usage Of "OCI Auditing Tool":
+    Commandline Usage of "OCI Auditing Tool":
 
     Arg 1 = Tenancy Names, each separated by a space
             complete list should be as single argument, so use double-quotes to cover the complete list
@@ -153,15 +153,6 @@ _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </
     fingerprint = <fingerprint of the user>
     Region = <any subscribed region identifier>
     key_file = <private key local path>
-
-
-
-<code style="margin-left:20pt">tenancy_name= &lt;name of your tenancy&gt;</code><br />
-<code style="margin-left:20pt">tenancy_ocid= &lt;OCID of your tenancy&gt;</code><br />
-<code style="margin-left:20pt">user_ocid   = &lt;OCID of the user&gt;</code><br />
-<code style="margin-left:20pt">fingerprint = &lt;fingerprint of the user&gt;</code><br />
-<code style="margin-left:20pt">Region = &lt;any subscribed region identifier&gt;</code><br />
-<code style="margin-left:20pt">key_file = &lt;private key local path&gt;</code><br />
 
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">For multiple tenancies, add multiple sets of entries as below.</span>
@@ -471,8 +462,7 @@ color:#5F5F5F" lang="EN-GB">
 
 <span lang="EN-GB"> </span>
 
-###### <u><span style="font-size:10.5pt;line-height:115%;font-family:&quot;Segoe UI&quot;,sans-serif;
-color:#172B4D">Events</span></u>
+###### <u><span style="font-size:10.5pt;line-height:115%;font-family:&quot;Segoe UI&quot;,sans-serif; color:#172B4D">Events</span></u>
 
 Shows all OCI Audit Events like creating or updating instances, listing security lists, route tables, etc.
 
@@ -677,24 +667,19 @@ color:#FF7700"></span> bash console on Linux
 Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700"></span> git bash or cygwin or ubuntu console on Windows-10
 
-<span lang="EN-GB">Navigate to home directory, and create </span><span style="font-family:&quot;Courier New&quot;" lang="EN-GB">.oci</span><span lang="EN-GB"> directory to store the credentials:</span>
+Navigate to home directory, and create <span style="font-family:&quot;Courier New&quot;" lang="EN-GB">.oci</span> directory to store the credentials:
+    
+    mkdir ~/.oci
 
-<span style="font-family:
-Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"></span> <span style="font-family:&quot;Courier New&quot;">mkdir ~/.oci</span>
+Generate the private key with no passphrase:
 
-<span lang="EN-GB">Generate the private key with no passphrase:</span>
+    openssl genrsa -out ~/.oci/oci_api_key.pem 2048
 
-<span style="font-family:
-Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"></span> <span style="font-family:&quot;Courier New&quot;">openssl genrsa -out ~/.oci/oci_api_key.pem 2048</span>
+Ensure that only you can read the private key file:
 
-<span lang="EN-GB">Ensure that only you can read the private key file:</span>
+    chmod go-rwx ~/.oci/oci_api_key.pem
 
-<span style="font-family:
-Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"></span> <span style="font-family:&quot;Courier New&quot;">chmod go-rwx ~/.oci/oci_api_key.pem</span>
+Generate the public key:
 
-<span lang="EN-GB">Generate the public key:</span>
+    openssl rsa -pubout -in ~/.oci/oci_api_key.pem -out ~/.oci/oci_api_key_public.pem
 
-<code style="margin-left:20pt">openssl rsa -pubout -in ~/.oci/oci_api_key.pem -out ~/.oci/oci_api_key_public.pem</code>
