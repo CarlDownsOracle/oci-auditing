@@ -8,9 +8,9 @@ Use any one of these:
 &nbsp;  
 
 Navigate to home directory, and create `.oci` directory to store the credentials:  
-    
-    mkdir ~/.oci
-
+```bash
+mkdir ~/.oci
+```
 <br />
 
 Generate the private key with no passphrase:
