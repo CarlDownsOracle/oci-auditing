@@ -5,7 +5,7 @@ Use any one of these:
 * git bash or cygwin or ubuntu console on Windows-10
 
 
-Navigate to home directory, and create <span style="font-family:&quot;Courier New&quot;" lang="EN-GB">.oci</span> directory to store the credentials:
+Navigate to home directory, and create ".oci" directory to store the credentials:
     
     mkdir ~/.oci
 
