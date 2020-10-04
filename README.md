@@ -61,8 +61,6 @@ Further how to provide tenancies list into configuration, and all other simple s
 
 <span>[<span lang="EN-GB">User configurations on OCI</span>](#_Toc52579470)</span>
 
-<span>[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52579471)</span>
-
 
 
 ## <a name="_Toc52579461"></a><a name="_Toc52573351"></a><a name="_Toc32324877"></a><a name="_Toc51353162"></a><a name="_Toc32325023"></a><span lang="EN-GB">Background</span>
@@ -499,14 +497,7 @@ color:#FF7700"></span> All events from last run
 <span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">These options are available on tool GUI</span>_
 
-<span style="font-size:10.5pt;font-family:&quot;Segoe UI&quot;,sans-serif;color:#172B4D">  
-</span>
-
-**<span style="font-size:10.5pt;font-family:&quot;Segoe UI&quot;,sans-serif;
-color:#172B4D"> </span>**
-
-###### <u><span style="font-size:10.5pt;line-height:115%;font-family:&quot;Segoe UI&quot;,sans-serif;
-color:#172B4D">Networking</span></u>
+###### <u><span style="font-size:10.5pt;line-height:115%;font-family:&quot;Segoe UI&quot;,sans-serif; color:#172B4D">Networking</span></u>
 
 <u>Virtual Cloud Network</u>: Shows VCN details such as VCN name, OCID, CIDR, etc.
 
@@ -627,7 +618,8 @@ font-family:&quot;Times New Roman&quot;,serif;color:#FF7700"></span> Rows are co
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">Upload the public key "</span>oci_api_key_public.pem" generated.
 
-<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">................................................................................</span> [How to generate: <span>[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52573072)]</span>
+<span style="font-family:Symbol;color:#FF7700" lang="EN-GB">................................................................................</span> [How to generate: <span>[<span lang="EN-GB">RSA key pair generation</span>](#_Toc52573361)]</span>
+................................................................................ [How to generate: [RSA key pair generation](#./doc/rsa_key_pair_generation.md)]
 
 <span style="font-family:Symbol;color:#FF7700" lang="EN-GB">*</span><span style="font-size:7.0pt;line-height:150%;font-family:&quot;Times New Roman&quot;,serif;
 color:#FF7700" lang="EN-GB"></span> <span lang="EN-GB">On the User Details page, scroll down to Resources and click on API Keys > Add Public Key.</span>
@@ -655,31 +647,5 @@ _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </
 
 _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> </span>_
 
-## <a name="_Toc52579471"></a><a name="_Toc52573361"><span style="font-size:19.0pt" lang="EN-GB">RSA key pair generation</span></a>
 
-Use any one of these:
-
-<span style="font-family:
-Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"></span> bash console on Linux
-
-<span style="font-family:
-Symbol;color:#FF7700">*</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"></span> git bash or cygwin or ubuntu console on Windows-10
-
-Navigate to home directory, and create <span style="font-family:&quot;Courier New&quot;" lang="EN-GB">.oci</span> directory to store the credentials:
-    
-    mkdir ~/.oci
-
-Generate the private key with no passphrase:
-
-    openssl genrsa -out ~/.oci/oci_api_key.pem 2048
-
-Ensure that only you can read the private key file:
-
-    chmod go-rwx ~/.oci/oci_api_key.pem
-
-Generate the public key:
-
-    openssl rsa -pubout -in ~/.oci/oci_api_key.pem -out ~/.oci/oci_api_key_public.pem
 
