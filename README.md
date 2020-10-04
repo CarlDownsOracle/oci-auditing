@@ -4,7 +4,8 @@ Oracle Cloud Infrastructure Auditing Tool
 * Windows GUI to select just what you needed.
 * multiple tenancies, schedule, email reports & lot more.
 
-&nbsp;  
+<br />
+<p></p>
 
 USE GUI MODE TO GET ALL OPTIONS ACCESSIBLE,
 command-line mode is with limited options required for schedulers/automations.
@@ -37,6 +38,7 @@ Note:
    * selected analysis will always list all respective OCI components in to the report, along with auditing, unless if some components are avoided by user configurations.
    
 &nbsp;  
+<p></p>
 
 GUI options are self-explorable, person who manages OCI, can understand UI easily.
 Further how to provide tenancies list into configuration, and all other simple steps are explained below:
