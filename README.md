@@ -4,6 +4,8 @@ Oracle Cloud Infrastructure Auditing Tool
 * Windows GUI to select just what you needed.
 * multiple tenancies, schedule, email reports & lot more.
 
+&nbsp;  
+
 USE GUI MODE TO GET ALL OPTIONS ACCESSIBLE,
 command-line mode is with limited options required for schedulers/automations.
 
@@ -34,12 +36,15 @@ Note:
    * All alerts are normally highlighted with suitable background colors.
    * selected analysis will always list all respective OCI components in to the report, along with auditing, unless if some components are avoided by user configurations.
    
-   
-GUI options self-explorable, person who manages OCI, can understand UI easily.
-Further how to provide tenancies list into configuration, and all other simple steps are explained below:
-  
+&nbsp;  
 
-###### Table of further contents
+GUI options are self-explorable, person who manages OCI, can understand UI easily.
+Further how to provide tenancies list into configuration, and all other simple steps are explained below:
+
+&nbsp;  
+
+
+### Table of further contents
 
 [Background](#_Toc52579461)
 
@@ -61,15 +66,17 @@ Further how to provide tenancies list into configuration, and all other simple s
 
 [User configurations on OCI](#_Toc52579470)
 
+&nbsp;  
 
-
-## <span><a name="_Toc52579461"></a><a name="_Toc52573351"></a><a name="_Toc32324877"></a><a name="_Toc51353162"></a><a name="_Toc32325023"></a>Background</span>
+## <a name="_Toc52579461"></a><a name="_Toc52573351"></a><a name="_Toc32324877"></a><a name="_Toc51353162"></a><a name="_Toc32325023"></a>Background
 
 With the increasing demand for scale of operations in OCI, visibility in managing the resources is becoming as important. While the Audit service provides the necessary governance, however, managing it manually becomes difficult for large and ever-changing infrastructures.
 
 "OCI Audit Tool" helps us in mitigating the manual work and provide an automated way to govern the infrastructure with minimal effort.
 
-## <span><a name="_Toc52579462"></a><a name="_Toc52573352"></a><a name="_Toc32324878"></a><a name="_Toc51353163"></a><a name="_Toc32325024"></a>High-Level Steps</span>
+&nbsp;  
+
+## <a name="_Toc52579462"></a><a name="_Toc52573352"></a><a name="_Toc32324878"></a><a name="_Toc51353163"></a><a name="_Toc32325024"></a>High-Level Steps
 
 \* Place OCI Audit Tool in OCI compute or local Windows system.
 
@@ -77,7 +84,9 @@ With the increasing demand for scale of operations in OCI, visibility in managin
 
 \* Configure the tool to authenticate the required tenancy.
 
-## <a name="_Toc52579463"></a><a name="_Toc52573353"></a><a name="_Toc51353164"></a><a name="_Toc32325026"></a><a name="_Toc32324880"></a>**<span style="font-family:&quot;Calibri&quot;,sans-serif;font-weight:normal" lang="EN-GB">Prerequisite**
+&nbsp;  
+
+## <a name="_Toc52579463"></a><a name="_Toc52573353"></a><a name="_Toc51353164"></a><a name="_Toc32325026"></a><a name="_Toc32324880"></a>Prerequisite
 
 \* A Windows system (cloud or local) to install the tool.
 
@@ -88,20 +97,21 @@ With the increasing demand for scale of operations in OCI, visibility in managin
 \* An OCI user.
 {security best practice is to create a new user with minimal permissions required}
 
-\* IAM policy for the user. <span style="font-size:9.0pt" lang="EN-GB">allow group <grp_name> read all-resources in tenancy
+\* IAM policy for the user.
+    
+    allow group <grp_name> read all-resources in tenancy
 
-\* RSA key pair in**<span style="font-size:10.0pt" lang="EN-GB">PEM format** <span style="font-size:10.0pt" lang="EN-GB"> to generate API authentication.
+\* RSA key pair in PEM format, to form API authentication.
 
 \* Tenancy OCID, user OCID and fingerprint obtained after adding the public key.
 
 \* SMTP/TLS service details for notifications.
 
-
+&nbsp;  
 
 ## <a name="_Toc52579464"></a><a name="_Toc51353165"></a><a name="_Toc52573354">Installation</a>
 
 Download the windows executable directly from here [compressed with 7zip format], both stable and recent beta versions will be available.
-
 
 \* Download the files "OCI Auditing Tool - vX.X" and "configurations\tool.ini".
 
@@ -111,30 +121,19 @@ Download the windows executable directly from here [compressed with 7zip format]
 
 \* Add all configurations and credentials in "tool.ini" (explained in the following section).
 
-
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;
-color:#5F5F5F" lang="EN-GB">  
-
-
-<span style="font-size:24.0pt;color:#8DA6B1;
-letter-spacing:-.05pt" lang="EN-GB"> 
+&nbsp;  
 
 ## <a name="_Toc52579465"></a><a name="_Toc51353166"></a><a name="_Toc52573355">Configurations</a>
 
-###### Configuring "tool.ini"
+### Configuring "tool.ini"
 
-Get User configurations on all tenancies following as steps in: [User configurations on OCI](#_Toc52579470)
+Get User configurations on all tenancies following as steps in: [User configurations on OCI](./doc/user_configurations_on_oci.md)
 
-<span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">Note: All lines starting with Hash or colon [ _**<span style="font-size:12.0pt;font-family:&quot;Calibri Light&quot;,sans-serif;color:red" lang="EN-GB">#**_ <span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">_**<span style="font-size:12.0pt;font-family:&quot;Calibri Light&quot;,sans-serif;
-color:red" lang="EN-GB">;**_ <span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">] are comment lines._
+_Note: All lines starting with Hash or colon [ # ;] are comment lines._
 
-_<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">These comment lines are just for user"s reference._
+_These comment lines are just for user"s reference._
 
-_<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> _
-
-![image-mouse-hover-text](./doc/images/image009.jpg)
-
+![image-mouse-hover-text](./doc/images/configuring-ui-subheading.png)
 
 \* Copy the private key "oci_api_key.pem" under the "configurations" folder created during installation.
     
@@ -150,25 +149,16 @@ _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB"> _
 
 \* For multiple tenancies, add multiple sets of entries as below.
 
+![](./doc/images/configuring-multiple-tenancies.png)
 
-![](./doc/images/image010.png)
-
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;
-color:#5F5F5F" lang="EN-GB">  
-
-
-<span style="font-size:24.0pt;color:#8DA6B1;
-letter-spacing:-.05pt" lang="EN-GB"> 
 
 ## <a name="_Toc52579466"></a><a name="_Toc51353167"></a><a name="_Toc52573356">Tool Demo</a>
 
 Once the configuration is complete, open "OCI_Auditing_Tool.exe" to launch the tool.
 
-The interface would look like this "
+The interface would look like this:
 
-
-![](./doc/images/image011.jpg)
-
+![](./doc/images/image013.jpg)
 
 
 To test the connectivity, select required tenancies, click on "Options > Connection Check"
@@ -176,57 +166,31 @@ To test the connectivity, select required tenancies, click on "Options > Connect
 ![](./doc/images/image012.jpg)
 
 
-
-
 To gather audit details:
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> Select the tenancy/s on left.
+\* Select the tenancy/s on left.
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> Select the type of audits required on right.
+\* Select the type of audits required on right.
 
-**<span style="font-family:Symbol;color:#FF7700;font-weight:normal">*****<span style="font-size:7.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#FF7700;
-font-weight:normal"> **Click on the green arrow button at the bottom.**<span style="font-size:10.5pt;
-font-family:&quot;Segoe UI&quot;,sans-serif;color:black;background:white">**
+\* Click on the green arrow button at the bottom.
 
 This will fetch the required information from OCI and generate an audit report in .xlsx format.
 
- ![](./doc/images/image013.jpg)
-
-
-<span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> The audit report along with an execution log will be stored in "results" folder.
-
-
-
-
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;
-color:#5F5F5F" lang="EN-GB">  
-
+The audit report along with an execution log will be stored in "results" folder.
 
 
 ## <a name="_Toc52579467"></a><a name="_Toc51353168"></a><a name="_Toc52573357">Report Details</a>
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> All audit data will be consolidated to one report.
+\* All audit data will be consolidated to one report.
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> Data will be spread across multiple tabs with respect to type of audit.
+\* Data will be spread across multiple tabs with respect to type of audit.
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> Report will be named along with generated time-stamp, for future differentiation between multiple reports.
+\* Report will be named along with generated time-stamp, for future differentiation between multiple reports.
 
 The Audit Report tabs are outlined below.
 
 
-###### <u>Tenancies</u>
-
+## Tenancies
 
 Report generation timestamp is displayed on top.
 
@@ -236,14 +200,7 @@ Shows basic details of tenancies like name, OCID, home-region, subscribed-region
 ![](./doc/images/image014.jpg)
 
 
-
-<u><span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;
-color:#5F5F5F" lang="EN-GB">  
-</u>
-
-**<span style="color:windowtext" lang="EN-GB"> **
-
-###### <u>Users</u>
+## Users
 
 
 Shows all user details fetched from selected tenancies.
@@ -251,61 +208,41 @@ Shows all user details fetched from selected tenancies.
 ![](./doc/images/image015.jpg)
 
 
-**<u>Optional configurations:</u>**
+### Optional configurations:
 
-**![](./doc/images/image016.png)**
+![](./doc/images/configuring-user-validations.png)
 
-** **
+\* allowed_username_pattern : pattern based on your preferences
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> <span style="font-family:&quot;Courier New&quot;">allowed_username_pattern : allowed username pattern based on your preferences
+\* allowed_named_user : any exceptional usernames, which does not follow pattern
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> <span style="font-family:&quot;Courier New&quot;">allowed_named_user : any exceptional usernames, which does not follow pattern
-
-###### <u>Groups</u>
+### Groups
 
 Shows all group details fetched from selected tenancies.
 
 ![](./doc/images/image017.jpg)
 
-**<u>Optional configurations:</u>**
+### Optional configurations:
 
-![](./doc/images/image018.png)
+![](./doc/images/configuring-group-validations.png)
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> <span style="font-family:&quot;Courier New&quot;">allowed_groupname_pattern : allowed group-name pattern
+\* allowed_groupname_pattern : based on your preferences
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> <span style="font-family:&quot;Courier New&quot;">allowed_named_group : any exceptional group names, which does not follow pattern
-
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#5F5F5F">  
+\* allowed_named_group : any exceptional group names, which does not follow pattern
 
 
-**<span style="color:windowtext"> **
-
-###### <u>Compartments</u>
+### Compartments
 
 Shows all compartments, sub-compartments up to any level.
 
 ![](./doc/images/image019.jpg)
 
-**<u>Optional configurations:</u>**
+### Optional configurations:
 
-![](./doc/images/image020.png)
-
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> <span style="font-family:&quot;Courier New&quot;">allowed_compname_pattern : allowed compartment name pattern based on your preferences
-
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#5F5F5F">  
+![](./doc/images/configuring-compartment-validations.png)
 
 
-###### <u>Service Limits</u>
+### Service Limits
 
 Shows all service-limits, scanning through all available services, and diving deep through all scopes and limits.
 
@@ -313,33 +250,23 @@ also, shows limit usage and availability if required.
 
 ![](./doc/images/image021.jpg)
 
-**<u>Optional configurations:</u>**
+### Optional configurations:
 
-![](./doc/images/image022.png)
+![](./doc/images/configuring-limits-validations.png)
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> <span style="font-family:&quot;Courier New&quot;">limits_alert_value : threshold for Service limit alerts
+\* limits_alert_value : threshold for Service limit alerts
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> <span style="font-family:&quot;Courier New&quot;">limits_show_used_and_available : show services used and available also
+\* limits_show_used_and_available : show services used and available also
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> <span style="font-family:&quot;Courier New&quot;">limits_skip_services : bypass these services
+\* limits_skip_services : bypass these services
 
 Marks row,
 
 *   red, if usage is above the limit
 *   yellow, if usage is above alert value
 
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#5F5F5F">  
 
-
-**<span style="color:windowtext"> **
-
-###### <u>Policies</u>
+### Policies
 
 Shows all policies present in each compartment.
 
@@ -347,94 +274,66 @@ Scans through every policy and all of its statements, and shows as policy statem
 
 ![](./doc/images/image023.jpg)
 
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#5F5F5F">  
 
-
-###### <u>Services Created</u>
+### Services Created
 
 Shows all services created by users, scanning in to every regions, availability domains and, compartments.
 
 
 These OCI services are supported: 
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Compute
+\* Compute
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Boot Volume, and Backups
+\* Boot Volume, and Backups
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Block Volume, and Backups
+\* Block Volume, and Backups
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Volume Group, and Backups
+\* Volume Group, and Backups
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Dedicated VM Host
+\* Dedicated VM Host
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Cluster Network
+\* Cluster Network
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Instance Pool
+\* Instance Pool
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> File System, Mount Target
+\* File System, Mount Target
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Analytics Instance
+\* Analytics Instance
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Integration Instance
+\* Integration Instance
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Load Balancer
+\* Load Balancer
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Health Check: HTTP, and Ping
+\* Health Check: HTTP, and Ping
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> DB Systems
+\* DB Systems
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Autonomous Databases
+\* Autonomous Databases
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Autonomous Container Databases
+\* Autonomous Container Databases
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Autonomous Exadata Infrastructure
+\* Autonomous Exadata Infrastructure
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> Exadata Infrastructure
+\* Exadata Infrastructure
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> VM Cluster
+\* VM Cluster
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> NoSQL Table
+\* NoSQL Table
 
-<span style="font-size:10.0pt;font-family:Symbol;color:#FF7700" lang="EN-GB">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> MySQL DB System
+\* MySQL DB System
 
-<span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">You can send request for additional services to get added in to the Tool_
+_You can send request for additional services to get added in to the Tool_
 
 ![](./doc/images/image024.jpg)
 
-**<u>Optional configurations:</u>**
+### Optional configurations:
 
-![](./doc/images/image025.png)
+![](./doc/images/service-listing-additional-configurations.png)
 
-<span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">These options are for tool runtime optimization only._
-
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;
-color:#5F5F5F" lang="EN-GB">  
+ _These options are for tool runtime optimization only._
 
 
-
-###### <u><span style="font-size:10.5pt;line-height:115%;font-family:&quot;Segoe UI&quot;,sans-serif; color:#172B4D">Events</u>
+## Events
 
 Shows all OCI Audit Events like creating or updating instances, listing security lists, route tables, etc.
 
@@ -442,73 +341,50 @@ Shows all OCI Audit Events like creating or updating instances, listing security
 
 Marks row,
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> Red upon creating or deleting a resource.
+\* Red upon creating or deleting a resource.
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> Yellow upon updating a resource.
+\* Yellow upon updating a resource.
 
-OCI Audit Events can be collected for these date ranges:
+\* OCI Audit Events can be collected for these date ranges:
+* Past 1 hour
+* Past 1 day
+* Past 1 month
+* All events from last run
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> Past 1 hour
+ _These options are available on tool GUI_
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> Past 1 day
+## Networking
 
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> Past 1 month
-
-<span style="font-family:
-Symbol;color:#FF7700">*<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700"> All events from last run
-
-<span style="font-family:&quot;Courier New&quot;;color:#FF7700" lang="EN-GB">-<span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;
-color:#FF7700" lang="EN-GB"> _<span style="font-family:&quot;Calibri Light&quot;,sans-serif" lang="EN-GB">These options are available on tool GUI_
-
-###### <u><span style="font-size:10.5pt;line-height:115%;font-family:&quot;Segoe UI&quot;,sans-serif; color:#172B4D">Networking</u>
-
-<u>Virtual Cloud Network</u>: Shows VCN details such as VCN name, OCID, CIDR, etc.
+Virtual Cloud Network: Shows VCN details such as VCN name, OCID, CIDR, etc.
 
 ![](./doc/images/image027.jpg)
 
-<u>Route Table</u>: Shows Route Tables available along with the implemented route rules.
+Route Table: Shows Route Tables available along with the implemented route rules.
 
 ![](./doc/images/image028.jpg)
 
 ![](./doc/images/image029.jpg)
 
-<u>Subnet</u>: Shows a list of all the subnets configured.
+Subnet: Shows a list of all the subnets configured.
 
 ![](./doc/images/image030.jpg)
 
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#5F5F5F">  
 
-
-<u>Security List:</u>
+Security List:
 
 ![](./doc/images/image031.jpg)
 
 ![](./doc/images/image032.jpg)
 
-<u>Network Security Groups:</u>
+Network Security Groups:
 
 ![](./doc/images/image033.jpg)
 
 ![](./doc/images/image034.jpg)
 
-<span style="font-family:&quot;Courier New&quot;;
-color:#FF7700">-<span style="font-size:7.0pt;line-height:150%;
-font-family:&quot;Times New Roman&quot;,serif;color:#FF7700"> Rows are color coded as below:
+ Rows are color coded as below:
 
-![](./doc/images/image035.png)
-
-<span style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#5F5F5F">  
+![](./doc/images/network-coloring-rules.png)
 
 
 ## <a name="_Toc52579468"></a><a name="_Toc51353169"></a><a name="_Toc52573358">Email Notifications</a>
@@ -516,66 +392,7 @@ font-family:&quot;Times New Roman&quot;,serif;color:#FF7700"> Rows are color cod
 If you are scheduling this tool for daily or weekly reports, then, email notification feature can send the report right to your inbox.
 
 
-**<u>Configurations for Email Notifications</u>**
+### Configurations for Email Notifications
 
-
-![](./doc/images/image036.png)
-
-
-
-
-
-
-
-## <a name="_Toc52579469"></a><a name="_Toc52573359">Appendix</a>
-
-## <a name="_Toc52579470"></a><a name="_Toc52573360"><span style="font-size:19.0pt" lang="EN-GB">User configurations on OCI</a>
-
-The details below would be required for the configuration
-
-\* RSA key pair in PEM format
-
-\* Tenancy name
-
-\* Tenancy OCID
-
-\* User OCID
-
-\* API fingerprint of the user
-
-Login to your OCI console and click on the Profile button > Tenancy.
-
-![](./doc/images/image003.jpg)
-
-On the Tenancy Details page, find the OCID and click on "Show" to view the complete OCID or click on "Copy" to copy it into clipboard and paste on a notepad.
-
-![](./doc/images/image004.jpg)
-
-In the OCI console, click on the Profile button > Username.
-
-![](./doc/images/image005.jpg)
-
-On the User Details page, find the user OCID and click on "Show" to view the complete OCID or click on "Copy" to copy it into clipboard and paste on a notepad.
-
-![](./doc/images/image006.jpg)
-
-\* Upload the public key "oci_api_key_public.pem" generated. {[How to generate RSA key pair](blob/master/doc/rsa_key_pair_generation.md)}
-
-\* Upload the public key "oci_api_key_public.pem" generated. {[How to generate RSA key pair](./doc/rsa_key_pair_generation.md)}
-
-\* Upload the public key "oci_api_key_public.pem" generated. {![How to generate RSA key pair](./doc/rsa_key_pair_generation.md)}
-
-![How to generate RSA key pair](./doc/rsa_key_pair_generation.md)
-
-\* On the User Details page, scroll down to Resources and click on API Keys > Add Public Key.
-
-\* Select or drop the public key and hit "Add".
-
-![](./doc/images/image007.jpg)
-
-\* A fingerprint will be generated. Copy this fingerprint and keep handy on a notepad.
-
-![](./doc/images/image008.jpg)
-
-_Note: In similar way, get details of all other tenancies in scope for audit._
+![](./doc/images/configuring-email-notifications.png)
 
