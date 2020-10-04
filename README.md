@@ -5,7 +5,6 @@ Oracle Cloud Infrastructure Auditing Tool
 * multiple tenancies, schedule, email reports & lot more.
 
 <br />
-<p></p>
 
 USE GUI MODE TO GET ALL OPTIONS ACCESSIBLE,
 command-line mode is with limited options required for schedulers/automations.
@@ -36,8 +35,7 @@ command-line mode is with limited options required for schedulers/automations.
 Note: 
    * All alerts are normally highlighted with suitable background colors.
    * selected analysis will always list all respective OCI components in to the report, along with auditing, unless if some components are avoided by user configurations.
-   
-&nbsp;  
+
 <p></p>
 
 GUI options are self-explorable, person who manages OCI, can understand UI easily.
@@ -64,9 +62,6 @@ Further how to provide tenancies list into configuration, and all other simple s
 
 [Email Notifications](#_Toc52579468)
 
-[Appendix](#_Toc52579469)
-
-[User configurations on OCI](#_Toc52579470)
 
 &nbsp;  
 
@@ -357,28 +352,30 @@ Marks row,
 
 ## Networking
 
-Virtual Cloud Network: Shows VCN details such as VCN name, OCID, CIDR, etc.
+### Virtual Cloud Network:
+Shows VCN details such as VCN name, OCID, CIDR, etc.
 
 ![](./doc/images/image027.jpg)
 
-Route Table: Shows Route Tables available along with the implemented route rules.
+### Route Table:
+Shows Route Tables available along with the implemented route rules.
 
 ![](./doc/images/image028.jpg)
 
 ![](./doc/images/image029.jpg)
 
-Subnet: Shows a list of all the subnets configured.
+### Subnet:
+Shows a list of all the subnets configured.
 
 ![](./doc/images/image030.jpg)
 
-
-Security List:
+### Security List:
 
 ![](./doc/images/image031.jpg)
 
 ![](./doc/images/image032.jpg)
 
-Network Security Groups:
+### Network Security Groups:
 
 ![](./doc/images/image033.jpg)
 
