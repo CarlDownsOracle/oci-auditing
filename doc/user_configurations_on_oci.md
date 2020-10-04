@@ -1,16 +1,14 @@
 # User configurations on OCI
 
-The details below would be required for the configuration
+These mandatory details will be required for the configuration:
+* RSA key pair in PEM format
+* Tenancy name
+* Tenancy OCID
+* User OCID
+* API fingerprint of the user
 
-\* RSA key pair in PEM format
-
-\* Tenancy name
-
-\* Tenancy OCID
-
-\* User OCID
-
-\* API fingerprint of the user
+<br />
+<br />
 
 Login to your OCI console and click on the Profile button > Tenancy.
 
@@ -39,6 +37,8 @@ On the User Details page, find the user OCID and click on "Show" to view the com
 \* A fingerprint will be generated. Copy this fingerprint and keep handy on a notepad.
 
 ![](./images/image008.jpg)
+
+<br />
 
 _Note: In similar way, get details of all other tenancies in scope for audit._
 

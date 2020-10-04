@@ -1,5 +1,5 @@
 # oci-auditing
-Oracle Cloud Infrastructure Auditing Tool
+**Oracle Cloud Infrastructure Auditing Tool**
 * automated auditing process of analysing different OCI resources.
 * Windows GUI to select just what you needed.
 * multiple tenancies, schedule, email reports & lot more.
@@ -65,7 +65,7 @@ Further how to provide tenancies list into configuration, and all other simple s
 
 &nbsp;  
 
-## <a name="_Toc52579461"></a><a name="_Toc52573351"></a><a name="_Toc32324877"></a><a name="_Toc51353162"></a><a name="_Toc32325023"></a>Background
+# <a name="_Toc52579461"></a><a name="_Toc52573351"></a><a name="_Toc32324877"></a><a name="_Toc51353162"></a><a name="_Toc32325023"></a>Background
 
 With the increasing demand for scale of operations in OCI, visibility in managing the resources is becoming as important. While the Audit service provides the necessary governance, however, managing it manually becomes difficult for large and ever-changing infrastructures.
 
@@ -73,7 +73,7 @@ With the increasing demand for scale of operations in OCI, visibility in managin
 
 &nbsp;  
 
-## <a name="_Toc52579462"></a><a name="_Toc52573352"></a><a name="_Toc32324878"></a><a name="_Toc51353163"></a><a name="_Toc32325024"></a>High-Level Steps
+# <a name="_Toc52579462"></a><a name="_Toc52573352"></a><a name="_Toc32324878"></a><a name="_Toc51353163"></a><a name="_Toc32325024"></a>High-Level Steps
 
 \* Place OCI Audit Tool in OCI compute or local Windows system.
 
@@ -83,16 +83,16 @@ With the increasing demand for scale of operations in OCI, visibility in managin
 
 &nbsp;  
 
-## <a name="_Toc52579463"></a><a name="_Toc52573353"></a><a name="_Toc51353164"></a><a name="_Toc32325026"></a><a name="_Toc32324880"></a>Prerequisite
+# <a name="_Toc52579463"></a><a name="_Toc52573353"></a><a name="_Toc51353164"></a><a name="_Toc32325026"></a><a name="_Toc32324880"></a>Prerequisite
 
 \* A Windows system (cloud or local) to install the tool.
 
-\* An advanced editor installed. example: notepad++
+\* An advanced editor installed. `example: notepad++`
 
 \* Oracle Cloud Infrastructure account. https://www.oracle.com/cloud/sign-in.html
 
 \* An OCI user.
-{security best practice is to create a new user with minimal permissions required}
+`security best practice is to create a new user with minimal permissions required`
 
 \* IAM policy for the user.
     
@@ -106,35 +106,35 @@ With the increasing demand for scale of operations in OCI, visibility in managin
 
 &nbsp;  
 
-## <a name="_Toc52579464"></a><a name="_Toc51353165"></a><a name="_Toc52573354">Installation</a>
+# <a name="_Toc52579464"></a><a name="_Toc51353165"></a><a name="_Toc52573354">Installation</a>
 
 Download the windows executable directly from here [compressed with 7zip format], both stable and recent beta versions will be available.
 
-\* Download the files "OCI Auditing Tool - vX.X" and "configurations\tool.ini".
+\* Download the files `OCI Auditing Tool - vX.X` and `configurations\tool.ini`.
 
 \* Extract exe to your preferred local folder.
 
-\* Move "tool.ini" file inside a subfolder named "configurations".
+\* Move `tool.ini` file inside a subfolder named `configurations`.
 
-\* Add all configurations and credentials in "tool.ini" (explained in the following section).
+\* Add all configurations and credentials in `tool.ini` (explained in the following section).
 
 &nbsp;  
 
-## <a name="_Toc52579465"></a><a name="_Toc51353166"></a><a name="_Toc52573355">Configurations</a>
+# <a name="_Toc52579465"></a><a name="_Toc51353166"></a><a name="_Toc52573355">Configurations</a>
 
 ### Configuring "tool.ini"
 
 Get User configurations on all tenancies following as steps in: [User configurations on OCI](./doc/user_configurations_on_oci.md)
 
-_Note: All lines starting with Hash or colon [ # ;] are comment lines._
+_Note: All lines starting with Hash or colon [ `# ;` ] are comment lines._
 
 _These comment lines are just for user"s reference._
 
 ![image-mouse-hover-text](./doc/images/configuring-ui-subheading.png)
 
-\* Copy the private key "oci_api_key.pem" under the "configurations" folder created during installation.
+\* Copy the private key `example: oci_api_key.pem` under the `configurations` folder created during installation.
     
-\* Open the "tool.ini" file in an editor and add the tenancy details.
+\* Open the `tool.ini` file in an editor and add the tenancy details.
 
     tenancy_name= <name of your tenancy>
     tenancy_ocid= <OCID of your tenancy>
@@ -148,8 +148,9 @@ _These comment lines are just for user"s reference._
 
 ![](./doc/images/configuring-multiple-tenancies.png)
 
+<br />
 
-## <a name="_Toc52579466"></a><a name="_Toc51353167"></a><a name="_Toc52573356">Tool Demo</a>
+# <a name="_Toc52579466"></a><a name="_Toc51353167"></a><a name="_Toc52573356">Tool Demo</a>
 
 Once the configuration is complete, open "OCI_Auditing_Tool.exe" to launch the tool.
 
@@ -157,6 +158,7 @@ The interface would look like this:
 
 ![](./doc/images/image013.jpg)
 
+<br />
 
 To test the connectivity, select required tenancies, click on "Options > Connection Check"
 
@@ -173,16 +175,19 @@ To gather audit details:
 
 This will fetch the required information from OCI and generate an audit report in .xlsx format.
 
-The audit report along with an execution log will be stored in "results" folder.
+The audit report along with an execution log will be stored in `results` folder.
 
+<br />
 
-## <a name="_Toc52579467"></a><a name="_Toc51353168"></a><a name="_Toc52573357">Report Details</a>
+# <a name="_Toc52579467"></a><a name="_Toc51353168"></a><a name="_Toc52573357">Report Details</a>
 
 \* All audit data will be consolidated to one report.
 
 \* Data will be spread across multiple tabs with respect to type of audit.
 
 \* Report will be named along with generated time-stamp, for future differentiation between multiple reports.
+
+<br />
 
 The Audit Report tabs are outlined below.
 
@@ -196,9 +201,9 @@ Shows basic details of tenancies like name, OCID, home-region, subscribed-region
 
 ![](./doc/images/image014.jpg)
 
+<br />
 
 ## Users
-
 
 Shows all user details fetched from selected tenancies.
 
@@ -209,11 +214,13 @@ Shows all user details fetched from selected tenancies.
 
 ![](./doc/images/configuring-user-validations.png)
 
-\* allowed_username_pattern : pattern based on your preferences
+\* `allowed_username_pattern` : pattern based on your preferences
 
-\* allowed_named_user : any exceptional usernames, which does not follow pattern
+\* `allowed_named_user` : any exceptional usernames, which does not follow pattern
 
-### Groups
+<br />
+
+## Groups
 
 Shows all group details fetched from selected tenancies.
 
@@ -223,12 +230,13 @@ Shows all group details fetched from selected tenancies.
 
 ![](./doc/images/configuring-group-validations.png)
 
-\* allowed_groupname_pattern : based on your preferences
+\* `allowed_groupname_pattern` : based on your preferences
 
-\* allowed_named_group : any exceptional group names, which does not follow pattern
+\* `allowed_named_group` : any exceptional group names, which does not follow pattern
 
+<br />
 
-### Compartments
+## Compartments
 
 Shows all compartments, sub-compartments up to any level.
 
@@ -238,8 +246,9 @@ Shows all compartments, sub-compartments up to any level.
 
 ![](./doc/images/configuring-compartment-validations.png)
 
+<br />
 
-### Service Limits
+## Service Limits
 
 Shows all service-limits, scanning through all available services, and diving deep through all scopes and limits.
 
@@ -262,8 +271,9 @@ Marks row,
 *   red, if usage is above the limit
 *   yellow, if usage is above alert value
 
+<br />
 
-### Policies
+## Policies
 
 Shows all policies present in each compartment.
 
@@ -271,53 +281,34 @@ Scans through every policy and all of its statements, and shows as policy statem
 
 ![](./doc/images/image023.jpg)
 
+<br />
 
-### Services Created
+## Services Created / Instances
 
 Shows all services created by users, scanning in to every regions, availability domains and, compartments.
 
 
 These OCI services are supported: 
-
-\* Compute
-
-\* Boot Volume, and Backups
-
-\* Block Volume, and Backups
-
-\* Volume Group, and Backups
-
-\* Dedicated VM Host
-
-\* Cluster Network
-
-\* Instance Pool
-
-\* File System, Mount Target
-
-\* Analytics Instance
-
-\* Integration Instance
-
-\* Load Balancer
-
-\* Health Check: HTTP, and Ping
-
-\* DB Systems
-
-\* Autonomous Databases
-
-\* Autonomous Container Databases
-
-\* Autonomous Exadata Infrastructure
-
-\* Exadata Infrastructure
-
-\* VM Cluster
-
-\* NoSQL Table
-
-\* MySQL DB System
+* Compute
+* Boot Volume, and Backups
+* Block Volume, and Backups
+* Volume Group, and Backups
+* Dedicated VM Host
+* Cluster Network
+* Instance Pool
+* File System, Mount Target
+* Analytics Instance
+* Integration Instance
+* Load Balancer
+* Health Check: HTTP, and Ping
+* DB Systems
+* Autonomous Databases
+* Autonomous Container Databases
+* Autonomous Exadata Infrastructure
+* Exadata Infrastructure
+* VM Cluster
+* NoSQL Table
+* MySQL DB System
 
 _You can send request for additional services to get added in to the Tool_
 
@@ -329,6 +320,7 @@ _You can send request for additional services to get added in to the Tool_
 
  _These options are for tool runtime optimization only._
 
+<br />
 
 ## Events
 
@@ -349,6 +341,8 @@ Marks row,
 * All events from last run
 
  _These options are available on tool GUI_
+
+<br />
 
 ## Networking
 
@@ -385,8 +379,9 @@ Shows a list of all the subnets configured.
 
 ![](./doc/images/network-coloring-rules.png)
 
+<br />
 
-## <a name="_Toc52579468"></a><a name="_Toc51353169"></a><a name="_Toc52573358">Email Notifications</a>
+# <a name="_Toc52579468"></a><a name="_Toc51353169"></a><a name="_Toc52573358">Email Notifications</a>
 
 If you are scheduling this tool for daily or weekly reports, then, email notification feature can send the report right to your inbox.
 
