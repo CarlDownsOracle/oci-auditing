@@ -390,3 +390,11 @@ If you are scheduling this tool for daily or weekly reports, then, email notific
 
 ![](./doc/images/configuring-email-notifications.png)
 
+<u>_Note:_</u>
+* _All configuration values here are just for illustration, please replace with parameters that you have setup_
+* _Mailing functionality may give this error if VPN or antivirus blocks the connection_
+
+    `argument of type 'TimeoutError' is not iterable`
+    
+    `Error: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond`
+
