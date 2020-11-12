@@ -1,13 +1,58 @@
-# oci-auditing
-**Oracle Cloud Infrastructure Auditing Tool**
-* automated auditing process of analysing different OCI resources.
-* Windows GUI to select just what you needed.
-* multiple tenancies, schedule, email reports & lot more.
+# OCI Auditing
+
+### Table of contents
+
+[Background](#_Toc52579461)
+
+[Tool GUI](#ui)
+
+[Command-line options](#cli)
+
+[Installation Steps](#_Toc52579462)
+
+[Prerequisite](#_Toc52579463)
+
+[Configurations](#config)
+
+[Tool Demo](#_Toc52579466)
+
+[Report Details](#_Toc52579467)
+
+[Email Notifications](#email)
+
+&nbsp;  
+
+
+# <a name="_Toc52579461"></a>Background
+
+With the increasing demand for scale of operations in Oracle Cloud Infrastructure, visibility in managing the resources is becoming as important.
+
+While the Audit service provides the necessary governance, however, managing it manually becomes difficult for large and ever-changing infrastructures.
+
+"OCI Auditing Tool" helps us in mitigating the manual work and provide an automated way to govern the infrastructure with minimal effort.
+
+* Audits & Reports on: 
+    * Users, Groups, Compartments, Service Limits
+    * Policies, all listed on a single sheet helps easy tracking by applying filters
+    * Instances or Services used
+    * Events, track every actions, and keep archive of what and all happened in your tenancies
+    * Networking alerts on all OCI network components
+    * Cloud Gaurd, get these alerts also right into this same report
+* supports multiple tenancies in a one go.
+* schedule daily, monthly or as needed for reporting/archiving tenancies details.
+* email reports & lot more features.
+* with GUI, also commandline access.
 
 <br />
 
-USE GUI MODE TO GET ALL OPTIONS ACCESSIBLE,
-command-line mode is with limited options required for schedulers/automations.
+# <a name="ui"></a>Tool GUI
+The interface would look like this:
+
+![](./doc/images/gui.jpg)
+
+
+# <a name="cli"></a>Command-line options
+CLI can be used for schedulers/automations.
 
     Commandline Usage of "OCI Auditing Tool":
 
@@ -42,52 +87,23 @@ GUI options are self-explorable, person who manages OCI, can understand UI easil
 Further how to provide tenancies list into configuration, and all other simple steps are explained below:
 
 &nbsp;  
+# <a name="_Toc52579462"></a>Installation steps for first time usage
+\* Download the "OCI_Auditing_Tool - stable/beta.7z" directly from above listed github files [compressed with 7zip format], both stable and recent beta versions will be available.
 
+\* Extract & place exe file anywhere in cloud or local Windows system.
 
-### Table of further contents
+\* Also download `configurations\tool.ini` and place inside a subfolder named `configurations`.
 
-[Background](#_Toc52579461)
-
-[High-Level Steps](#_Toc52579462)
-
-[Prerequisite](#_Toc52579463)
-
-[Installation](#_Toc52579464)
-
-[Configurations](#_Toc52579465)
-
-[Tool Demo](#_Toc52579466)
-
-[Report Details](#_Toc52579467)
-
-[Email Notifications](#_Toc52579468)
-
+\* Configure tenancies, authentications and optional configurations.
+[how to configure](#config) and [prerequisite](#prereq)
 
 &nbsp;  
 
-# <a name="_Toc52579461"></a><a name="_Toc52573351"></a><a name="_Toc32324877"></a><a name="_Toc51353162"></a><a name="_Toc32325023"></a>Background
-
-With the increasing demand for scale of operations in OCI, visibility in managing the resources is becoming as important. While the Audit service provides the necessary governance, however, managing it manually becomes difficult for large and ever-changing infrastructures.
-
-"OCI Audit Tool" helps us in mitigating the manual work and provide an automated way to govern the infrastructure with minimal effort.
-
-&nbsp;  
-
-# <a name="_Toc52579462"></a><a name="_Toc52573352"></a><a name="_Toc32324878"></a><a name="_Toc51353163"></a><a name="_Toc32325024"></a>High-Level Steps
-
-\* Place OCI Audit Tool in OCI compute or local Windows system.
-
-\* Get authentication details: Tenancy OCID, Region, User OCID, API fingerprint.
-
-\* Configure the tool to authenticate the required tenancy.
-
-&nbsp;  
-
-# <a name="_Toc52579463"></a><a name="_Toc52573353"></a><a name="_Toc51353164"></a><a name="_Toc32325026"></a><a name="_Toc32324880"></a>Prerequisite
+# <a name="_Toc52579463"></a><a name="prereq"></a>Prerequisite
 
 \* A Windows system (cloud or local) to install the tool.
 
-\* An advanced editor installed. `example: notepad++`
+\* An advanced editor is preferred. `example: notepad++`
 
 \* Oracle Cloud Infrastructure account. https://www.oracle.com/cloud/sign-in.html
 
@@ -102,25 +118,13 @@ With the increasing demand for scale of operations in OCI, visibility in managin
 
 \* Tenancy OCID, user OCID and fingerprint obtained after adding the public key.
 
-\* SMTP/TLS service details for notifications.
+\* SMTP/TLS service details for notifications (optional).
 
 &nbsp;  
 
-# <a name="_Toc52579464"></a><a name="_Toc51353165"></a><a name="_Toc52573354">Installation</a>
 
-Download the windows executable directly from here [compressed with 7zip format], both stable and recent beta versions will be available.
 
-\* Download the files `OCI Auditing Tool - vX.X` and `configurations\tool.ini`.
-
-\* Extract exe to your preferred local folder.
-
-\* Move `tool.ini` file inside a subfolder named `configurations`.
-
-\* Add all configurations and credentials in `tool.ini` (explained in the following section).
-
-&nbsp;  
-
-# <a name="_Toc52579465"></a><a name="_Toc51353166"></a><a name="_Toc52573355">Configurations</a>
+# <a name="config">Configurations</a>
 
 ### Configuring "tool.ini"
 
@@ -150,13 +154,9 @@ _These comment lines are just for user"s reference._
 
 <br />
 
-# <a name="_Toc52579466"></a><a name="_Toc51353167"></a><a name="_Toc52573356">Tool Demo</a>
+# <a name="_Toc52579466">Tool Demo</a>
 
 Once the configuration is complete, open "OCI_Auditing_Tool.exe" to launch the tool.
-
-The interface would look like this:
-
-![](./doc/images/image013.jpg)
 
 <br />
 
@@ -179,7 +179,7 @@ The audit report along with an execution log will be stored in `results` folder.
 
 <br />
 
-# <a name="_Toc52579467"></a><a name="_Toc51353168"></a><a name="_Toc52573357">Report Details</a>
+# <a name="_Toc52579467">Report Details</a>
 
 \* All audit data will be consolidated to one report.
 
@@ -381,9 +381,9 @@ Shows a list of all the subnets configured.
 
 <br />
 
-# <a name="_Toc52579468"></a><a name="_Toc51353169"></a><a name="_Toc52573358">Email Notifications</a>
+# <a name="email">Email Notifications</a>
 
-If you are scheduling this tool for daily or weekly reports, then, email notification feature can send the report right to your inbox.
+If you are scheduling this tool for daily, weekly reports, then email notification feature can send the report right to your inbox.
 
 
 ### Configurations for Email Notifications
@@ -392,9 +392,6 @@ If you are scheduling this tool for daily or weekly reports, then, email notific
 
 <u>_Note:_</u>
 * _All configuration values here are just for illustration, please replace with parameters that you have setup_
-* _Mailing functionality may give this error if VPN or antivirus blocks the connection_
+* _Mailing functionality may give error if VPN or antivirus blocks the connection_
 
-    `argument of type 'TimeoutError' is not iterable`
-    
-    `Error: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond`
 
