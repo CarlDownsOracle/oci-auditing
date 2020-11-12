@@ -18,6 +18,10 @@
 
 [Report Details](#_Toc52579467)
 
+[Events](#events)
+
+[Networking](#networks)
+
 [Email Notifications](#email)
 
 &nbsp;  
@@ -55,6 +59,7 @@ The interface would look like this:
 <p></p>
 
 GUI options are self-explorable, person who manages OCI, can understand UI easily.
+
 Further how to provide tenancies list into configuration, and all other simple steps are explained in [first time usge steps](#_Toc52579462)
 
 [TOC](#toc)
@@ -345,9 +350,11 @@ _You can send request for additional services to get added in to the Tool_
 
  _These options are for tool runtime optimization only._
 
+ [TOC](#toc)
+
 <br />
 
-## Events
+## <a name="events">Events</a>
 
 Shows all OCI Audit Events like creating or updating instances, listing security lists, route tables, etc.
 
@@ -373,9 +380,23 @@ Marks row,
 
 <br />
 
-## Networking
+## <a name="networks">Networking</a>
 
 ### Virtual Cloud Network:
+VCN [When networking is selected - by default listing]
+Route Table
+Subnet
+Security List
+Network Security Group
+Internet Gateway
+NAT Gateway
+Service Gateway
+DRG attachments to VCN
+Local Peering Gateway
+DRG
+
+<br />
+
 Shows VCN details such as VCN name, OCID, CIDR, etc.
 
 ![](./doc/images/image027.jpg)
@@ -407,6 +428,7 @@ Shows a list of all the subnets configured.
  Rows are color coded as below:
 
 ![](./doc/images/network-coloring-rules.png)
+
 
 <br />
 
