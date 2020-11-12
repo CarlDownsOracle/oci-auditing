@@ -1,6 +1,6 @@
 # OCI Auditing
 
-### Table of contents
+### <a name="toc">Table of contents
 
 [Background](#_Toc52579461)
 
@@ -43,6 +43,8 @@ While the Audit service provides the necessary governance, however, managing it 
 * email reports & lot more features.
 * with GUI, also commandline access.
 
+[TOC](#toc)
+
 <br />
 
 # <a name="ui"></a>Tool GUI
@@ -50,6 +52,14 @@ The interface would look like this:
 
 ![](./doc/images/gui.jpg)
 
+<p></p>
+
+GUI options are self-explorable, person who manages OCI, can understand UI easily.
+Further how to provide tenancies list into configuration, and all other simple steps are explained in [first time usge steps](#_Toc52579462)
+
+[TOC](#toc)
+
+<br />
 
 # <a name="cli"></a>Command-line options
 CLI can be used for schedulers/automations.
@@ -79,14 +89,12 @@ CLI can be used for schedulers/automations.
 
 Note: 
    * All alerts are normally highlighted with suitable background colors.
-   * selected analysis will always list all respective OCI components in to the report, along with auditing, unless if some components are avoided by user configurations.
+   * selected analysis will always list all respective OCI components in to the report, plus auditing, unless if some components are avoided by user configurations.
 
-<p></p>
-
-GUI options are self-explorable, person who manages OCI, can understand UI easily.
-Further how to provide tenancies list into configuration, and all other simple steps are explained below:
+[TOC](#toc)
 
 &nbsp;  
+
 # <a name="_Toc52579462"></a>Installation steps for first time usage
 \* Download the "OCI_Auditing_Tool - stable/beta.7z" directly from above listed github files [compressed with 7zip format], both stable and recent beta versions will be available.
 
@@ -95,7 +103,12 @@ Further how to provide tenancies list into configuration, and all other simple s
 \* Also download `configurations\tool.ini` and place inside a subfolder named `configurations`.
 
 \* Configure tenancies, authentications and optional configurations.
+
 [how to configure](#config) and [prerequisite](#prereq)
+
+<br />
+
+[TOC](#toc)
 
 &nbsp;  
 
@@ -120,9 +133,9 @@ Further how to provide tenancies list into configuration, and all other simple s
 
 \* SMTP/TLS service details for notifications (optional).
 
+[TOC](#toc)
+
 &nbsp;  
-
-
 
 # <a name="config">Configurations</a>
 
@@ -152,6 +165,8 @@ _These comment lines are just for user"s reference._
 
 ![](./doc/images/configuring-multiple-tenancies.png)
 
+[TOC](#toc)
+
 <br />
 
 # <a name="_Toc52579466">Tool Demo</a>
@@ -176,6 +191,8 @@ To gather audit details:
 This will fetch the required information from OCI and generate an audit report in .xlsx format.
 
 The audit report along with an execution log will be stored in `results` folder.
+
+[TOC](#toc)
 
 <br />
 
@@ -248,6 +265,10 @@ Shows all compartments, sub-compartments up to any level.
 
 <br />
 
+[TOC](#toc)
+
+<br />
+
 ## Service Limits
 
 Shows all service-limits, scanning through all available services, and diving deep through all scopes and limits.
@@ -280,6 +301,10 @@ Shows all policies present in each compartment.
 Scans through every policy and all of its statements, and shows as policy statement per row format.
 
 ![](./doc/images/image023.jpg)
+
+<br />
+
+[TOC](#toc)
 
 <br />
 
@@ -344,6 +369,10 @@ Marks row,
 
 <br />
 
+[TOC](#toc)
+
+<br />
+
 ## Networking
 
 ### Virtual Cloud Network:
@@ -381,6 +410,11 @@ Shows a list of all the subnets configured.
 
 <br />
 
+[TOC](#toc)
+
+<br />
+
+
 # <a name="email">Email Notifications</a>
 
 If you are scheduling this tool for daily, weekly reports, then email notification feature can send the report right to your inbox.
@@ -394,4 +428,7 @@ If you are scheduling this tool for daily, weekly reports, then email notificati
 * _All configuration values here are just for illustration, please replace with parameters that you have setup_
 * _Mailing functionality may give error if VPN or antivirus blocks the connection_
 
+[TOC](#toc)
+
+<br />
 
