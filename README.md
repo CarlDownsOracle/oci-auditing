@@ -1,6 +1,6 @@
 # OCI Auditing
 
-### <a name="toc">Table of contents
+### <a name="toc">Table of contents [TOC]
 
 [Background](#_Toc52579461)
 
@@ -41,7 +41,7 @@ While the Audit service provides the necessary governance, however, managing it 
     * Instances or Services used
     * Events, track every actions, and keep archive of what and all happened in your tenancies
     * Networking alerts on all OCI network components
-    * Cloud Gaurd, get these alerts also right into this same report
+    * Cloud Guard, get these alerts also right into this same report
 * supports multiple tenancies in a one go.
 * schedule daily, monthly or as needed for reporting/archiving tenancies details.
 * email reports & lot more features.
@@ -384,15 +384,25 @@ Marks row,
 
 ### Virtual Cloud Network:
 VCN [When networking is selected - by default listing]
+
 Route Table
+
 Subnet
+
 Security List
+
 Network Security Group
+
 Internet Gateway
+
 NAT Gateway
+
 Service Gateway
+
 DRG attachments to VCN
+
 Local Peering Gateway
+
 DRG
 
 <br />
