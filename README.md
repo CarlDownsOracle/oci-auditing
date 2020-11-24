@@ -105,7 +105,7 @@ Note:
 
 \* Extract & place exe file anywhere in cloud or local Windows system.
 
-\* Also download [configurations\tool.ini](./configurations/tool.ini) and place inside a subfolder named `configurations`.
+\* Also download [configurations\tool.ini](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini) and place inside a subfolder named `configurations`.
 
 \* Configure tenancies, authentications and optional configurations.
 
