@@ -373,6 +373,10 @@ Marks row,
 * All events from last run
 
  _These options are available on tool GUI_
+ 
+### Optional configurations:
+
+![](./doc/images/configuring-events.jpg)
 
 <br />
 
