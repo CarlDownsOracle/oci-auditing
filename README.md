@@ -101,11 +101,11 @@ Note:
 &nbsp;  
 
 # <a name="_Toc52579462"></a>Installation steps for first time usage
-\* Download the "OCI_Auditing_Tool - stable/beta.7z" directly from above listed github files [compressed with 7zip format], both stable and recent beta versions will be available.
+\* Download packaged single click exe file from [releases](https://github.com/KsiriCreations/oci-auditing/releases)
 
 \* Extract & place exe file anywhere in cloud or local Windows system.
 
-\* Also download `configurations\tool.ini` and place inside a subfolder named `configurations`.
+\* Also download [configurations\tool.ini](./configurations/tool.ini) and place inside a subfolder named `configurations`.
 
 \* Configure tenancies, authentications and optional configurations.
 
