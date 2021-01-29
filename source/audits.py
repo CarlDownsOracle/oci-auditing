@@ -15,6 +15,46 @@ def init(a,b):
 	gaugeBreaks=the.gaugeBreaks
 	networkServiceSelection=ui.getUIselection('audits', 'networkComponents')
 
+	# These errors are handled, with this "RETRY STRATEGY"
+	# Notepad++ search pattern to see if any new error came: 
+		# Response status\: (?!(504|200|401|404|429))
+		# Response status\: (?!(504|502|503|200|401|404|429))
+		# Logview Plus format: 30 days trial%d
+			# %d{%H:mm} %p Thread-%t: %m%n
+		# glogg - open source
+	### These errors can appear, and should be resolved with retries
+	# 500-Internal Server Error, 504-Gateway Timeout, 429-Too many requests for the user
+	# 503 - Not added here in list, however its getting retried, and found success on retries [seen only for integration instances, actually this is improper return code]
+	# 502 - Not added here in list, however its getting retried, few are ending without retry success and time out.
+		# if the real cause is just network or the maintenance kind of situation, then no need from tooling end
+		# apart from this I am not finding anything sure as of now
+	### These errors are handled, and should not be appeared
+	# 404-NotFound [if service not available in that region, or if not validServicesInManagedCompartmentForPaaS]
+	# 401-NotAuthenticated [if tenancy keys are disturbed, or if not validServicesInManagedCompartmentForPaaS]
+	### These incorrect return status are ignored as of now without retry
+	# 400 - this is actually for invalid syntax, but OCI returning falsely
+	the.retry_strategy = oci.retry.RetryStrategyBuilder(
+		# Make up to 10 service calls
+		max_attempts_check=True, max_attempts=10,
+		# Don't exceed a total of 60 seconds for all service calls
+		total_elapsed_time_check=True, total_elapsed_time_seconds=60,
+		# Wait 45 seconds between attempts
+		retry_max_wait_between_calls_seconds=6,
+		# Use 2 seconds as the base number for doing sleep time calculations
+		retry_base_sleep_time_seconds=2,
+		# Retry on certain service errors:
+		#   - Any 429 (this is signified by the empty array in the retry config)
+				# Todo: to avoid 429 errors, try reducing threading count
+		service_error_check=True,
+		service_error_retry_config={
+			500: ['InternalServerError','InternalError', None], # in 500 return status, for these 2 return codes, retries will be performed
+			504: [None], # empty array means, all 504 status will be retried
+			429: []
+		},
+		# Use exponential backoff and retry with full jitter, but on throttles use exponential backoff and retry with equal jitter
+		backoff_type=oci.retry.BACKOFF_FULL_JITTER_EQUAL_ON_THROTTLE_VALUE
+	).get_retry_strategy()
+
 def listUsers(idty, tenName, tenOcid):
 	ui.setInfo(tenName + ': Getting Users...')
 	allowedNamedUsers = conf.allowedNamedUsers # Work on local variable
@@ -400,7 +440,7 @@ def networksOfRegion(config, tenName):
 		call_vcnComponents('Route Table', vcnCl.list_route_tables, routeTables, tenName, region)
 		call_vcnComponents('Subnet', vcnCl.list_subnets, subnets, tenName, region)
 		call_vcnComponents('Security List', vcnCl.list_security_lists, securityLists, tenName, region)
-		call_vcnComponents('Network Security Group', vcnCl.list_network_security_groups, networkSecurityGroups, tenName, region, vcnCl=vcnCl)
+		call_vcnComponents('Network Security Group', vcnCl.list_network_security_groups, networkSecurityGroups, tenName, region, f1X=f12_networkComponents, vcnCl=vcnCl)
 		call_vcnComponents('Internet Gateway', vcnCl.list_internet_gateways, internetGateways, tenName, region)
 		call_vcnComponents('NAT Gateway', vcnCl.list_nat_gateways, natGateways, tenName, region)
 		call_vcnComponents('Service Gateway', vcnCl.list_service_gateways, serviceGateways, tenName, region)
@@ -436,10 +476,6 @@ def getProtocolOptions(ie):
 		elif 'TCP' in prtcl and ie.tcp_options: return [prtcl, getPortRange(ie.tcp_options.source_port_range),getPortRange(ie.tcp_options.destination_port_range)]
 		elif 'UDP' in prtcl and ie.udp_options: return [prtcl, getPortRange(ie.udp_options.source_port_range),getPortRange(ie.udp_options.destination_port_range)]
 	return [prtcl,'-','-']
-def call_vcnComponents(service, ociFunc, locFunc, tenName, region, **kwargs):
-	if service in networkServiceSelection:
-		log.info('Scanning "'+service+'" in: '+tenName+' > '+region+' ...')
-		loopCompartments(ociFunc, locFunc, tenName, region, service, f1X=f11_networkComponents, **kwargs)
 def getVcnId(srv,obj):
 	vcnID=obj.vcn_id
 	if not vcnID in the.networks[srv]: the.networks[srv][vcnID]=[]
@@ -600,6 +636,21 @@ def f11_networkComponents(ociFunc, locFunc, compId, compName, tenName, region, s
 	except Exception:
 		log.exception('Something Error happened !!') # send to log
 		raise
+def f12_networkComponents(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
+	try:
+		ui.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
+		res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId)
+		if res:
+			log.debug('Count: '+str(len(res.data)))
+			for srv in res.data:
+				locFunc(srv, compName, tenName, service, region, **kwargs)
+	except Exception:
+		log.exception('Something Error happened !!') # send to log
+		raise
+def call_vcnComponents(service, ociFunc, locFunc, tenName, region, f1X=f11_networkComponents, **kwargs):
+	if service in networkServiceSelection:
+		log.info('Scanning "'+service+'" in: '+tenName+' > '+region+' ...')
+		loopCompartments(ociFunc, locFunc, tenName, region, service, f1X=f1X, **kwargs)
 def f11_parms(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
 	try:
 		ui.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
@@ -742,12 +793,12 @@ def bootVolumes(vol, compName, tenName, serviceName, ad):
 	toServices(key, tenName, compName, serviceName, vol.display_name, str(vol.size_in_gbs)+' GB', ad, dateFormat(vol.time_created))
 def volumesBackups(vol, compName, tenName, serviceName, region): # Same used for: Boot & Block Volume Backups
 	key=compName+region+serviceName+vol.display_name
-	fld1=commaJoin(str(vol.size_in_gbs)+' GB', vol.source_type, vol.type)
-	fld2=commaJoin(region, dateFormat(vol.expiration_time))
+	fld1=the.commaJoin(str(vol.size_in_gbs)+' GB', vol.source_type, vol.type)
+	fld2=the.commaJoin(region, dateFormat(vol.expiration_time))
 	toServices(key, tenName, compName, serviceName, vol.display_name, fld1, fld2, dateFormat(vol.time_created))
 def volumeGroupBackups(vol, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+vol.display_name
-	fld1=commaJoin(str(vol.size_in_gbs)+' GB', vol.type)
+	fld1=the.commaJoin(str(vol.size_in_gbs)+' GB', vol.type)
 	toServices(key, tenName, compName, serviceName, vol.display_name, fld1, region, dateFormat(vol.time_created))
 def volumes(vol, compName, tenName, serviceName, region): # Same used for: Block Volumes & Volume Groups
 	key=compName+region+serviceName+vol.display_name
@@ -802,11 +853,15 @@ def mySqlDbSystems(db, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+db.display_name
 	toServices(key, tenName, compName, serviceName, db.display_name, db.mysql_version, db.availability_domain, dateFormat(db.time_created))
 def noSqlTables(tb, compName, tenName, serviceName, region):
-	log.debug('Service Count: '+str(len(tb.items)))
+	try:
+		log.debug('Service Count: '+str(len(tb.items)))
+	except AttributeError:
+		log.debug('NoSqlTables TableCollection, no items obtained !')
+		return
 	for tbl in tb.items:
 		lmts=tbl.table_limits
 		fld1=str(lmts.max_storage_in_g_bs)+' GB'
-		fld2=commaJoin(lmts.max_read_units, lmts.max_write_units)
+		fld2=the.commaJoin(lmts.max_read_units, lmts.max_write_units)
 		key=compName+region+serviceName+tbl.name
 		toServices(key, tenName, compName, serviceName, tbl.name, fld1, fld2, dateFormat(tbl.time_created))
 def analytics(anl, compName, tenName, serviceName, region):

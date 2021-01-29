@@ -45,7 +45,7 @@ While the Audit service provides the necessary governance, however, managing it 
 * supports multiple tenancies in a one go.
 * schedule daily, monthly or as needed for reporting/archiving tenancies details.
 * email reports & lot more features.
-* with GUI, also commandline access.
+* with GUI, and also command-line access.
 
 [TOC](#toc)
 
@@ -121,7 +121,7 @@ Note:
 
 \* A Windows system (cloud or local) to install the tool.
 
-\* An advanced editor is preferred. `example: notepad++`
+\* An advanced text editor is preferred. `example: notepad++`
 
 \* Oracle Cloud Infrastructure account. https://www.oracle.com/cloud/sign-in.html
 
@@ -156,7 +156,7 @@ _These comment lines are just for user"s reference._
 
 \* Copy the private key `example: oci_api_key.pem` under the `configurations` folder created during installation.
     
-\* Open the `tool.ini` file in an editor and add the tenancy details.
+\* Open the `tool.ini` file in text editor and add the tenancy details.
 
     tenancy_name= <name of your tenancy>
     tenancy_ocid= <OCID of your tenancy>
@@ -169,6 +169,8 @@ _These comment lines are just for user"s reference._
 \* For multiple tenancies, add multiple sets of entries as below.
 
 ![](./doc/images/configuring-multiple-tenancies.png)
+
+\* Further additional configurations are shown along with individual report snaps.
 
 [TOC](#toc)
 

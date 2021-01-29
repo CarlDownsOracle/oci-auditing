@@ -129,18 +129,24 @@ def initTenancyDicts(tenancyName):
 	policies[tenancyName]={};instances[tenancyName]={};events[tenancyName]={}
 
 def createThread(func, *argv, max=maxThreads, **kwargv):
-	i=1
+	waitSeconds=1
+	msgInterval=40 # seconds
+	maxIntervals=2
+	bypassWait=False
 	while True:
-		if threading.active_count()<=max:
+		threadCount = threading.active_count()
+		if threadCount<=max or bypassWait:
 			with lock:
 				mt.append(threading.Thread(target=func, args=argv, kwargs=kwargv))
 				t=mt[-1]; t.start()
+				log.debug('Started New Thread. Total threads now: '+str(threadCount+1))
 				return t
 		else:
-			sleep(1); i+=1
-			if i%60==0:
-				ui.setInfo(threading.current_thread().name + ': All ' + str(threading.active_count()) + ' threads busy.. wait ' + str(i) + 'secs..')
-				log.info('Current Running Threads: ' + str(getActiveThreadNames()))
+			sleep(1); waitSeconds+=1
+			if waitSeconds%msgInterval:
+				ui.setInfo(threading.current_thread().name + ': All ' + str(threadCount) + ' threads busy.. waited ' + str(waitSeconds) + 'secs..')
+				log.debug('Current Running Threads: ' + str(getActiveThreadNames()))
+				if waitSeconds >= msgInterval*maxIntervals: bypassWait=True
 
 def getActiveThreadNames():
 	thrds=[]
@@ -172,48 +178,8 @@ def raiseInternetIssue(retryCount):
 		if ans==wx.ID_CANCEL: os._exit()
 		with lock: internetIssuePopup=False
 	ui.setInfo('[' + str(retryCount+1) + '] Retrying connection..')
-def getOciData(ociFunc, *argv, **kwargv):
-	# These errors are handled
-	# Notepad++ search pattern to see if any new error came: 
-		# Response status\: (?!(504|200|401|404|429))
-		# Response status\: (?!(504|502|503|200|401|404|429))
-		# Logview Plus format: 30 days trial%d
-			# %d{%H:mm} %p Thread-%t: %m%n
-		# glogg - open source
-	### These errors can appear, and should be resolved with retries
-	# 500-Internal Server Error, 504-Gateway Timeout, 429-Too many requests for the user
-	# 503 - Not added here in list, however its getting retried, and found success on retries [seen only for integration instances, actually this is improper return code]
-	# 502 - Not added here in list, however its getting retried, few are ending without retry success and time out.
-		# if the real cause is just network or the maintenance kind of situation, then no need from tooling end
-		# apart from this I am not finding anything sure as of now
-	### These errors are handled, and should not be appeared
-	# 404-NotFound [if service not available in that region, or if not validServicesInManagedCompartmentForPaaS]
-	# 401-NotAuthenticated [if tenancy keys are disturbed, or if not validServicesInManagedCompartmentForPaaS]
-	### These incorrect return status are ignored as of now without retry
-	# 400 - this is actually for invalid syntax, but OCI returning falsely
 
-	retry_strategy = oci.retry.RetryStrategyBuilder(
-		# Make up to 10 service calls
-		max_attempts_check=True, max_attempts=10,
-		# Don't exceed a total of 60 seconds for all service calls
-		total_elapsed_time_check=True, total_elapsed_time_seconds=60,
-		# Wait 45 seconds between attempts
-		retry_max_wait_between_calls_seconds=6,
-		# Use 2 seconds as the base number for doing sleep time calculations
-		retry_base_sleep_time_seconds=2,
-		# Retry on certain service errors:
-		#   - Any 429 (this is signified by the empty array in the retry config)
-				# Todo: to avoid 429 errors, try reducing threading count
-		service_error_check=True,
-		service_error_retry_config={
-			500: ['InternalServerError','InternalError', None], # in 500 return status, for these 2 return codes, retries will be performed
-			504: [None], # empty array means, all 504 status will be retried
-			429: []
-		},
-		# Use exponential backoff and retry with full jitter, but on throttles use exponential backoff and retry with equal jitter
-		backoff_type=oci.retry.BACKOFF_FULL_JITTER_EQUAL_ON_THROTTLE_VALUE
-	).get_retry_strategy()
-	
+def getOciData(ociFunc, *argv, **kwargv):
 	for i in range(4): # retry on issues
 		try:
 			res=ociFunc(*argv, retry_strategy=retry_strategy, **kwargv)
