@@ -2,32 +2,30 @@
 
 ### <a name="toc">Table of contents [TOC]
 
-[Background](#_Toc52579461)
+[Introduction](#intro)
 
 [Tool GUI](#ui)
 
 [Command-line options](#cli)
 
-[Installation Steps](#_Toc52579462)
+[Installation Steps](#installation_steps)
 
-[Prerequisite](#_Toc52579463)
+[Prerequisite](#prerequisite)
 
 [Configurations](#config)
 
-[Tool Demo](#_Toc52579466)
+[Tool Demo](#demo)
 
-[Report Details](#_Toc52579467)
-
-[Events](#events)
-
-[Networking](#networks)
+[Audit Details](#report_details)
 
 [Email Notifications](#email)
+
+[FAQs](./doc/FAQs.md)
 
 &nbsp;  
 
 
-# <a name="_Toc52579461"></a>Background
+# <a name="intro"></a>Introduction
 
 With the increasing demand for scale of operations in Oracle Cloud Infrastructure, visibility in managing the resources is becoming as important.
 
@@ -60,7 +58,7 @@ The interface would look like this:
 
 GUI options are self-explorable, person who manages OCI, can understand UI easily.
 
-Further how to provide tenancies list into configuration, and all other simple steps are explained in [first time usge steps](#_Toc52579462)
+Further how to provide tenancies list into configuration, and all other simple steps are explained in [first time usge steps](#installation_steps)
 
 [TOC](#toc)
 
@@ -100,10 +98,10 @@ Note:
 
 &nbsp;  
 
-# <a name="_Toc52579462"></a>Installation steps for first time usage
+# <a name="installation_steps"></a>Installation steps for first time usage
 \* Download packaged single click exe file from [releases](https://github.com/KsiriCreations/oci-auditing/releases)
 
-\* Extract & place exe file anywhere in cloud or local Windows system.
+\* Place exe file in your preferred directory.
 
 \* Also download [configurations\tool.ini](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini) and place inside a subfolder named `configurations`.
 
@@ -117,7 +115,7 @@ Note:
 
 &nbsp;  
 
-# <a name="_Toc52579463"></a><a name="prereq"></a>Prerequisite
+# <a name="prerequisite"></a><a name="prereq"></a>Prerequisite
 
 \* A Windows system (cloud or local) to install the tool.
 
@@ -146,15 +144,25 @@ Note:
 
 ### Configuring "tool.ini"
 
-Get User configurations on all tenancies following as steps in: [User configurations on OCI](./doc/user_configurations_on_oci.md)
+Get User configuration details following as steps in: [User configurations on OCI](./doc/user_configurations_on_oci.md)
 
 _Note: All lines starting with Hash or colon [ `# ;` ] are comment lines._
 
-_These comment lines are just for user"s reference._
+```ini
+# use hash # symbol for notes, comments or any explanations
+; use semi-colon ; to switch between enabling/disabling tags
 
-![image-mouse-hover-text](./doc/images/configuring-ui-subheading.png)
+### Few Examples ###
 
-\* Copy the private key `example: oci_api_key.pem` under the `configurations` folder created during installation.
+# if "overwrite_logfile" specified with any key, log file will be overwritten
+;overwrite_logfile=x
+
+# This sub heading will be shown on GUI
+ui_sub_heading=OCI tenancies detailed auditing
+;ui_sub_heading=XYZ groups, tenancies auditing
+```
+
+\* Preferred to copy private key/s under the `configurations` folder.
     
 \* Open the `tool.ini` file in text editor and add the tenancy details.
 
@@ -176,7 +184,7 @@ _These comment lines are just for user"s reference._
 
 <br />
 
-# <a name="_Toc52579466">Tool Demo</a>
+# <a name="demo">Tool Demo</a>
 
 Once the configuration is complete, open "OCI_Auditing_Tool.exe" to launch the tool.
 
@@ -203,7 +211,7 @@ The audit report along with an execution log will be stored in `results` folder.
 
 <br />
 
-# <a name="_Toc52579467">Report Details</a>
+# <a name="report_details">Report Details</a>
 
 \* All audit data will be consolidated to one report.
 
@@ -236,7 +244,14 @@ Shows all user details fetched from selected tenancies.
 
 ### Optional configurations:
 
-![](./doc/images/configuring-user-validations.png)
+```ini
+# if "validate_users" specified with any key, users list will be validated, else will be just listed.
+validate_users=x
+allowed_username_pattern = ^((([5|6]\d{6})|(9\d{7}))\-)?sales\.user([0-1]?\d{2})$
+allowed_username_max_number = 199
+allowed_named_user=oracleidentityprovider/karthik.hiraskar@oracle.com
+allowed_named_user=xyz.zzz@oracle.com
+```
 
 \* `allowed_username_pattern` : pattern based on your preferences
 
@@ -252,7 +267,12 @@ Shows all group details fetched from selected tenancies.
 
 ### Optional configurations:
 
-![](./doc/images/configuring-group-validations.png)
+```ini
+validate_groups=x
+allowed_groupname_pattern=^((demo\.group)|(GRP((([5|6]\d{6})|(9\d{7}))\-)?sales\.user))([0-1]?\d{2})$
+allowed_groupname_max_number=199
+allowed_named_group=Administrators
+```
 
 \* `allowed_groupname_pattern` : based on your preferences
 
@@ -268,7 +288,10 @@ Shows all compartments, sub-compartments up to any level.
 
 ### Optional configurations:
 
-![](./doc/images/configuring-compartment-validations.png)
+```ini
+; validate_compartments=x
+; allowed_compname_pattern=(^([5|6]\d{6}\-C)|(9\d{7}\-C)|(C))[0-1]?\d{2}$
+```
 
 <br />
 
@@ -286,18 +309,24 @@ also, shows limit usage and availability if required.
 
 ### Optional configurations:
 
-![](./doc/images/configuring-limits-validations.png)
+```ini
+validate_limits=x
+limits_alert_value=0.8
+limits_show_used_and_available=x
+limits_skip_services=Streaming,VPN,WaaS
+;limits_skip_services=LbaaS,Virtual Cloud Network,Integration,Notifications,Resource Manager
+; limits_skip_services=Auto Scaling,Compute,Block Volume,API Gateway,Email Delivery,Functions
+```
 
-\* limits_alert_value : threshold for Service limit alerts
+\* `limits_alert_value` : threshold for Service limit alerts
 
-\* limits_show_used_and_available : show services used and available also
+\* `limits_show_used_and_available` : show count of services used and available also
 
-\* limits_skip_services : bypass these services
+\* `limits_skip_services` : Donot alayze these services
 
-Marks row,
-
-*   red, if usage is above the limit
-*   yellow, if usage is above alert value
+_Marks row,_
+*   <i><p style='color:red;'>red, if usage is above the limit</style></i>
+*   <i><p style='color:yellow;'>yellow, if usage is above alert value</style></i>
 
 <br />
 
@@ -308,6 +337,26 @@ Shows all policies present in each compartment.
 Scans through every policy and all of its statements, and shows as policy statement per row format.
 
 ![](./doc/images/image023.jpg)
+
+### Optional configurations:
+
+```ini {.line-numbers}
+; validate_policies=x
+# # Mandatory Policies # #
+root_policy=ALLOW ANY-USER TO READ ALL-RESOURCES IN TENANCY
+root_policy=allow service PSM to inspect tenant in tenancy
+root_policy=allow service PSM to inspect compartments in tenancy
+root_policy=ALLOW GROUP Administrators to manage all-resources IN TENANCY
+# RULES for "compartment_policy"
+# replace Compartment Name by tag '<compartment-name>'
+# replace Group Name by tag <group-name>
+compartment_policy=ALLOW GROUP <group-name> TO MANAGE object-family IN COMPARTMENT <compartment-name>
+compartment_policy=ALLOW GROUP <group-name> to manage all-resources IN COMPARTMENT <compartment-name>
+compartment_policy=ALLOW SERVICE PSM TO INSPECT VCNS IN COMPARTMENT <compartment-name>
+compartment_policy=ALLOW SERVICE PSM TO USE BUCKETS IN COMPARTMENT <compartment-name>
+```
+
+_Note: These policies configuration parameters are just a trial implementation!_
 
 <br />
 
@@ -348,9 +397,19 @@ _You can send request for additional services to get added in to the Tool_
 
 ### Optional configurations:
 
-![](./doc/images/service-listing-additional-configurations.png)
+```ini
+# Region Specific, Service Not Availability [mentioning this will save process time]
+# Format: service_notin_region=Service Name/region-names in comma seperated
+service_notin_region= MySQL DB System / ap-seoul-1, me-jeddah-1, ap-chuncheon-1, ca-montreal-1, eu-frankfurt-1, us-phoenix-1, uk-london-1, ap-tokyo-1, ap-sydney-1, ap-osaka-1, ap-melbourne-1, eu-amsterdam-1
+service_notin_region= Cluster Network / ca-toronto-1, sa-saopaulo-1, eu-zurich-1, ap-mumbai-1, ap-hyderabad-1, ap-seoul-1, me-jeddah-1, ap-chuncheon-1, ca-montreal-1
 
- _These options are for tool runtime optimization only._
+# disable_compartments, provide list of compartments which should not be scanned
+disable_compartments=C101,C102,CompartmentABC,XYZ
+; disable_compartments=Lina_Comp,tenancy05 (root),Network_Comp
+
+```
+
+ _Note: These options can also be used for tool runtime optimizations._
 
  [TOC](#toc)
 
@@ -358,27 +417,29 @@ _You can send request for additional services to get added in to the Tool_
 
 ## <a name="events">Events</a>
 
-Shows all OCI Audit Events like creating or updating instances, listing security lists, route tables, etc.
+Shows each and every Events performed.
 
 ![](./doc/images/image026.jpg)
 
-Marks row,
+* OCI Audit Events can be collected for these date ranges:
+    * Past 1 hour
+    * Past 1 day
+    * Past 1 month
+    * All events from last run
 
-\* Red upon creating or deleting a resource.
+    all options available on UI, command-line always selects events from last run
 
-\* Yellow upon updating a resource.
-
-\* OCI Audit Events can be collected for these date ranges:
-* Past 1 hour
-* Past 1 day
-* Past 1 month
-* All events from last run
-
- _These options are available on tool GUI_
+_Marks row,_
+* <i><p style='color:red;'>Red upon creating or deleting a resource</style></i>
+* <i><p style='color:yellow;'>Yellow upon updating a resource</style></i>
  
 ### Optional configurations:
 
-![](./doc/images/configuring-events.jpg)
+```ini
+events_show_all=x
+```
+
+_Note: By default audit events identified for alert will only be listed, use `events_show_all` to show everything_
 
 <br />
 
@@ -460,13 +521,26 @@ If you are scheduling this tool for daily, weekly reports, then email notificati
 
 ### Configurations for Email Notifications
 
-![](./doc/images/configuring-email-notifications.png)
+```ini
+# # # - - - - - - - - - - - - - - - - - - - - - - - - -
+# # # SMTP [TLS] Email Configuration
+# # # - - - - - - - - - - - - - - - - - - - - - - - - -
+sendmail_onlyif_audit_issues=x
+smtp_tls_port=587
+smtp_tls_host=smtp.us-ashburn-1.oraclecloud.com
+# All these are mandatory if you are using OCI's Email Delivery Service
+smtp_tls_username=ocid1.user.oc1..aaaaaaaa6dno7kkiosss2klu6@ocid1.tenancy.oc1..aaax2cfa3r.fm.com
+smtp_tls_password=g>SDhuu
+smtp_tls_from=noreply@your-domain.com
+smtp_tls_to=your-name@your-domain.com
+; smtp_tls_to=karthik.hiraskar@oracle.com,xyz.aaa@ggg.com,xyz.aaa@yy.com
+```
 
 <u>_Note:_</u>
-* _All configuration values here are just for illustration, please replace with parameters that you have setup_
 * _Mailing functionality may give error if VPN or antivirus blocks the connection_
 
 [TOC](#toc)
 
 <br />
 
+* _All configuration values here are just for illustration, replace with your suitable values_
