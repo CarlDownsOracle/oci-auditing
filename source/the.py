@@ -60,7 +60,9 @@ def init(a,b):
 	# 'VCN Components',
 	networkComponents=("Route Table,Subnet,Security List,Network Security Group,Internet Gateway,NAT Gateway,Service Gateway," +
 				"VCN's DRG,Local Peering Gateway," +
-				"Dynamic Routing Gateway,VPN").split(',')
+				"Dynamic Routing Gateway," + 
+				"FastConnect [implementation pending],Customer-Premises Equipment [pending],VPN Connections [pending]," +
+				"Load Balancers [pending],IP Management [pending],DNS Management [pending]").split(',')
 	additionalNetworkComponents=['route_rules','sl_egress_security_rules','sl_ingress_security_rules','nsg_security_rules','nsg_vnics']
 
 	validServicesInManagedCompartmentForPaaS=['Boot Volume','Block Volume','Compute','Boot Volume Backup','Block Volume Backup',

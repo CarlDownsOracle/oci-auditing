@@ -13,7 +13,8 @@ def generateReport():
 	end_time_local = datetime.now().strftime('%Y-%m-%d %H:%M:%S'); time_zone = strftime("[%z]", gmtime())
 	end_time_utc = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 	ui.setInfo('Generating final Excel Report ...')
-	global workbook,ws,row,format,startRow,data,head,cols,service
+	global workbook,ws,row,format,startRow,data,head,cols,service,lnk
+	lnk={} # used to store any hashed/dictionaries/linked kind of datas
 	auditIssuesFound=False
 	reportName = the.startTime + ' OCI Auditing Report.xlsx'
 	reportDirPath = conf.resDr
@@ -297,16 +298,19 @@ def generateReport():
 		addCountSummary(row+2, the.events)
 	
 	if ui.parentWindow.m_checkBox_Networking.GetValue():
-		addTab('VCN', colWidths=[20,20,20,20,20,15,18], tabColor='#632523')
-		addHeading2('VCN')
-		writeHeader('Tenancy','Region','Compartment','Name','OCID','CIDR Block','Created Time')
 		## VCN
-		for t in sorted(the.networks['VCN'].keys()):
-			for r in sorted(the.networks['VCN'][t].keys()):
-				for c in sorted(the.networks['VCN'][t][r].keys()):
-					for n in sorted(the.networks['VCN'][t][r][c].keys()):
-						v=the.networks['VCN'][t][r][c][n]
+		srvc='VCN'
+		addTab(srvc, colWidths=[20,20,20,20,20,15,18], tabColor='#632523')
+		addHeading2(srvc)
+		writeHeader('Tenancy','Region','Compartment','Name','OCID','CIDR Block','Created Time')
+		lnk[srvc]={}
+		for t in sorted(the.networks[srvc].keys()):
+			for r in sorted(the.networks[srvc][t].keys()):
+				for c in sorted(the.networks[srvc][t][r].keys()):
+					for n in sorted(the.networks[srvc][t][r][c].keys()):
+						v=the.networks[srvc][t][r][c][n]
 						writeRow(data=[t,r,c,n,v[0],v[1],v[2]], style=getStyle(f6=[4]))
+						lnk[srvc][v[0]] = n + ' . ' + c + ' . ' + t # vcn-ocid = name,comp,tenancy
 		finalTouchTable()
 		
 		if len(conf.disableCompartments)>0:
@@ -353,39 +357,50 @@ def generateReport():
 			addTable()
 				
 		service='Security List'
+		srvc='SL'
 		if service in nwSerSel:
-			addTab('SL', colWidths=[20,30,20,20,20,12,20,20,20], tabColor='#632523')
+			lnk[srvc]={}
+			addTab(srvc, colWidths=[25,20,20,20,20,12,20,20,20], tabColor='#632523')
 			addHeading2(service+'s')
-			generateHeaderList('VCN OCID','SL Name','SL OCID','Created Time')
+			writeHeader('VCN . Compartment . Tenancy','SL Name','SL OCID','Created Time')
+			#generateHeaderList('VCN . Compartment . Tenancy','SL Name','SL OCID','Created Time')
 			for vcnID in the.networks[service].keys():
-				for sl in the.networks[service][vcnID]: data.append([vcnID, sl[0], sl[1], sl[2]])
-			addTable()
-				
-			service='sl_egress_security_rules'
+				for sl in the.networks[service][vcnID]:
+					writeRow(data=[getLnk('VCN',vcnID), sl[0], sl[1], sl[2]], style=getStyle(f6=[0]))
+					#data.append([getLnk('VCN',vcnID), sl[0], sl[1], sl[2]])
+					lnk[srvc][sl[1]]=sl[0] # sl-ocid = name
+			#addTable()
+			finalTouchTable()
+			
 			row+=1
 			ws.merge_range(row,0,row,3,'SL - Security Rules',format['h3'])
 			ws.write(row,6,'type / source_port_range',format['normal_small'])
 			ws.write(row,7,'code / destination_port_range',format['normal_small'])
 			row+=1
-			writeHeader('SL OCID','Egress/Ingress Rule','Stateless','Destination/Source Type','Destination/Source','Protocol','Field-1','Field-2','Description')
+			writeHeader('SL','Egress/Ingress Rule','Stateless','Destination/Source Type','Destination/Source','Protocol','Field-1','Field-2','Description')
+			service='sl_egress_security_rules'
 			for slID in the.networks[service].keys():
 				for egr in the.networks[service][slID]:
 					if egr[0]: auditIssuesFound=True
-					writeRow(data=[slID, 'Egress', egr[1], egr[2], egr[3], egr[4], egr[5], egr[6], egr[7]], style=getStyle(risk=egr[0], f6=[0]))
+					writeRow(data=[getLnk('SL',slID), 'Egress', egr[1], egr[2], egr[3], egr[4], egr[5], egr[6], egr[7]], style=getStyle(risk=egr[0], f6=[0]))
 			service='sl_ingress_security_rules'
 			for slID in the.networks[service].keys():
 				for ing in the.networks[service][slID]:
 					if ing[0]: auditIssuesFound=True
-					writeRow(data=[slID, 'Ingress', ing[1], ing[2], ing[3], ing[4], ing[5], ing[6], ing[7]], style=getStyle(risk=ing[0], f6=[0]))
+					writeRow(data=[getLnk('SL',slID), 'Ingress', ing[1], ing[2], ing[3], ing[4], ing[5], ing[6], ing[7]], style=getStyle(risk=ing[0], f6=[0]))
 			finalTouchTable()
 				
 		service='Network Security Group'
 		if service in nwSerSel:
-			addTab('NSG', colWidths=[20,20,20,20,20,12,20,20,20,18], tabColor='#632523')
+			srvc='NSG'
+			lnk[srvc]={}
+			addTab(srvc, colWidths=[30,20,20,20,20,12,20,20,20,18], tabColor='#632523')
 			addHeading2(service+'s')
-			generateHeaderList('VCN OCID','NSG Name','NSG OCID','Created Time')
+			generateHeaderList('VCN . Compartment . Tenancy','NSG Name','NSG OCID','Created Time')
 			for vcnID in the.networks[service].keys():
-				for nsg in the.networks[service][vcnID]: data.append([vcnID, nsg[0], nsg[1], nsg[2]])
+				for nsg in the.networks[service][vcnID]:
+					data.append([getLnk('VCN',vcnID), nsg[0], nsg[1], nsg[2]])
+					lnk[srvc][nsg[1]] = nsg[0] # nsg-ocid=nsg-name
 			addTable()
 				
 			service='nsg_security_rules'
@@ -394,19 +409,19 @@ def generateReport():
 			ws.write(row,7,'type / source_port_range',format['normal_small'])
 			ws.write(row,8,'code / destination_port_range',format['normal_small'])
 			row+=1
-			writeHeader('NSG OCID','Stateless','Direction','Type Source/Destination','Source/Destination','Protocol','Field-1','Field-2','Description','Created Time')
+			writeHeader('NSG','Stateless','Direction','Type Source/Destination','Source/Destination','Protocol','Field-1','Field-2','Description','Created Time')
 			for nsgID in the.networks[service].keys():
 				for sr in the.networks[service][nsgID]:
 					if sr[0]: auditIssuesFound=True
-					writeRow([nsgID, sr[1], sr[2], sr[3], sr[4], sr[5], sr[6], sr[7], sr[8], sr[9]], style=getStyle(risk=sr[0], f6=[0]))
+					writeRow([getLnk('NSG',nsgID), sr[1], sr[2], sr[3], sr[4], sr[5], sr[6], sr[7], sr[8], sr[9]], style=getStyle(risk=sr[0], f6=[0]))
 			finalTouchTable()
 				
 			service='nsg_vnics'
 			row+=1
 			addHeading2('NSG - VNICs', hx='h3')
-			generateHeaderList('NSG OCID','Parent resource OCID','VNIC OCID','Time Associated')
+			generateHeaderList('NSG','Parent resource OCID','VNIC OCID','Time Associated')
 			for nsgID in the.networks[service].keys():
-				for v in the.networks[service][nsgID]: data.append([nsgID, v[0], v[1], v[2]])
+				for v in the.networks[service][nsgID]: data.append([getLnk('NSG',nsgID), v[0], v[1], v[2]])
 			addTable()
 		
 		service='Internet Gateway'
@@ -660,4 +675,8 @@ def addAllFormatsToWorkbook():
 	format={}
 	for n in f.keys(): format[n]=workbook.add_format(f[n])
 	return format
+def getLnk(a,b):
+	# as of now a=service, b=ocid, and its value will be linked details
+	# return linked details if available, else return just an hyphen (-) symbol
+	return lnk[a].get(b, '-')
 #

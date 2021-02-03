@@ -433,7 +433,10 @@ def networksOfRegion(config, tenName):
 	region=config['region']
 	vcnCl = oci.core.VirtualNetworkClient(config)
 	vcnThreads = loopCompartments(vcnCl.list_vcns, vcns, tenName, region, 'VCN')
-	loopCompartments(vcnCl.list_drgs, dynamicRoutingGateways, tenName, region, 'Dynamic Routing Gateway')
+	
+	service = 'Dynamic Routing Gateway'
+	if service in networkServiceSelection:
+		loopCompartments(vcnCl.list_drgs, dynamicRoutingGateways, tenName, region, service)
 	
 	for t in vcnThreads: t.join() # wait for VCN listings to complete
 	if (tenName in the.networks['VCN']) and (region in the.networks['VCN'][tenName]):
@@ -447,7 +450,7 @@ def networksOfRegion(config, tenName):
 		call_vcnComponents("VCN's DRG", vcnCl.list_drg_attachments, drgAttachments, tenName, region)
 		call_vcnComponents('Local Peering Gateway', vcnCl.list_local_peering_gateways, localPeeringGateways, tenName, region)
 	else:
-		log.debug('IGNORE: No VCN in '+region+': ' + tenName + ' > ' + region + ' > VCN SUB-COMPONENTS')
+		log.debug('IGNORE VCN SUB-COMPONENTS: No VCN in : ' + tenName + ' > ' + region)
 		regionsSubscribed=len(getRegionsSubscribed(tenName))
 		incGaugePerRegion=(the.gaugeIncNum*gaugeBreaks['allCompartments'])/regionsSubscribed
 		ui.increamentGauge(incGaugePerRegion)

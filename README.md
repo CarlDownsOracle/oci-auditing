@@ -325,8 +325,8 @@ limits_skip_services=Streaming,VPN,WaaS
 \* `limits_skip_services` : Donot alayze these services
 
 _Marks row,_
-*   <i><p style='color:red;'>red, if usage is above the limit</style></i>
-*   <i><p style='color:yellow;'>yellow, if usage is above alert value</style></i>
+*   red, if usage is above the limit
+*   yellow, if usage is above alert value
 
 <br />
 
@@ -430,8 +430,8 @@ Shows each and every Events performed.
     all options available on UI, command-line always selects events from last run
 
 _Marks row,_
-* <i><p style='color:red;'>Red upon creating or deleting a resource</style></i>
-* <i><p style='color:yellow;'>Yellow upon updating a resource</style></i>
+* Red upon creating or deleting a resource
+* Yellow upon updating a resource
  
 ### Optional configurations:
 
@@ -544,3 +544,16 @@ smtp_tls_to=your-name@your-domain.com
 <br />
 
 * _All configuration values here are just for illustration, replace with your suitable values_
+
+<br />
+<br />
+
+## Tools for IDCS
+Similar kind of applications are also available for Oracle's classic cloud, IDCS (Identity Cloud service).
+
+More Details here:
+* IDCS Auditing Tool: https://confluence.oraclecorp.com/confluence/x/PIK_Yw
+* IDCS Instances Listing Tool: Lists all instances, means all service created.
+
+[these IDCS links are accessible only within Oracle]
+
