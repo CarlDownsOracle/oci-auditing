@@ -431,24 +431,24 @@ def eventsOfComp(evt, compName, tenName, region):
 
 def networksOfRegion(config, tenName):
 	region=config['region']
-	vcnCl = oci.core.VirtualNetworkClient(config)
-	vcnThreads = loopCompartments(vcnCl.list_vcns, vcns, tenName, region, 'VCN')
+	vnCl = oci.core.VirtualNetworkClient(config)
+	vcnThreads = loopCompartments(vnCl.list_vcns, vcns, tenName, region, 'VCN')
 	
 	service = 'Dynamic Routing Gateway'
 	if service in networkServiceSelection:
-		loopCompartments(vcnCl.list_drgs, dynamicRoutingGateways, tenName, region, service)
+		loopCompartments(vnCl.list_drgs, dynamicRoutingGateways, tenName, region, service)
 	
 	for t in vcnThreads: t.join() # wait for VCN listings to complete
 	if (tenName in the.networks['VCN']) and (region in the.networks['VCN'][tenName]):
-		call_vcnComponents('Route Table', vcnCl.list_route_tables, routeTables, tenName, region)
-		call_vcnComponents('Subnet', vcnCl.list_subnets, subnets, tenName, region)
-		call_vcnComponents('Security List', vcnCl.list_security_lists, securityLists, tenName, region)
-		call_vcnComponents('Network Security Group', vcnCl.list_network_security_groups, networkSecurityGroups, tenName, region, f1X=f12_networkComponents, vcnCl=vcnCl)
-		call_vcnComponents('Internet Gateway', vcnCl.list_internet_gateways, internetGateways, tenName, region)
-		call_vcnComponents('NAT Gateway', vcnCl.list_nat_gateways, natGateways, tenName, region)
-		call_vcnComponents('Service Gateway', vcnCl.list_service_gateways, serviceGateways, tenName, region)
-		call_vcnComponents("VCN's DRG", vcnCl.list_drg_attachments, drgAttachments, tenName, region)
-		call_vcnComponents('Local Peering Gateway', vcnCl.list_local_peering_gateways, localPeeringGateways, tenName, region)
+		call_vcnComponents('Route Table', vnCl.list_route_tables, routeTables, tenName, region)
+		call_vcnComponents('Subnet', vnCl.list_subnets, subnets, tenName, region)
+		call_vcnComponents('Security List', vnCl.list_security_lists, securityLists, tenName, region)
+		call_vcnComponents('Network Security Group', vnCl.list_network_security_groups, networkSecurityGroups, tenName, region, f1X=f11, vnCl=vnCl)
+		call_vcnComponents('Internet Gateway', vnCl.list_internet_gateways, internetGateways, tenName, region)
+		call_vcnComponents('NAT Gateway', vnCl.list_nat_gateways, natGateways, tenName, region)
+		call_vcnComponents('Service Gateway', vnCl.list_service_gateways, serviceGateways, tenName, region)
+		call_vcnComponents("VCN's DRG", vnCl.list_drg_attachments, drgAttachments, tenName, region)
+		call_vcnComponents('Local Peering Gateway', vnCl.list_local_peering_gateways, localPeeringGateways, tenName, region)
 	else:
 		log.debug('IGNORE VCN SUB-COMPONENTS: No VCN in : ' + tenName + ' > ' + region)
 		regionsSubscribed=len(getRegionsSubscribed(tenName))
@@ -605,14 +605,14 @@ def securityRules(sr, srv, nsgId):
 def vnics(v, srv, nsgId):
 	if not nsgId in the.networks[srv]: the.networks[srv][nsgId]=[]
 	the.networks[srv][nsgId].append([v.resource_id, v.vnic_id, dateFormat(v.time_associated)])
-def networkSecurityGroups(nsg, compName, tenName, srv, region, vcnCl=''):
+def networkSecurityGroups(nsg, compName, tenName, srv, region, vnCl):
 	name=getDisplayName(nsg)
 	ui.setInfo('Scanning NSG:' + name + ' ...')
 	if not nsg.vcn_id in the.networks[srv]: the.networks[srv][nsg.vcn_id]=[]
 	the.networks[srv][nsg.vcn_id].append([name, nsg.id, dateFormat(nsg.time_created)])
 	
-	scanNSG('nsg_security_rules', vcnCl.list_network_security_group_security_rules, securityRules, nsg.id)
-	scanNSG('nsg_vnics', vcnCl.list_network_security_group_vnics, vnics, nsg.id)
+	scanNSG('nsg_security_rules', vnCl.list_network_security_group_security_rules, securityRules, nsg.id)
+	scanNSG('nsg_vnics', vnCl.list_network_security_group_vnics, vnics, nsg.id)
 
 def scanCompartment(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
 	try:
@@ -636,17 +636,6 @@ def f11_networkComponents(ociFunc, locFunc, compId, compName, tenName, region, s
 				for srv in res.data:
 					locFunc(srv, compName, tenName, service, region, **kwargs)
 		# else: log.debug('IGNORE: No VCN in '+region+', '+compName+': ' + tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's')
-	except Exception:
-		log.exception('Something Error happened !!') # send to log
-		raise
-def f12_networkComponents(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
-	try:
-		ui.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
-		res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId)
-		if res:
-			log.debug('Count: '+str(len(res.data)))
-			for srv in res.data:
-				locFunc(srv, compName, tenName, service, region, **kwargs)
 	except Exception:
 		log.exception('Something Error happened !!') # send to log
 		raise
@@ -758,29 +747,34 @@ def listInstancesOfRegion(config, tenName):
 	if 'Integration Instance' in selectedServices: intgCl = oci.integration.IntegrationInstanceClient(config)
 	
 	for service in selectedServices:
-		if   service=='Boot Volume': f1(blkStrgCl.list_boot_volumes, bootVolumes, tenName, region, service, f1X=f12)
-		elif service=='Boot Volume Backup': f1(blkStrgCl.list_boot_volume_backups, volumesBackups, tenName, region, service)
+		if   service=='Boot Volume': f1(blkStrgCl.list_boot_volumes, bootVolume, tenName, region, service, f1X=f12)
+		elif service=='Boot Volume Backup': f1(blkStrgCl.list_boot_volume_backups, volumesBackup, tenName, region, service)
 		elif service=='Block Volume': f1(blkStrgCl.list_volumes, volumes, tenName, region, service)
-		elif service=='Block Volume Backup': f1(blkStrgCl.list_volume_backups, volumesBackups, tenName, region, service)
+		elif service=='Block Volume Backup': f1(blkStrgCl.list_volume_backups, volumesBackup, tenName, region, service)
 		elif service=='Volume Group': f1(blkStrgCl.list_volume_groups, volumes, tenName, region, service)
 		elif service=='Volume Group Backup': f1(blkStrgCl.list_volume_group_backups, volumeGroupBackups, tenName, region, service)
-		elif service=='Compute': f1(compCl.list_instances, computes, tenName, region, service)
-		elif service=='File System': f1(filStrgCl.list_file_systems, fileSystems, tenName, region, service, f1X=f12)
-		elif service=='Mount Target': f1(filStrgCl.list_mount_targets, mountTargets, tenName, region, service, f1X=f12)
-		elif service=='Cluster Network': f1(compMngCl.list_cluster_networks, clusterNetworks, tenName, region, service)
-		elif service=='Instance Pool': f1(compMngCl.list_instance_pools, instancePools, tenName, region, service)
-		elif service=='Dedicated VM Host': f1(compCl.list_dedicated_vm_hosts, dedicatedVmHosts, tenName, region, service)
-		elif service=='DB System': f1(dbCl.list_db_systems, dbSystems, tenName, region, service)
+		elif service=='Compute':
+			vnCl=None
+			if 'show_compute_ips' in conf.keys:
+				vnCl = oci.core.VirtualNetworkClient(config)
+				f1(compCl.list_vnic_attachments, vnicAttachment, tenName, region, 'VNIC Attachments')
+			f1(compCl.list_instances, compute, tenName, region, service, vnCl=vnCl)
+		elif service=='File System': f1(filStrgCl.list_file_systems, fileSystem, tenName, region, service, f1X=f12)
+		elif service=='Mount Target': f1(filStrgCl.list_mount_targets, mountTarget, tenName, region, service, f1X=f12)
+		elif service=='Cluster Network': f1(compMngCl.list_cluster_networks, clusterNetwork, tenName, region, service)
+		elif service=='Instance Pool': f1(compMngCl.list_instance_pools, instancePool, tenName, region, service)
+		elif service=='Dedicated VM Host': f1(compCl.list_dedicated_vm_hosts, dedicatedVmHost, tenName, region, service)
+		elif service=='DB System': f1(dbCl.list_db_systems, dbSystem, tenName, region, service)
 		elif service=='Autonomous Database': f1(dbCl.list_autonomous_databases, autoDB, tenName, region, service)
 		elif service=='Autonomous Container Database': f1(dbCl.list_autonomous_container_databases, autoContainerDB, tenName, region, service)
 		elif service=='Autonomous Exadata Infrastructure': f1(dbCl.list_autonomous_exadata_infrastructures, autoExaDB, tenName, region, service)
 		elif service=='Exadata Infrastructure': f1(dbCl.list_exadata_infrastructures, exaDB, tenName, region, service)
-		elif service=='VM Cluster': f1(dbCl.list_vm_clusters, vmClusters, tenName, region, service)
+		elif service=='VM Cluster': f1(dbCl.list_vm_clusters, vmCluster, tenName, region, service)
 		elif service=='NoSQL Table': f1(noSqlCl.list_tables, noSqlTables, tenName, region, service, f1X=f13)
-		elif service=='MySQL DB System': f1(mySqlDbCl.list_db_systems, mySqlDbSystems, tenName, region, service)
-		elif service=='Load Balancer': f1(ldBalCl.list_load_balancers, loadBalancers, tenName, region, service)
+		elif service=='MySQL DB System': f1(mySqlDbCl.list_db_systems, mySqlDbSystem, tenName, region, service)
+		elif service=='Load Balancer': f1(ldBalCl.list_load_balancers, loadBalancer, tenName, region, service)
 		elif service=='Analytics Instance': f1(anlyCl.list_analytics_instances, analytics, tenName, region, service)
-		elif service=='Integration Instance': f1(intgCl.list_integration_instances, integrations, tenName, region, service)
+		elif service=='Integration Instance': f1(intgCl.list_integration_instances, integration, tenName, region, service)
 		elif service=='Health Check (HTTP)': f1(hltCl.list_http_monitors, healthCheck, tenName, region, service)
 		elif service=='Health Check (Ping)': f1(hltCl.list_ping_monitors, healthCheck, tenName, region, service)
 def getDisplayName(obj):
@@ -788,73 +782,90 @@ def getDisplayName(obj):
 		return obj.display_name
 	else:
 		return '#NoDisplayName# '+obj.id
-def toServices(key, ten, comp, service, name, fld1, fld2, created):
-	the.instances[ten][key] = [comp, service, name, fld1, fld2, created]
+def toServices(key, ten, comp, service, name, created, *extraFields):
+	the.instances[ten][key] = [comp, service, name, created, *extraFields]
 	log.debug(the.instances[ten][key])
-def bootVolumes(vol, compName, tenName, serviceName, ad):
+def bootVolume(vol, compName, tenName, serviceName, ad):
 	key=compName+ad+serviceName+vol.display_name
-	toServices(key, tenName, compName, serviceName, vol.display_name, str(vol.size_in_gbs)+' GB', ad, dateFormat(vol.time_created))
-def volumesBackups(vol, compName, tenName, serviceName, region): # Same used for: Boot & Block Volume Backups
+	toServices(key, tenName, compName, serviceName, vol.display_name, dateFormat(vol.time_created), str(vol.size_in_gbs)+' GB', ad)
+def volumesBackup(vol, compName, tenName, serviceName, region): # Same used for: Boot & Block Volume Backups
 	key=compName+region+serviceName+vol.display_name
 	fld1=the.commaJoin(str(vol.size_in_gbs)+' GB', vol.source_type, vol.type)
 	fld2=the.commaJoin(region, dateFormat(vol.expiration_time))
-	toServices(key, tenName, compName, serviceName, vol.display_name, fld1, fld2, dateFormat(vol.time_created))
+	toServices(key, tenName, compName, serviceName, vol.display_name, dateFormat(vol.time_created), fld1, fld2)
 def volumeGroupBackups(vol, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+vol.display_name
 	fld1=the.commaJoin(str(vol.size_in_gbs)+' GB', vol.type)
-	toServices(key, tenName, compName, serviceName, vol.display_name, fld1, region, dateFormat(vol.time_created))
+	toServices(key, tenName, compName, serviceName, vol.display_name, dateFormat(vol.time_created), fld1, region)
 def volumes(vol, compName, tenName, serviceName, region): # Same used for: Block Volumes & Volume Groups
 	key=compName+region+serviceName+vol.display_name
-	toServices(key, tenName, compName, serviceName, vol.display_name, str(vol.size_in_gbs)+' GB', vol.availability_domain, dateFormat(vol.time_created))
-def computes(compute, compName, tenName, serviceName, region):
-	name=getDisplayName(compute)
+	toServices(key, tenName, compName, serviceName, vol.display_name, dateFormat(vol.time_created), str(vol.size_in_gbs)+' GB', vol.availability_domain)
+def vnicAttachment(va, compName, tenName, serviceName, region):
+	theVa = the.vnicAttachments
+	if va.instance_id not in theVa: theVa[va.instance_id]={}
+	theVaI=theVa[va.instance_id]
+	if 'VNICs' not in theVaI: theVaI['VNICs']=[]
+	theVaI['VNICs'].append(va.vnic_id)
+	log.debug("instance's vnic: " + va.instance_id + ' > ' + va.vnic_id)
+def compute(cmp, compName, tenName, serviceName, region, vnCl):
+	name=getDisplayName(cmp)
 	key=compName+region+serviceName+name
-	fld2=compute.region+', '+compute.lifecycle_state
-	toServices(key, tenName, compName, serviceName, name, compute.shape, fld2, dateFormat(compute.time_created))
-def fileSystems(fs, compName, tenName, serviceName, ad):
+	fld1=cmp.shape + ', ' + str(cmp.shape_config.memory_in_gbs)
+	fld2=cmp.region + ', ' + cmp.lifecycle_state
+	fld3='-'
+	if 'show_compute_ips' in conf.keys:
+		ips=[]
+		vnics = [vnCl.get_vnic(vnicId).data for vnicId in the.vnicAttachments[cmp.id]['VNICs']]
+		for vnic in vnics:
+			ip=vnic.private_ip
+			if vnic.public_ip: ip+='/'+vnic.public_ip
+			ips.append(ip)
+		fld3=' | '.join(ips)
+	toServices(key, tenName, compName, serviceName, name, dateFormat(cmp.time_created), fld1, fld2, fld3)
+def fileSystem(fs, compName, tenName, serviceName, ad):
 	key=compName+ad+serviceName+fs.display_name
-	toServices(key, tenName, compName, serviceName, fs.display_name, fs.metered_bytes, ad, dateFormat(fs.time_created))
-def mountTargets(mnt, compName, tenName, serviceName, ad):
+	toServices(key, tenName, compName, serviceName, fs.display_name, dateFormat(fs.time_created), fs.metered_bytes, ad)
+def mountTarget(mnt, compName, tenName, serviceName, ad):
 	key=compName+ad+serviceName+mnt.display_name
-	toServices(key, tenName, compName, serviceName, mnt.display_name, '-', ad, dateFormat(mnt.time_created))
-def clusterNetworks(cn, compName, tenName, serviceName, region):
+	toServices(key, tenName, compName, serviceName, dateFormat(mnt.time_created), mnt.display_name, ad)
+def clusterNetwork(cn, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+cn.display_name
-	toServices(key, tenName, compName, serviceName, cn.display_name, cn.instance_pools.display_name, region, dateFormat(cn.time_created))
-def instancePools(ip, compName, tenName, serviceName, region):
+	toServices(key, tenName, compName, serviceName, cn.display_name, dateFormat(cn.time_created), cn.instance_pools.display_name, region)
+def instancePool(ip, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+ip.display_name
-	toServices(key, tenName, compName, serviceName, ip.display_name, ip.size, region, dateFormat(ip.time_created))
-def dedicatedVmHosts(dvh, compName, tenName, serviceName, region):
+	toServices(key, tenName, compName, serviceName, ip.display_name, dateFormat(ip.time_created), ip.size, region)
+def dedicatedVmHost(dvh, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+dvh.display_name
-	toServices(key, tenName, compName, serviceName, dvh.display_name, dvh.dedicated_vm_host_shape, dvh.availability_domain, dateFormat(dvh.time_created))
-def customImages(compute, compName, tenName, serviceName, region): #Todo: Pending
+	toServices(key, tenName, compName, serviceName, dvh.display_name, dateFormat(dvh.time_created), dvh.dedicated_vm_host_shape, dvh.availability_domain)
+def customImages(cmp, compName, tenName, serviceName, region): #Todo: Pending
 	## This is listing custom images, along with all other oracle images, not getting right filter from docs
 	## Submitted MyHelp Ticket 200615-001123
 	# res = compCl.list_images(compId, lifecycle_state='AVAILABLE', page=page)
-	# for compute in res.data:
-		# key=compName+region+serviceName+compute.display_name
-		# toServices(key, tenName, compName, serviceName, compute.display_name+' / '+compute.launch_mode, compute.operating_system+' ['+compute.operating_system_version+']', dateFormat(compute.time_created))
+	# for cmp in res.data:
+		# key=compName+region+serviceName+cmp.display_name
+		# toServices(key, tenName, compName, serviceName, cmp.display_name+' / '+cmp.launch_mode, cmp.operating_system+' ['+cmp.operating_system_version+']', dateFormat(cmp.time_created))
 	dummy='remove this'
-def dbSystems(db, compName, tenName, serviceName, region):
+def dbSystem(db, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+db.display_name
-	toServices(key, tenName, compName, serviceName, db.display_name, db.database_edition, db.version, dateFormat(db.time_created))
+	toServices(key, tenName, compName, serviceName, db.display_name, dateFormat(db.time_created), db.database_edition, db.version)
 def autoDB(db, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+db.display_name
-	toServices(key, tenName, compName, serviceName, db.display_name, db.db_version, db.db_workload, dateFormat(db.time_created))
+	toServices(key, tenName, compName, serviceName, db.display_name, dateFormat(db.time_created), db.db_version, db.db_workload)
 def autoContainerDB(db, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+db.display_name
-	toServices(key, tenName, compName, serviceName, db.display_name, '-', db.service_level_agreement_type, dateFormat(db.time_created))
+	toServices(key, tenName, compName, serviceName, db.display_name, dateFormat(db.time_created), db.service_level_agreement_type)
 def autoExaDB(db, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+db.display_name
-	toServices(key, tenName, compName, serviceName, db.display_name, db.shape, db.domain, dateFormat(db.time_created))
+	toServices(key, tenName, compName, serviceName, db.display_name, dateFormat(db.time_created), db.shape, db.domain)
 def exaDB(db, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+db.display_name
-	toServices(key, tenName, compName, serviceName, db.display_name, db.shape, '-', dateFormat(db.time_created))
-def vmClusters(db, compName, tenName, serviceName, region):
+	toServices(key, tenName, compName, serviceName, db.display_name, dateFormat(db.time_created), db.shape)
+def vmCluster(db, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+db.display_name
-	toServices(key, tenName, compName, serviceName, db.display_name, db.shape, db.gi_version, dateFormat(db.time_created))
-def mySqlDbSystems(db, compName, tenName, serviceName, region):
+	toServices(key, tenName, compName, serviceName, db.display_name, dateFormat(db.time_created), db.shape, db.gi_version)
+def mySqlDbSystem(db, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+db.display_name
-	toServices(key, tenName, compName, serviceName, db.display_name, db.mysql_version, db.availability_domain, dateFormat(db.time_created))
+	toServices(key, tenName, compName, serviceName, db.display_name, dateFormat(db.time_created), db.mysql_version, db.availability_domain)
 def noSqlTables(tb, compName, tenName, serviceName, region):
 	try:
 		log.debug('Service Count: '+str(len(tb.items)))
@@ -866,23 +877,23 @@ def noSqlTables(tb, compName, tenName, serviceName, region):
 		fld1=str(lmts.max_storage_in_g_bs)+' GB'
 		fld2=the.commaJoin(lmts.max_read_units, lmts.max_write_units)
 		key=compName+region+serviceName+tbl.name
-		toServices(key, tenName, compName, serviceName, tbl.name, fld1, fld2, dateFormat(tbl.time_created))
+		toServices(key, tenName, compName, serviceName, tbl.name, dateFormat(tbl.time_created), fld1, fld2)
 def analytics(anl, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+anl.name
-	toServices(key, tenName, compName, serviceName, anl.name, anl.feature_set, anl.description, dateFormat(anl.time_created))
-def integrations(int, compName, tenName, serviceName, region):
+	toServices(key, tenName, compName, serviceName, anl.name, dateFormat(anl.time_created), anl.feature_set, anl.description)
+def integration(int, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+int.display_name
-	toServices(key, tenName, compName, serviceName, int.display_name, int.integration_instance_type, region, dateFormat(int.time_created))
-def loadBalancers(lb, compName, tenName, serviceName, region):
+	toServices(key, tenName, compName, serviceName, int.display_name, dateFormat(int.time_created), int.integration_instance_type, region)
+def loadBalancer(lb, compName, tenName, serviceName, region):
 	key=compName+region+serviceName+lb.display_name
-	toServices(key, tenName, compName, serviceName, lb.display_name, lb.shape_name, region, dateFormat(lb.time_created))
+	toServices(key, tenName, compName, serviceName, lb.display_name, dateFormat(lb.time_created), lb.shape_name, region)
 def healthCheck(hlt, compName, tenName, serviceName, region): # Uses same function for both HTTP and Ping type services
 	key=compName+region+serviceName+hlt.display_name
 	fld1 = hlt.protocol + ', '
 	fld1 += str(hlt.interval_in_seconds)+'s'
 	fld2 = region + ', '
 	fld2 += 'Enabled' if hlt.is_enabled else 'Disabled'
-	toServices(key, tenName, compName, serviceName, hlt.display_name, fld1, fld2, dateFormat(hlt.time_created))
+	toServices(key, tenName, compName, serviceName, hlt.display_name, dateFormat(hlt.time_created), fld1, fld2)
 
 def getRootCompartmentName(tenName): return tenName+' (root)'
 def getRootCompartmentID(tenName): return the.compartments[tenName]['(root)'][1]

@@ -31,7 +31,7 @@ def init(a,b):
 
 	xfi='xtraFieldsInfo'
 	ociServices = {
-		'Compute': {xfi:['Shape', 'Region, Lifecycle State']},
+		'Compute': {xfi:['Shape, RAM(GB)', 'Region, Lifecycle State']},
 		'Boot Volume': {xfi:['Size', 'Availability Domain']},
 		'Boot Volume Backup': {xfi:['Size, Backup Type:Manual/Scheduled, Type:Full/Incremental', 'Region, Expiration Time']},
 		'Dedicated VM Host': {xfi:['Dedicated VM Host Shape', 'Availability Domain']},
@@ -43,20 +43,21 @@ def init(a,b):
 		'Volume Group Backup': {xfi:['Size, Type:Full/Incremental', 'Region']},
 		'DB System': {xfi:['DB Edition', 'Version']},
 		'Autonomous Database': {xfi:['DB Version', 'Workload [ATP/ADW]']},
-		'Autonomous Container Database': {xfi:['-', 'Service Level Agreement Type']},
+		'Autonomous Container Database': {xfi:['Service Level Agreement Type']},
 		'Autonomous Exadata Infrastructure': {xfi:['Shape', 'Domain']},
-		'Exadata Infrastructure': {xfi:['Shape', '-']},
+		'Exadata Infrastructure': {xfi:['Shape']},
 		'VM Cluster': {xfi:['Shape', 'GI Version']},
 		'NoSQL Table': {xfi:['Max Storage', 'Max Read, Max Write Units']},
 		'MySQL DB System': {xfi:['MySQL Version', 'Availability Domain']},
 		'File System': {xfi:['Metered bytes', 'Availability Domain']},
-		'Mount Target': {xfi:['-', 'Availability Domain']},
+		'Mount Target': {xfi:['Availability Domain']},
 		'Analytics Instance': {xfi:['Feature Set', 'Description']},
 		'Integration Instance': {xfi:['Integration Instance Type', 'Region']},
 		'Health Check (HTTP)': {xfi:['Protocol, Interval', 'Region, Status']},
 		'Health Check (Ping)': {xfi:['Protocol, Interval', 'Region, Status']},
 		'Load Balancer': {xfi:['Shape Name', 'Region']},
 	}
+	if 'show_compute_ips' in conf.keys: ociServices['Compute'][xfi].append('IP Address')
 	# 'VCN Components',
 	networkComponents=("Route Table,Subnet,Security List,Network Security Group,Internet Gateway,NAT Gateway,Service Gateway," +
 				"VCN's DRG,Local Peering Gateway," +
@@ -86,7 +87,7 @@ def resetGlobalVariables():
 	global compartments,compartmentIds
 	global limits
 	global policies
-	global instances
+	global instances, vnicAttachments
 	global events, eventDates
 	global networks
 	global cloudGuard
@@ -103,7 +104,7 @@ def resetGlobalVariables():
 	compartments={}; compartmentIds={}
 	limits = {}
 	policies = {}
-	instances = {}
+	instances = {}; vnicAttachments={}
 	events = {}; eventDates={}
 	networks={}; networks['VCN']={}
 	cloudGuard={}

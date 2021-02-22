@@ -230,39 +230,45 @@ def generateReport():
 		addCountSummary(row+2, the.policies)
 		
 	if ui.parentWindow.m_checkBox_Instances.GetValue():
-		addTab('Services Created', colWidths=[14,25,35,35,35,35,20])
-		ws.write(row,4,'* Extra Fields information at the end',format['normal_small'])
+		addTab('Services Created', colWidths=[14,25,30,30,20,30,30,30,30,30,30,30,30])
+		ws.write(row,5,'* Ref. extra fields details after the table',format['normal_small'])
 		row+=1
-		writeHeader('Tenancy','Compartment','Cloud Service','Display Name','Field-1','Field-2','Created')
+		writeHeader('Tenancy','Compartment','Cloud Service','Display Name','Created','ExtraField-1','ExtraField-2','ExtraField-3','ExtraField-4')
+		maxCol=8
 		ws.freeze_panes(row,0)
 		
 		for t in sortedTenancies:
 			for k in sorted(the.instances[t].keys()):
 				ws.write(row,0, t, format['tblCell'])
-				ws.write(row,1, the.instances[t][k][0], format['tblCell'])
-				ws.write(row,2, the.instances[t][k][1], format['tblCell'])
-				ws.write(row,3, the.instances[t][k][2], format['tblCell'])
-				ws.write(row,4, the.instances[t][k][3], format['tblCell'])
-				ws.write(row,5, the.instances[t][k][4], format['tblCell'])
-				ws.write(row,6, the.instances[t][k][5], format['tblCell'])
+				col=1
+				for data in the.instances[t][k]:
+					ws.write(row,col, data, format['tblCell'])
+					col+=1
+				while col<=maxCol:
+					ws.write(row,col, '-', format['tblCell'])
+					col+=1
 				row+=1
-		ws.autofilter(1, 0, row-1, 6)
+		ws.autofilter(1, 0, row-1, maxCol)
 		
 		row+=1
-		ws.write(row,1, 'Extra Fields Information:', format['bold_underlined'])
+		ws.write(row,0, 'EXTRA FIELDS DETAILS:', format['bold_underlined'])
+		col=2
+		for data in ['Cloud Service','ExtraField-1','ExtraField-2','ExtraField-3','ExtraField-4']:
+			ws.write(row,col, data, format['italicBold_downBorder'])
+			col+=1
 		selectedServices = ui.getUIselection('audits', 'ociServices') # array of selected services
 		for srv in selectedServices:
 			row+=1
-			ws.write(row,2, srv, format['italic_downBorder'])
-			ws.write(row,3, '',   format['italic_downBorder'])
-			ws.write(row,4, the.ociServices[srv]['xtraFieldsInfo'][0], format['italic_downBorder'])
-			ws.write(row,5, the.ociServices[srv]['xtraFieldsInfo'][1], format['italic_downBorder'])
+			col=2
+			for data in [srv] + the.ociServices[srv]['xtraFieldsInfo']:
+				ws.write(row,col, data, format['italic_downBorder'])
+				col+=1
 		
 		if len(conf.disableCompartments)>0:
 			row+=2
-			ws.write(row,1, 'Disabled Compartments List:', format['bold_underlined'])
+			ws.write(row,0, 'Disabled Compartments List:', format['bold_underlined'])
 			row+=1
-			colStart=1; colEnd=5
+			colStart=0; colEnd=6
 			col=colStart
 			for comp in conf.disableCompartments:
 				ws.write(row,col, comp, format['italic'])
@@ -363,13 +369,10 @@ def generateReport():
 			addTab(srvc, colWidths=[25,20,20,20,20,12,20,20,20], tabColor='#632523')
 			addHeading2(service+'s')
 			writeHeader('VCN . Compartment . Tenancy','SL Name','SL OCID','Created Time')
-			#generateHeaderList('VCN . Compartment . Tenancy','SL Name','SL OCID','Created Time')
 			for vcnID in the.networks[service].keys():
 				for sl in the.networks[service][vcnID]:
 					writeRow(data=[getLnk('VCN',vcnID), sl[0], sl[1], sl[2]], style=getStyle(f6=[0]))
-					#data.append([getLnk('VCN',vcnID), sl[0], sl[1], sl[2]])
 					lnk[srvc][sl[1]]=sl[0] # sl-ocid = name
-			#addTable()
 			finalTouchTable()
 			
 			row+=1
@@ -644,6 +647,7 @@ def addAllFormatsToWorkbook():
 		'italic' : {'italic':True},
 		'italic_left' : {'italic':True, 'align':'left'},
 		'italic_downBorder' : {'italic':True, 'bottom':1},
+		'italicBold_downBorder' : {'bold':True, 'italic':True, 'bottom':1},
 		'center' : {'align':'center'},
 		'bold_fntRed' : {'bold':True, 'font_size':11, 'font_color':'red'},
 		'fntPaleRed'  : {'font_size':10, 'font_color':'#FF3300'},

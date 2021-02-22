@@ -1,26 +1,14 @@
 # OCI Auditing
 
-### <a name="toc">Table of contents [TOC]
+### <a name="toc">Contents
 
-[Introduction](#intro)
+[Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro) [Tool GUI <img src=./doc/images/semicolon-512.webp width=20>](#ui) [Command-line options <img src=./doc/images/semicolon-512.webp width=20>](#cli)
 
-[Tool GUI](#ui)
+[Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps) [Prerequisite <img src=./doc/images/semicolon-512.webp width=20>](#prerequisite) [Configurations <img src=./doc/images/semicolon-512.webp width=20>](#config)
 
-[Command-line options](#cli)
+[Tool Demo <img src=./doc/images/semicolon-512.webp width=20>](#demo) [Audit Details <img src=./doc/images/semicolon-512.webp width=20>](#report_details) [Email Notifications <img src=./doc/images/semicolon-512.webp width=20>](#email)
 
-[Installation Steps](#installation_steps)
-
-[Prerequisite](#prerequisite)
-
-[Configurations](#config)
-
-[Tool Demo](#demo)
-
-[Audit Details](#report_details)
-
-[Email Notifications](#email)
-
-[FAQs](./doc/FAQs.md)
+[FAQs <img src=./doc/images/semicolon-512.webp width=20>](./doc/FAQs.md)
 
 &nbsp;  
 
@@ -181,6 +169,11 @@ ui_sub_heading=OCI tenancies detailed auditing
 \* Further additional configurations are shown along with individual report snaps.
 
 [TOC](#toc)
+
+<br />
+
+* _All configuration values like OCIDs, Names etc., are dummy and made to seem like originals, for clear understanding._
+_As these values are just for illustration purpose, replace with your suitable values_
 
 <br />
 
@@ -402,7 +395,8 @@ _You can send request for additional services to get added in to the Tool_
 # Format: service_notin_region=Service Name/region-names in comma seperated
 service_notin_region= MySQL DB System / ap-seoul-1, me-jeddah-1, ap-chuncheon-1, ca-montreal-1, eu-frankfurt-1, us-phoenix-1, uk-london-1, ap-tokyo-1, ap-sydney-1, ap-osaka-1, ap-melbourne-1, eu-amsterdam-1
 service_notin_region= Cluster Network / ca-toronto-1, sa-saopaulo-1, eu-zurich-1, ap-mumbai-1, ap-hyderabad-1, ap-seoul-1, me-jeddah-1, ap-chuncheon-1, ca-montreal-1
-
+# show private & public IPs of Compute Instances
+show_compute_ips=x
 # disable_compartments, provide list of compartments which should not be scanned
 disable_compartments=C101,C102,CompartmentABC,XYZ
 ; disable_compartments=Lina_Comp,tenancy05 (root),Network_Comp
@@ -518,7 +512,6 @@ Shows a list of all the subnets configured.
 
 If you are scheduling this tool for daily, weekly reports, then email notification feature can send the report right to your inbox.
 
-
 ### Configurations for Email Notifications
 
 ```ini
@@ -536,14 +529,13 @@ smtp_tls_to=your-name@your-domain.com
 ; smtp_tls_to=karthik.hiraskar@oracle.com,xyz.aaa@ggg.com,xyz.aaa@yy.com
 ```
 
-<u>_Note:_</u>
-* _Mailing functionality may give error if VPN or antivirus blocks the connection_
+_Note:_
+> _Mailing functionality may give error if VPN or antivirus blocks the connection._
+
+> _Email Notifications are required only when we run on scheduler_
+    - _With GUI, reports will be right on your system, so email feature is only enabled for CLI runs._
 
 [TOC](#toc)
-
-<br />
-
-* _All configuration values here are just for illustration, replace with your suitable values_
 
 <br />
 <br />
@@ -555,5 +547,4 @@ More Details here:
 * IDCS Auditing Tool: https://confluence.oraclecorp.com/confluence/x/PIK_Yw
 * IDCS Instances Listing Tool: Lists all instances, means all service created.
 
-[these IDCS links are accessible only within Oracle]
 
