@@ -95,7 +95,7 @@ Note:
 
 \* Place exe file in your preferred directory, and under `configurations` folder place [tool.ini](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini)
 
-\* Configure tenancies authentication and optional configurations if required.
+\* Configure tenancies authentication and if required optional configurations.
 \{[how to configure](#config) and [prerequisite](#prereq)\}
 
 <br />
