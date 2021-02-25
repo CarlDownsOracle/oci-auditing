@@ -2,11 +2,15 @@
 
 ### <a name="toc">Contents
 
-[Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro) [Tool GUI <img src=./doc/images/semicolon-512.webp width=20>](#ui) [Command-line options <img src=./doc/images/semicolon-512.webp width=20>](#cli)
-
-[Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps) [Prerequisite <img src=./doc/images/semicolon-512.webp width=20>](#prerequisite) [Configurations <img src=./doc/images/semicolon-512.webp width=20>](#config)
-
-[Tool Demo <img src=./doc/images/semicolon-512.webp width=20>](#demo) [Audit Details <img src=./doc/images/semicolon-512.webp width=20>](#report_details) [Email Notifications <img src=./doc/images/semicolon-512.webp width=20>](#email)
+[Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro)
+[Tool GUI <img src=./doc/images/semicolon-512.webp width=20>](#ui)
+[Command-line options <img src=./doc/images/semicolon-512.webp width=20>](#cli)
+[Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
+[Prerequisite <img src=./doc/images/semicolon-512.webp width=20>](#prerequisite)
+[Configurations <img src=./doc/images/semicolon-512.webp width=20>](#config)
+[Tool Demo <img src=./doc/images/semicolon-512.webp width=20>](#demo)
+[Audit Details <img src=./doc/images/semicolon-512.webp width=20>](#report_details)
+[Email Notifications <img src=./doc/images/semicolon-512.webp width=20>](#email)
 
 [FAQs <img src=./doc/images/semicolon-512.webp width=20>](./doc/FAQs.md)
 
@@ -87,15 +91,12 @@ Note:
 &nbsp;  
 
 # <a name="installation_steps"></a>Installation steps for first time usage
-\* Download packaged single click exe file from [releases](https://github.com/KsiriCreations/oci-auditing/releases)
+\* Download packaged single click executable `OCI_Auditing_Tool-vX.exe` from [releases](https://github.com/KsiriCreations/oci-auditing/releases)
 
-\* Place exe file in your preferred directory.
+\* Place exe file in your preferred directory, and under `configurations` folder place [tool.ini](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini)
 
-\* Also download [configurations\tool.ini](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini) and place inside a subfolder named `configurations`.
-
-\* Configure tenancies, authentications and optional configurations.
-
-[how to configure](#config) and [prerequisite](#prereq)
+\* Configure tenancies authentication and optional configurations if required.
+\{[how to configure](#config) and [prerequisite](#prereq)\}
 
 <br />
 
@@ -172,8 +173,9 @@ ui_sub_heading=OCI tenancies detailed auditing
 
 <br />
 
-* _All configuration values like OCIDs, Names etc., are dummy and made to seem like originals, for clear understanding._
-_As these values are just for illustration purpose, replace with your suitable values_
+> _All configuration values like OCIDs, Names etc., are dummy and made to seem like originals, for clear understanding._
+
+> As these are just for illustration purpose, replace with your correct values!_
 
 <br />
 
