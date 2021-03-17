@@ -2,10 +2,10 @@
 
 ### <a name="toc">Contents
 
+[Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
 [Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro)
 [Tool GUI <img src=./doc/images/semicolon-512.webp width=20>](#ui)
 [Command-line options <img src=./doc/images/semicolon-512.webp width=20>](#cli)
-[Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
 [Prerequisite <img src=./doc/images/semicolon-512.webp width=20>](#prerequisite)
 [Configurations <img src=./doc/images/semicolon-512.webp width=20>](#config)
 [Tool Demo <img src=./doc/images/semicolon-512.webp width=20>](#demo)
@@ -16,6 +16,18 @@
 
 &nbsp;  
 
+# <a name="installation_steps"></a>Installation steps for first time usage
+* Download one click executable `OCI_Auditing_Tool-vX.exe` from [RELEASES](https://github.com/KsiriCreations/oci-auditing/releases)
+    - Place exe file in your preferred directory
+    - On first run under `configurations` folder [`tool.ini`](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini) a initial configuration will be automatically placed
+* Configure tenancies authentication and if required optional configurations.
+\{[how to configure](#config) and [prerequisite](#prereq)\}
+
+<br />
+
+[TOC](#toc)
+
+&nbsp; 
 
 # <a name="intro"></a>Introduction
 
@@ -88,20 +100,7 @@ Note:
 
 [TOC](#toc)
 
-&nbsp;  
-
-# <a name="installation_steps"></a>Installation steps for first time usage
-* Download one click executable `OCI_Auditing_Tool-vX.exe` from [RELEASES](https://github.com/KsiriCreations/oci-auditing/releases)
-    - Place exe file in your preferred directory
-    - On first run under `configurations` folder [`tool.ini`](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini) a initial configuration will be automatically placed
-* Configure tenancies authentication and if required optional configurations.
-\{[how to configure](#config) and [prerequisite](#prereq)\}
-
-<br />
-
-[TOC](#toc)
-
-&nbsp;  
+&nbsp;   
 
 # <a name="prerequisite"></a><a name="prereq"></a>Prerequisite
 
