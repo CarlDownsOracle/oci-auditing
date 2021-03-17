@@ -91,11 +91,10 @@ Note:
 &nbsp;  
 
 # <a name="installation_steps"></a>Installation steps for first time usage
-\* Download packaged single click executable `OCI_Auditing_Tool-vX.exe` from [releases](https://github.com/KsiriCreations/oci-auditing/releases)
-
-\* Place exe file in your preferred directory, and under `configurations` folder place [tool.ini](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini)
-
-\* Configure tenancies authentication and if required optional configurations.
+* Download one click executable `OCI_Auditing_Tool-vX.exe` from [RELEASES](https://github.com/KsiriCreations/oci-auditing/releases)
+    - Place exe file in your preferred directory
+    - On first run under `configurations` folder [`tool.ini`](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini) a initial configuration will be automatically placed
+* Configure tenancies authentication and if required optional configurations.
 \{[how to configure](#config) and [prerequisite](#prereq)\}
 
 <br />
@@ -106,62 +105,48 @@ Note:
 
 # <a name="prerequisite"></a><a name="prereq"></a>Prerequisite
 
-\* A Windows system (cloud or local) to install the tool.
-
-\* An advanced text editor is preferred. `example: notepad++`
-
-\* Oracle Cloud Infrastructure account. https://www.oracle.com/cloud/sign-in.html
-
-\* An OCI user.
-`security best practice is to create a new user with minimal permissions required`
-
-\* IAM policy for the user.
-    
-    allow group <grp_name> read all-resources in tenancy
-
-\* RSA key pair in PEM format, to form API authentication.
-
-\* Tenancy OCID, user OCID and fingerprint obtained after adding the public key.
-
-\* SMTP/TLS service details for notifications (optional).
+* A Windows system (cloud or local) to setup the tool.
+* An advanced text editor is preferred. `example: notepad++`
+* Oracle Cloud Infrastructure, OCI account.
+    - An OCI user.
+        - security best practice is to create a new user with minimal permissions required
+        - `allow group <grp_name> read all-resources in tenancy`
+* RSA key pair in PEM format, to form API authentication.
+* Tenancy OCID, user OCID and fingerprint obtained after adding the public key.
+* SMTP/TLS configurations for mail notifications (optional).
 
 [TOC](#toc)
 
 &nbsp;  
 
-# <a name="config">Configurations</a>
+# <a name="config">Configurations - "tool.ini"</a>
 
-### Configuring "tool.ini"
-
-Get User configuration details following as steps in: [User configurations on OCI](./doc/user_configurations_on_oci.md)
-
-_Note: All lines starting with Hash or colon [ `# ;` ] are comment lines._
-
+_All lines starting with Hash or colon [ `# ;` ] are comment lines._
 ```ini
 # use hash # symbol for notes, comments or any explanations
 ; use semi-colon ; to switch between enabling/disabling tags
 
-### Few Examples ###
+### Examples ###
 
-# if "overwrite_logfile" specified with any key, log file will be overwritten
-;overwrite_logfile=x
+# if "overwrite_logfile" specified with any key, log file will be overwritten [comments]
+; overwrite_logfile=x [This tag is Disabled now]
+overwrite_logfile=x [This tag is Enabled now]
 
 # This sub heading will be shown on GUI
+; ui_sub_heading=XYZ groups, tenancies auditing
 ui_sub_heading=OCI tenancies detailed auditing
-;ui_sub_heading=XYZ groups, tenancies auditing
 ```
-
-\* Preferred to copy private key/s under the `configurations` folder.
-    
-\* Open the `tool.ini` file in text editor and add the tenancy details.
-
+Get User configuration details following as steps in: [User configurations on OCI](./doc/user_configurations_on_oci.md)
+* Preferred to copy private key/s under the `configurations` folder.
+* Open the `tool.ini` file in text editor and add the tenancy details.
+```ini
     tenancy_name= <name of your tenancy>
     tenancy_ocid= <OCID of your tenancy>
     user_ocid = <OCID of the user>
     fingerprint = <fingerprint of the user>
     Region = <any subscribed region identifier>
     key_file = <private key local path>
-
+```
 
 \* For multiple tenancies, add multiple sets of entries as below.
 
@@ -173,9 +158,10 @@ ui_sub_heading=OCI tenancies detailed auditing
 
 <br />
 
-> _All configuration values like OCIDs, Names etc., are dummy and made to seem like originals, for clear understanding._
+__IMPORTANT NOTE:__
+> _All configuration values like OCIDs, Names etc., are shown dummy in this document, seems like originals, for clear understanding._
 
-> As these are just for illustration purpose, replace with your correct values!_
+> _Replace with right values in your configurations!_
 
 <br />
 
@@ -191,12 +177,9 @@ To test the connectivity, select required tenancies, click on "Options > Connect
 
 
 To gather audit details:
-
-\* Select the tenancy/s on left.
-
-\* Select the type of audits required on right.
-
-\* Click on the green arrow button at the bottom.
+* Select the tenancy/s on left.
+* Select the type of audits required on right.
+* Click on the green arrow button at the bottom.
 
 This will fetch the required information from OCI and generate an audit report in .xlsx format.
 
@@ -542,11 +525,6 @@ _Note:_
 <br />
 <br />
 
-## Tools for IDCS
-Similar kind of applications are also available for Oracle's classic cloud, IDCS (Identity Cloud service).
-
-More Details here:
-* IDCS Auditing Tool: https://confluence.oraclecorp.com/confluence/x/PIK_Yw
+## Similar Tools for IDCS/OCIC
+* IDCS Auditing Tool: Lists Users, Groups, AppRoles
 * IDCS Instances Listing Tool: Lists all instances, means all service created.
-
-
