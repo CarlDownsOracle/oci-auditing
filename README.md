@@ -1,6 +1,13 @@
 # OCI Auditing
 
-### <a name="toc">Contents
+## DOWNLOAD
+[Linux package <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.14/oci-auditing-v3614)
+[Windows executable <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.12/OCI_Auditing_Tool-v3.6.12.exe)
+
+&nbsp;
+&nbsp;
+
+## <a name="toc">Index
 
 [Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
 [Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro)

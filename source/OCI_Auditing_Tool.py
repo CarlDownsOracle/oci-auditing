@@ -3,7 +3,7 @@
 # Purpose   : Auditing Tool, for OCI tenancies
 # - - - - - - - - - - - - - - - - - - - - - - - -
 #
-version='3.6.12' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
+version='3.6.13' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
 tool_name='OCI Auditing'
 
 # Todo:
@@ -13,16 +13,14 @@ tool_name='OCI Auditing'
 # importing standard/open-source modules
 import sys,os
 help='''
-USE GUI MODE TO GET ALL OPTIONS ACCESSIBLE, command-line mode is with limited options required for schedulers/automations.
+COMMANDLINE USAGE:
 
-COMMANDLINE USAGE OF "OCI AUDITING TOOL"
-
-	Arg 1    [*Mandatory argument]
+    Arg 1    [*Mandatory argument]
         Tenancy Names, each separated by a space, and enclosed by quotes
             ex: "tenancy1"
                 "tenancy1 tenancy2 tenancy3"
 
-	Arg 2    [*Mandatory argument]
+    Arg 2    [*Mandatory argument]
         Use one or more of these below options seperated by space, and enclosed by quotes
             ex: "users groups"
                 "networks"
@@ -43,7 +41,7 @@ COMMANDLINE USAGE OF "OCI AUDITING TOOL"
             Note: select only required audits, to save big run-times.
                   optimization in configurations can also save longer run-times.
 
-	Arg 3    [-Optional argument]
+    Arg 3    [-Optional argument]
         sendMail = sends report generated directly to your mail inbox
                    [as per SMTP/TLS configurations]
 
@@ -55,31 +53,69 @@ Note:
 argLen=len(sys.argv)
 argLen_min=3; argLen_max=4
 if argLen==2:
-	if sys.argv[1] in ['-v','-V','--version']:
-		print('OCI Auditing Tool, version '+version)
-	elif sys.argv[1] in ['--help','-?']:
-		print('OCI Auditing Tool, version '+version)
-		print(help)
-	else:
-		print('== Error: Invalid arguments ==\n'+help)
-	os._exit(0)
+    if sys.argv[1] in ['-v','-V','--version']:
+        print('OCI Auditing Tool, version '+version)
+    elif sys.argv[1] in ['--help','-?']:
+        print('OCI Auditing Tool, version '+version)
+        print(help)
+    else:
+        print('== Error: Invalid arguments ==\n'+help)
+    os._exit(0)
 elif (argLen>1 and argLen<argLen_min) or argLen>argLen_max:
-	print('== Error: Invalid number of arguments ==\n'+help)
-	os._exit(0)
+    print('== Error: Invalid number of arguments ==\n'+help)
+    os._exit(0)
+else:
+    import the
+    the.init(version,tool_name) # after this initialization only, import ui
+    if os.name=='nt' and argLen==1: # Windows UI mode
+        import wx
+        import ui
+        #the.ui=ui, the.ui is assigned within ui module, so no need again here
+        # this variable can be used in any other modules to determine if UI mode
+        app = wx.App(False) #mandatory in wx, create an app, False stands for not redirection stdin/stdout
+        self = ui.MainFrame(None)
+        app.MainLoop() #start the applications
+    elif argLen>1: # Command line mode
+        commandlineTenancies = sys.argv[1].split()
+        analysisType         = sys.argv[2].split()
+        if argLen==4 and sys.argv[3]=='sendMail': the.sendMail=True
+        conf=the.conf
+        the.consoleWidth=os.get_terminal_size().columns
+        selectedTenancies=[]; selectedAudits=[]
+        # select requested tenancies
+        for tenancy in conf.tenancyNames:
+            if tenancy in commandlineTenancies: selectedTenancies.append(tenancy)
+        the.updateSelection('domains', 'selection', selectedTenancies)
+        if len(selectedTenancies)>0: # if more than one valid tenancies selected
+            for audt in ['users','groups','limits','policies','instances','events','networks','cloudGuard']:
+                if 'all' in analysisType or audt in analysisType:
+                    the.updateSelection('audits', audt, True)
+                    selectedAudits.append(audt)
+                else:
+                    the.updateSelection('audits', audt, False)
+            if 'instances' in selectedAudits: # selects all OCI services
+                the.updateSelection('audits', 'ociServices', list(the.ociServices))
+            if 'events' in selectedAudits: # select from last run
+                the.updateSelection('audits', 'eventsDateRange', 3)
+            if 'networks' in selectedAudits: # selects all networkComponents
+                the.updateSelection('audits', 'networkComponents', the.networkComponents)
+            the.setInfo('''
+    * * * Commandline Mode * * *
+        
+    Audit Components: {}
+    Tenancies       : {}
+    ----------------------
+    '''.format(selectedAudits, selectedTenancies))
+            import start
+            start.init(the)
+            ret=start.start()
+        else:
+            the.setError('''\n\n
+    * * * Detected Commandline Mode * * *
+        
+    NO VALID TENANCIES CALLED !!
 
-import wx
-import the
-the.init(version,tool_name) # after this initialization only, import ui
-import ui
-
-# Process command line arguments
-# Commandline usage supported with limited options, for normal options, use directly with GUI
-if argLen>1: # Todo: need to complete
-	ui.commandlineMode=True
-	ui.commandlineTenancies = sys.argv[1].split()
-	the.analysisType=sys.argv[2].split()
-	if argLen==4:
-		if sys.argv[3]=='sendMail': the.sendMail=True
-app = wx.App(False) #mandatory in wx, create an app, False stands for not redirection stdin/stdout
-self = ui.MainFrame(None)
-app.MainLoop() #start the applications
+    Ending this program now..!!
+    ''')
+            os._exit(0)
+    

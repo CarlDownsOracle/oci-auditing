@@ -2,18 +2,17 @@ import re
 from datetime import datetime
 from time import sleep
 
-def init(a,b):
+def init(a):
 	global ui,the,conf,log,oci
 	global networkServiceSelection,dateFormat,gaugeBreaks
 	the=a
-	oci=b
+	oci=the.oci
 	ui=the.ui
-	the.oci=oci
 	conf=the.conf
 	dateFormat=the.dateFormat
 	log=conf.log
 	gaugeBreaks=the.gaugeBreaks
-	networkServiceSelection=ui.getUIselection('audits', 'networkComponents')
+	networkServiceSelection=the.getSelection('audits', 'networkComponents')
 
 	# These errors are handled, with this "RETRY STRATEGY"
 	# Notepad++ search pattern to see if any new error came: 
@@ -56,7 +55,7 @@ def init(a,b):
 	).get_retry_strategy()
 
 def listUsers(idty, tenName, tenOcid):
-	ui.setInfo(tenName + ': Getting Users...')
+	the.setInfo(tenName + ': Getting Users...')
 	allowedNamedUsers = conf.allowedNamedUsers # Work on local variable
 	
 	page=None
@@ -90,10 +89,10 @@ def listUsers(idty, tenName, tenOcid):
 	if conf.validate['USERS']:
 		for nu in allowedNamedUsers: # List Missing Named Users
 			the.users[tenName]['#Missing#' + nu] = [nu, '--NA--', '--NA--', '--NA--', '--NA--', 'Mandatory Named User Missing']
-	ui.increamentGauge(the.gaugeIncNum)
+	the.increamentGauge(the.gaugeIncNum)
 
 def listGroups(idty, tenName, tenOcid):
-	ui.setInfo(tenName + ': Getting Groups...')
+	the.setInfo(tenName + ': Getting Groups...')
 	allowedNamedGroups = conf.allowedNamedGroups
 	
 	page=None
@@ -124,19 +123,19 @@ def listGroups(idty, tenName, tenOcid):
 	if conf.validate['GROUPS']:
 		for ng in allowedNamedGroups:
 			the.groups[tenName]['#Missing#' + ng] = [ng, '--NA--', '--NA--', '--NA--', 'Mandatory Group Missing']
-	ui.increamentGauge(the.gaugeIncNum)
+	the.increamentGauge(the.gaugeIncNum)
 
 def listPolicies(idty, tenName):
 	gaugeIncNumFor1Compartment = (the.gaugeIncNum*gaugeBreaks['allCompartments'])/len(the.compartments[tenName])
 	## Compartments wise looping
 	for compKey in the.compartments[tenName]:
 		the.createThread_5belowMaxThreads(listPoliciesFor1Compartment, compKey, idty, tenName)
-		ui.increamentGauge(gaugeIncNumFor1Compartment)
+		the.increamentGauge(gaugeIncNumFor1Compartment)
 def listPoliciesFor1Compartment(compKey, idty, tenName):
 	compName= the.compartments[tenName][compKey][0]
 	compId  = the.compartments[tenName][compKey][1]
 	compCmts= the.compartments[tenName][compKey][5]
-	ui.setInfo(tenName + ': Getting Policies - ' + compName)
+	the.setInfo(tenName + ': Getting Policies - ' + compName)
 	
 	compNum=''
 	res = re.search(r'([0-1]?\d{2})$', compName)
@@ -230,7 +229,7 @@ def listLimits(config, tenName):
 	tenancyOcid = config['tenancy']
 	lmts = oci.limits.LimitsClient(config)
 	
-	ui.setInfo(tenName + ': Getting Service Names and Definitions - for Limits ...')
+	the.setInfo(tenName + ': Getting Service Names and Definitions - for Limits ...')
 	## Getting Service Names, with local code to handle paging [This method is preserved just as examples]
 	serviceNames = {}
 	page=None # This is manual way of handling pages, automated way is "oci.pagination.list_call_get_all_results"
@@ -248,7 +247,7 @@ def listLimits(config, tenName):
 	limitDefs = response.data
 	log.debug('Got Limit Definitions: ' + str(len(limitDefs)))
 	for defn in limitDefs: serviceDefs[defn.name] = {'service': defn.service_name,	'desc': defn.description}
-	ui.increamentGauge(the.gaugeIncNum)
+	the.increamentGauge(the.gaugeIncNum)
 
 	gaugeIncNumFor1Region = (the.gaugeIncNum*(gaugeBreaks['serviceLimits']-1))/len(getRegionsSubscribed(tenName))
 	loopRegions(listLimitsForRegion, config, tenName, serviceDefs=serviceDefs, serviceNames=serviceNames, gaugeIncNumFor1Region=gaugeIncNumFor1Region)
@@ -262,9 +261,9 @@ def listLimitsForRegion(config, tenName, serviceDefs={}, serviceNames={}, gaugeI
 		serviceDesc = serviceNames[serviceName]
 		if serviceDesc in conf.limitsSkipServices: continue
 		the.createThread(listLimitsFor1RegionService, tenancyOcid, tenName, region, lmts, serviceDefs, serviceName, serviceDesc)
-	ui.increamentGauge(gaugeIncNumFor1Region)
+	the.increamentGauge(gaugeIncNumFor1Region)
 def listLimitsFor1RegionService(tenancyOcid, tenName, region, lmts, serviceDefs, serviceName, serviceDesc):
-	ui.setInfo(tenName + ' > ' + region + ': Getting Service Limits - ' + serviceDesc + ' ...')
+	the.setInfo(tenName + ' > ' + region + ': Getting Service Limits - ' + serviceDesc + ' ...')
 	
 	res1 = the.getOciData(oci.pagination.list_call_get_all_results, lmts.list_limit_values, tenancyOcid, service_name=serviceName)
 	limitValues = res1.data
@@ -284,7 +283,7 @@ def listLimitsFor1RegionService(tenancyOcid, tenName, region, lmts, serviceDefs,
 				else:
 					res2 = the.getOciData(lmts.get_resource_availability, serviceName, l.name, tenancyOcid)
 			except oci.exceptions.ServiceError as e:
-				ui.setError(str(e))
+				the.setError(str(e))
 			resourceData = res2.data
 			used = resourceData.used if resourceData.used else 0
 			available = resourceData.available if resourceData.available else 0
@@ -297,7 +296,7 @@ def listCompartments(idty, tenName, tenancyOcid):
 	# namePattern  = re.compile(r"(^([5|6]\d{6}\-C)|(9\d{7}\-C)|(C))[0-1]?\d{2}$")
 	namePattern  = re.compile(conf.allowed_compname_pattern)
 	
-	ui.setInfo(tenName + ': Getting Compartments...')
+	the.setInfo(tenName + ': Getting Compartments...')
 
 	page=None
 	while True:
@@ -347,7 +346,7 @@ def listCompartments(idty, tenName, tenancyOcid):
 		key=cmp_name
 		the.compartments[tenName][key] = [cmp_name, id, level, cmp['lifecycle_state'], cmp['description'], cmnts]
 		the.compartmentIds[id]=[tenName,key]
-	ui.increamentGauge(the.gaugeIncNum)
+	the.increamentGauge(the.gaugeIncNum)
 
 # Todo: incomplete/untested functionality
 def usageFn(config, tenName): # This functionality always returning None for OU internal tenancies, may work for other.
@@ -379,13 +378,13 @@ def cloudGuard(config, tenName):
 	the.createThread(callCgService, tenName, rootCompId, 'Problems', cgCl.list_problems, cgProblems, incGaugeCG)
 	the.createThread(callCgService, tenName, rootCompId, 'Recommendations', cgCl.list_recommendations, cgRecommendations, incGaugeCG)
 def callCgService(tenName, rootCompId, service, ociFunc, locFunc, incGaugeCG):
-	ui.setInfo(tenName + ': ' + service + ' ...')
+	the.setInfo(tenName + ': ' + service + ' ...')
 	the.cloudGuard[service][tenName]={}
 	res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, rootCompId, compartment_id_in_subtree=True, access_level='ACCESSIBLE')
 	if res:
 		# log.debug(res.data)
 		for obj in res.data: locFunc(obj, tenName, service)
-	ui.increamentGauge(incGaugeCG)
+	the.increamentGauge(incGaugeCG)
 def cgProblems(pr, tenName, srv):
 	comp = getCompartmentName(pr.compartment_id)
 	labels = '; '.join(pr.labels)
@@ -453,7 +452,7 @@ def networksOfRegion(config, tenName):
 		log.debug('IGNORE VCN SUB-COMPONENTS: No VCN in : ' + tenName + ' > ' + region)
 		regionsSubscribed=len(getRegionsSubscribed(tenName))
 		incGaugePerRegion=(the.gaugeIncNum*gaugeBreaks['allCompartments'])/regionsSubscribed
-		ui.increamentGauge(incGaugePerRegion)
+		the.increamentGauge(incGaugePerRegion)
 def initiateDictsForNetworkComponents(srv,ten,rgn,comp):
 	if not ten in the.networks[srv]: the.networks[srv][ten]={}
 	if not rgn in the.networks[srv][ten]: the.networks[srv][ten][rgn]={}
@@ -607,7 +606,7 @@ def vnics(v, srv, nsgId):
 	the.networks[srv][nsgId].append([v.resource_id, v.vnic_id, dateFormat(v.time_associated)])
 def networkSecurityGroups(nsg, compName, tenName, srv, region, vnCl):
 	name=getDisplayName(nsg)
-	ui.setInfo('Scanning NSG:' + name + ' ...')
+	the.setInfo('Scanning NSG:' + name + ' ...')
 	if not nsg.vcn_id in the.networks[srv]: the.networks[srv][nsg.vcn_id]=[]
 	the.networks[srv][nsg.vcn_id].append([name, nsg.id, dateFormat(nsg.time_created)])
 	
@@ -616,7 +615,7 @@ def networkSecurityGroups(nsg, compName, tenName, srv, region, vnCl):
 
 def scanCompartment(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
 	try:
-		ui.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
+		the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
 		res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId)
 		if res:
 			log.debug('Count: '+str(len(res.data)))
@@ -629,7 +628,7 @@ f11=scanCompartment
 def f11_networkComponents(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
 	try:
 		if compName in the.networks['VCN'][tenName][region]:
-			ui.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
+			the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
 			res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId)
 			if res:
 				log.debug('Count: '+str(len(res.data)))
@@ -645,7 +644,7 @@ def call_vcnComponents(service, ociFunc, locFunc, tenName, region, f1X=f11_netwo
 		loopCompartments(ociFunc, locFunc, tenName, region, service, f1X=f1X, **kwargs)
 def f11_parms(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
 	try:
-		ui.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
+		the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
 		page=None
 		while True:
 			res=the.getOciData(ociFunc, compId, **kwargs, page=page)
@@ -653,7 +652,7 @@ def f11_parms(ociFunc, locFunc, compId, compName, tenName, region, service, **kw
 				log.debug('Count: '+str(len(res.data)))
 				for srv in res.data: locFunc(srv, compName, tenName, region)
 			# This function is interupt enabled
-			if ui.getUIselection('audits', 'interuptRaised'): break
+			if the.getSelection('audits', 'interuptRaised'): break
 			if res and res.has_next_page: page=res.next_page
 			else: break
 	except Exception:
@@ -662,7 +661,7 @@ def f11_parms(ociFunc, locFunc, compId, compName, tenName, region, service, **kw
 def f12(ociFunc, locFunc, compId, compName, tenName, region, service): # Loops through every AD with Paging, Parmeter: 1.Compartment, 2.AvailabilityDomain
 	try:
 		for ad in the.tenancies[tenName][2][region]: # Loop through ADs
-			ui.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + ad + ' > ' + service + 's ...')
+			the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + ad + ' > ' + service + 's ...')
 			page=None
 			while True:
 				res=the.getOciData(ociFunc, compartment_id=compId, availability_domain=ad, page=page)
@@ -676,7 +675,7 @@ def f12(ociFunc, locFunc, compId, compName, tenName, region, service): # Loops t
 		raise # send also to console
 def f13(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs): # non-iterable listing
 	try:
-		ui.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
+		the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
 		res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId, **kwargs)
 		if res:
 			locFunc(res.data, compName, tenName, service, region)
@@ -687,7 +686,7 @@ def loopCompartments(ociFunc, locFunc, tenName, region, service='', f1X=f11, **k
 	regionsSubscribed=len(getRegionsSubscribed(tenName))
 	incGaugePerRegion=(the.gaugeIncNum*gaugeBreaks['allCompartments'])/regionsSubscribed
 	if service and (service in conf.serviceNotinRegions) and (region in conf.serviceNotinRegions[service]):
-		ui.increamentGauge(incGaugePerRegion)
+		the.increamentGauge(incGaugePerRegion)
 		return # if configured as, service not available in region
 	
 	# Creates Thread for Each Compartment
@@ -707,22 +706,22 @@ def loopCompartments(ociFunc, locFunc, tenName, region, service='', f1X=f11, **k
 		else:
 			t=the.createThread_5belowMaxThreads(f1X, ociFunc, locFunc, compId, compName, tenName, region, service, **kwargv)
 			threads.append(t)
-		ui.increamentGauge(incGaugePerComp)
+		the.increamentGauge(incGaugePerComp)
 	return threads
 f1=loopCompartments
 def loopRegions(fn, config, tenName, **kwargs): # Loops through all subscribed regions
-	ui.parentWindow.m_staticField1.Show()
+	if ui: ui.parentWindow.m_staticField1.Show()
 	for regn in getRegionsSubscribed(tenName):
 		config['region']=regn
-		ui.parentWindow.m_staticField1.SetLabel('')
+		if ui: ui.parentWindow.m_staticField1.SetLabel('')
 		sleep(1) # go and comes new value effect, and no problem of 1 second sleep, many threads will be running in this interval
-		ui.parentWindow.m_staticField1.SetLabel('Processing - "'+regn+'"')
+		if ui: ui.parentWindow.m_staticField1.SetLabel('Processing - "'+regn+'"')
 		fn(config, tenName, **kwargs)
-	ui.parentWindow.m_staticField1.Hide()
+	if ui: ui.parentWindow.m_staticField1.Hide()
 
 def listInstancesOfRegion(config, tenName):
 	region=config['region']
-	selectedServices = ui.getUIselection('audits', 'ociServices') # array of selected services
+	selectedServices = the.getSelection('audits', 'ociServices') # array of selected services
 	def fn1(srvcs): return any(x in selectedServices for x in srvcs)
 	
 	# ClientObjects wise grouping, that support Services
