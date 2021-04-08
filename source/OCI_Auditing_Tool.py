@@ -3,7 +3,7 @@
 # Purpose   : Auditing Tool, for OCI tenancies
 # - - - - - - - - - - - - - - - - - - - - - - - -
 #
-version='3.6.13' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
+version='3.6.16' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
 tool_name='OCI Auditing'
 
 # Todo:
@@ -34,9 +34,10 @@ COMMANDLINE USAGE:
         limits       = list & analyse Service Limits, warnings on near to limits
         policies     = list & analyse Policies, audits for mandatory policies, missing policies, additional policies
         instances    = lists instances created for all the OCI services supported
-        events       = list & analyse Audit Events, alerts for all create/modify/terminate events
+        events       = list & analyse Audit Events from last run, alerts for all create/modify/terminate events
         networks     = list & analyse VCN and all of it's sub-components, audits CIDR, Protocols
-        cloudGuard   = lists all Cloud Guard findings, with colorings as per Severity
+        cloudGuard   = lists all Cloud Guard findings, with graphs and colorings as per Severity
+        cloudAdvisor = lists all Cloud Advisor Recommendations, with estimated savings
         all          = all these audits
             Note: select only required audits, to save big run-times.
                   optimization in configurations can also save longer run-times.
@@ -65,57 +66,60 @@ elif (argLen>1 and argLen<argLen_min) or argLen>argLen_max:
     print('== Error: Invalid number of arguments ==\n'+help)
     os._exit(0)
 else:
-    import the
-    the.init(version,tool_name) # after this initialization only, import ui
-    if os.name=='nt' and argLen==1: # Windows UI mode
-        import wx
-        import ui
-        #the.ui=ui, the.ui is assigned within ui module, so no need again here
-        # this variable can be used in any other modules to determine if UI mode
-        app = wx.App(False) #mandatory in wx, create an app, False stands for not redirection stdin/stdout
-        self = ui.MainFrame(None)
-        app.MainLoop() #start the applications
-    elif argLen>1: # Command line mode
-        commandlineTenancies = sys.argv[1].split()
-        analysisType         = sys.argv[2].split()
-        if argLen==4 and sys.argv[3]=='sendMail': the.sendMail=True
+    try:
+        import the
+        the.init(version,tool_name) # after this initialization only, import ui
         conf=the.conf
-        the.consoleWidth=os.get_terminal_size().columns
-        selectedTenancies=[]; selectedAudits=[]
-        # select requested tenancies
-        for tenancy in conf.tenancyNames:
-            if tenancy in commandlineTenancies: selectedTenancies.append(tenancy)
-        the.updateSelection('domains', 'selection', selectedTenancies)
-        if len(selectedTenancies)>0: # if more than one valid tenancies selected
-            for audt in ['users','groups','limits','policies','instances','events','networks','cloudGuard']:
-                if 'all' in analysisType or audt in analysisType:
-                    the.updateSelection('audits', audt, True)
-                    selectedAudits.append(audt)
-                else:
-                    the.updateSelection('audits', audt, False)
-            if 'instances' in selectedAudits: # selects all OCI services
-                the.updateSelection('audits', 'ociServices', list(the.ociServices))
-            if 'events' in selectedAudits: # select from last run
-                the.updateSelection('audits', 'eventsDateRange', 3)
-            if 'networks' in selectedAudits: # selects all networkComponents
-                the.updateSelection('audits', 'networkComponents', the.networkComponents)
-            the.setInfo('''
+        if os.name=='nt' and argLen==1: # Windows UI mode
+            import wx
+            import ui
+            #the.ui=ui, the.ui is assigned within ui module, so no need again here
+            # this variable can be used in any other modules to determine if UI mode
+            app = wx.App(False) #mandatory in wx, create an app, False stands for not redirection stdin/stdout
+            self = ui.MainFrame(None)
+            app.MainLoop() #start the applications
+        elif argLen>1: # Command line mode
+            commandlineTenancies = sys.argv[1].split()
+            analysisType         = sys.argv[2].split()
+            if argLen==4 and sys.argv[3]=='sendMail': the.sendMail=True
+            the.consoleWidth=os.get_terminal_size().columns
+            selectedTenancies=[]; selectedAudits=[]
+            # select requested tenancies
+            for tenancy in conf.tenancyNames:
+                if tenancy in commandlineTenancies: selectedTenancies.append(tenancy)
+            the.updateSelection('domains', 'selection', selectedTenancies)
+            if len(selectedTenancies)>0: # if more than one valid tenancies selected
+                for audt in ['users','groups','limits','policies','instances','events','networks','cloudGuard','cloudAdvisor']:
+                    if 'all' in analysisType or audt in analysisType:
+                        the.updateSelection('audits', audt, True)
+                        selectedAudits.append(audt)
+                    else:
+                        the.updateSelection('audits', audt, False)
+                if 'instances' in selectedAudits: # selects all OCI services
+                    the.updateSelection('audits', 'ociServices', list(the.ociServices))
+                if 'events' in selectedAudits: # select from last run
+                    the.updateSelection('audits', 'eventsDateRange', 3)
+                if 'networks' in selectedAudits: # selects all networkComponents
+                    the.updateSelection('audits', 'networkComponents', the.networkComponents)
+                the.setInfo('''
     * * * Commandline Mode * * *
         
     Audit Components: {}
     Tenancies       : {}
     ----------------------
-    '''.format(selectedAudits, selectedTenancies))
-            import start
-            start.init(the)
-            ret=start.start()
+            '''.format(selectedAudits, selectedTenancies))
+                import start
+                start.init(the)
+                ret=start.start()
+            else:
+                the.setError('INVALID TENANCIES: ' + str(commandlineTenancies) +
+                '\nCheck if these tenancies are in, ' + conf.configFilePath)
+                os._exit(0)
         else:
-            the.setError('''\n\n
-    * * * Detected Commandline Mode * * *
-        
-    NO VALID TENANCIES CALLED !!
-
-    Ending this program now..!!
-    ''')
+            print('== Error: Invalid number of arguments ==\n'+help)
             os._exit(0)
-    
+    except Exception as e:
+        f=open('traceback.log', "w")
+        f.write(str(e))
+        f.write(traceback.format_exc())
+        f.close()

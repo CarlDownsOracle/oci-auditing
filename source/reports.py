@@ -18,7 +18,7 @@ def generateReport():
     auditIssuesFound=False
     reportName = the.startTime + ' OCI Auditing Report.xlsx'
     reportDirPath = conf.resDr
-    reportPath = reportDirPath + '\\' + reportName
+    reportPath = os.path.abspath(reportDirPath + '/' + reportName)
     workbook = xlsxwriter.Workbook(reportPath)
     
     workbook.set_properties({
@@ -484,23 +484,120 @@ def generateReport():
                 addTable()
         
     if the.getSelection('audits', 'cloudGuard'):
+        tabName="CloudGuard"
+        cGws = addTab(tabName, colWidths=[40,11], tabColor='#F08080', header=False)
+        riskInit={'Critical':0,'High':0,'Medium':0,'Low':0,'Minor':0}
+        riskDict = riskInit.copy(); rgnDict={}
         service="Problems"
-        addTab(service, colWidths=[14,20,22,18,20,25,15,12,18,18], tabColor='#F08080')
-        addHeading2(service)
+        addTab('CG '+service, colWidths=[14,20,22,18,20,25,15,12,18,18], tabColor='#F08080')
+        addHeading2(tabName + ' ' + service)
         writeHeader('Tenancy','Compartment','Labels','State','Regions(Affected)','Resource Name','Resource Type','Risk','First Found On','Last Found On')
         for t in the.cloudGuard[service].keys():
             for c in the.cloudGuard[service][t].keys():
-                for pr in the.cloudGuard[service][t][c]: writeRow([t,c, pr[0],pr[1],pr[2],pr[3],pr[4],pr[5],pr[6],pr[7]], getStyle(risk=pr[5]))
+                for pr in the.cloudGuard[service][t][c]:
+                    risk=pr[5]
+                    rgn=pr[2]
+                    writeRow([t,c, pr[0],pr[1],rgn,pr[3],pr[4],risk,pr[6],pr[7]], getStyle(risk=risk))
+                    riskDict[risk]+=1
+                    if not rgn in rgnDict: rgnDict[rgn]=riskInit.copy()
+                    rgnDict[rgn][risk]+=1
         finalTouchTable()
-        
+        row=2; ws=cGws
+        writeHeader('Risk', 'Problems #')
+        totalProblems=0
+        for r in riskDict.keys():
+            writeRow([r,riskDict[r]])
+            totalProblems+=riskDict[r]
+        writeRow(['Total Problems Identified', totalProblems], ['tblCell_bold','tblCell_bold'])
+        prblmsChart = workbook.add_chart({'type': 'doughnut'})
+        prblmsChart.add_series({
+            'name': 'CloudGuard Detected Risks',
+            'categories': [tabName,3,0,row-2,0],
+            'values':     [tabName,3,1,row-2,1],
+            'data_labels': {'percentage': True},
+        })
+        prblmsChart.set_title({'name': 'PROBLEMS'})
+        prblmsChart.set_style(10)
+        prblmsChart.set_chartarea({'border': {'none': True}})
+        ws.insert_chart('C1', prblmsChart, {'x_offset': 1, 'y_offset': 0})
+        row=16
+        writeHeader('Regions / Risks','Critical','High','Medium','Low','Minor','Total')
+        startRow=row
+        rgnProblems=riskInit.copy()
+        grandTotalProblems=0
+        for rgn in sorted(rgnDict.keys()):
+            totalProblems=0
+            for k in rgnDict[rgn].keys():
+                rgnProblems[k]+=rgnDict[rgn][k]
+                totalProblems+=rgnDict[rgn][k]
+            writeRow([rgn,rgnDict[rgn]['Critical'],rgnDict[rgn]['High'],rgnDict[rgn]['Medium'],rgnDict[rgn]['Low'],rgnDict[rgn]['Minor'],totalProblems])
+            grandTotalProblems+=totalProblems
+        writeRow(['Total Problems Identified',rgnProblems['Critical'],rgnProblems['High'],rgnProblems['Medium'],rgnProblems['Low'],rgnProblems['Minor'],grandTotalProblems],style=boldStyle_max15Cells)
+        prblmsChart = workbook.add_chart({'type': 'bar', 'subtype': 'stacked'})
+        categories=[tabName,startRow,0,row-2,0]
+        prblmsChart.add_series({'name':'Critical','categories': categories, 'values': [tabName,startRow,1,row-2,1]})
+        prblmsChart.add_series({'name':'High',    'categories': categories, 'values': [tabName,startRow,2,row-2,2]})
+        prblmsChart.add_series({'name':'Medium',  'categories': categories, 'values': [tabName,startRow,3,row-2,3]})
+        prblmsChart.add_series({'name':'Low',     'categories': categories, 'values': [tabName,startRow,4,row-2,4]})
+        prblmsChart.add_series({'name':'Minor',   'categories': categories, 'values': [tabName,startRow,5,row-2,5]})
+        prblmsChart.set_title({'name': 'Regions Affected'})
+        prblmsChart.set_style(10)
+        prblmsChart.set_x_axis({'major_gridlines': {'visible': False}})
+        prblmsChart.set_legend({'position': 'bottom'})
+        prblmsChart.set_chartarea({'border': {'none': True}})
+        ws.insert_chart('H14', prblmsChart, {'x_offset': 1, 'y_offset': 0})
+        ws.set_zoom(80)
         service="Recommendations"
-        addTab(service, colWidths=[14,20,18,20,12,10,35,25,18,18], tabColor='#F08080')
-        addHeading2(service)
+        addTab('CG '+service, colWidths=[14,20,18,20,12,10,35,25,18,18], tabColor='#F08080')
+        addHeading2(tabName + ' ' + service)
         writeHeader('Tenancy','Compartment','State','Type','Risk','Count','Name','Details','Created On','Updated On')
         for t in the.cloudGuard[service].keys():
             for c in the.cloudGuard[service][t].keys():
                 for rc in the.cloudGuard[service][t][c]: writeRow([t,c, rc[0],rc[1],rc[2],rc[3],rc[4],rc[5],rc[6],rc[7]], getStyle(risk=rc[2]))
         finalTouchTable()
+
+    if the.getSelection('audits', 'cloudAdvisor'):
+        tabName="CloudAdvisor"
+        cAws = addTab(tabName, colWidths=[11,7,14,14,14,14,22], tabColor='#F08080', header=False)
+        riskInit={'Critical':[0,0,0,0,0],'High':[0,0,0,0,0],'Medium':[0,0,0,0,0],'Low':[0,0,0,0,0],'Minor':[0,0,0,0,0]}
+        riskDict = riskInit.copy()
+        addTab("CA Recommendations", colWidths=[14,32,18,9,14,14,14,14,14,17,17,17,17], tabColor='#F08080')
+        addHeading2(tabName + " Recommendations")
+        writeHeader('Tenancy','Name','Estimated Savings','State','Importance','Pending','Dismissed','Postponed','Implemented','Created','Updated','State Start', 'State End')
+        for t in the.cloudAdvisor.keys():
+                for rc in the.cloudAdvisor[t]:
+                    imp=rc[3]
+                    writeRow([t,rc[0],rc[1],rc[2],imp,rc[4],rc[5],rc[6],rc[7],rc[8],rc[9],rc[10],rc[11]], getStyle(risk=imp))
+                    riskDict[imp][0]+=1
+                    riskDict[imp][1]+=rc[4]
+                    riskDict[imp][2]+=rc[5]
+                    riskDict[imp][3]+=rc[6]
+                    riskDict[imp][4]+=rc[7]
+        finalTouchTable()
+        row=15; ws=cAws
+        writeHeader('Importance', 'Entries', 'Pending #','Dismissed #','Postponed #','Implemented #','Total Recommendations')
+        startRow=row
+        totals=[0,0,0,0,0,0]
+        for i in riskDict.keys():
+            rd=riskDict[i]
+            totRc=0
+            for j in range(1,5): totRc+=rd[j]
+            writeRow([i] + rd + [totRc])
+            for j in range(5):
+                totals[j]+=rd[j]
+            totals[5]+=totRc
+        writeRow(['Totals'] + totals, style=boldStyle_max15Cells)
+        prblmsChart = workbook.add_chart({'type': 'doughnut'})
+        prblmsChart.add_series({
+            'name': 'CloudAdvisor Recommendations',
+            'categories': [tabName,startRow,0,row-2,0],
+            'values':     [tabName,startRow,6,row-2,6],
+            'data_labels': {'percentage': True},
+        })
+        prblmsChart.set_title({'name': 'Recommendations'})
+        prblmsChart.set_style(10)
+        prblmsChart.set_chartarea({'border': {'none': True}})
+        ws.insert_chart('A1', prblmsChart, {'x_offset': 1, 'y_offset': 0})
     
     if False:
         # usages[tenName][key] = [comp,rgn+' / '+ad,srv,name,' / '.join(amt,qty,shape)]
@@ -566,6 +663,7 @@ def generateReport():
         ans=dlg.ShowModal()
         if ans==wx.ID_NO:
             os.startfile('"' + reportPath + '"')
+            os._exit(0)
         elif ans==wx.ID_CANCEL:
             os._exit(0)
 
@@ -579,43 +677,47 @@ def generateHeaderList(*headers):
         head.append(f)
     #print('Debug| Service1: ' + service)
     #print(head)
-def writeHeader(*headers):
+def writeHeader(*headers, colStart=0):
     global row,startRow,cols
     startRow=row
-    i=0
+    i=colStart
     for h in headers:
         ws.write(row,i,h,format['tbl_head'])
         i+=1
     cols=i
     row+=1
-def writeRow(data=[], style=[]):
-    global row
-    i=0
-    for d in data:
-        ws.write(row,i, d, format[style[i]])
-        i+=1
-    row+=1
+boldStyle_max15Cells=['tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold']
+normalStyle_max20Cells=['tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell',]
 def getStyle(risk='', f6=[]):
     rs = '_'+risk.lower()[0:3] if risk else '' # first three characters of, risk string
     norm = 'tblCell'+rs; normS = norm+'_f6'
     style=[]
     for i in range(0,cols): style.append(normS if i in f6 else norm)
     return style
+def writeRow(data=[], style=normalStyle_max20Cells, colStart=0):
+    global row
+    col=colStart
+    for d in data:
+        ws.write(row,col, d, format[style[col]])
+        col+=1
+    row+=1
 def finalTouchTable():
     global row
     ws.autofilter(startRow, 0, row-1, cols-1)
     if row==startRow+1: ws.write(row,0,'No data found !',format['normal']) # means no data, row still at first line
     row+=1
-def addTab(name, tabColor='#FFFFFF', colWidths=[]):
+def addTab(name, tabColor='#FFFFFF', colWidths=[],header=True):
     global ws,row
     row=0
     ws = workbook.add_worksheet(name)
     ws.hide_gridlines(2)
+    if not header: ws.hide_row_col_headers()
     ws.set_tab_color(tabColor)
     i=0
     for cw in colWidths:
         ws.set_column(i,i,cw)
         i+=1
+    return ws
 def addTable():
     global startRow,row,data,head,service
     dataLen = len(data)

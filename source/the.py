@@ -1,9 +1,10 @@
 from time import sleep
-import threading, re
+import threading, re, sys
 from tinydb import TinyDB, Query
 from datetime import datetime
 # local
 import conf
+conf.init(sys.modules[__name__])
 import start
 
 maxThreads=18 # cannot be less than 10
@@ -74,6 +75,7 @@ def init(a,b):
     log = conf.log
     log.info('Tool Version: ' + version)
     log.info('Start Time  : ' + conf.start_time_local)
+    conf.loadConfigs()
     conf.logConfigs()
 
     # Initiate Tiny DB
@@ -100,7 +102,7 @@ def resetGlobalVariables():
     global instances, vnicAttachments
     global events, eventDates
     global networks
-    global cloudGuard
+    global cloudGuard, cloudAdvisor
     global mt
     global startTime
     global gaugeIncNum
@@ -117,7 +119,7 @@ def resetGlobalVariables():
     instances = {}; vnicAttachments={}
     events = {}; eventDates={}
     networks={}; networks['VCN']={}
-    cloudGuard={}
+    cloudGuard={}; cloudAdvisor={}
     for x in ['Problems','Recommendations']: cloudGuard[x]={}
     for nc in networkComponents: networks[nc]={}
     for nc in additionalNetworkComponents: networks[nc]={}
