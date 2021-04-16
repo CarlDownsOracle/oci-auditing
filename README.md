@@ -1,8 +1,6 @@
 # OCI Auditing
 
-## DOWNLOAD
-[Linux package <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
-[Windows executable <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/OCI_Auditing_Tool-v3.6.16.exe)
+![](./doc/images/oci-auditing-banner.jpg)
 
 &nbsp;
 &nbsp;
@@ -20,12 +18,20 @@
 [Email Notifications <img src=./doc/images/semicolon-512.webp width=20>](#email)
 
 [FAQs <img src=./doc/images/semicolon-512.webp width=20>](./doc/FAQs.md)
+[Roadmap <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/projects/1)
 
 &nbsp;  
+&nbsp;
+
+## DOWNLOAD
+[LINUX package <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
+[WINDOWS executable <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/OCI_Auditing_Tool-v3.6.16.exe)
+
+&nbsp;
 
 # <a name="installation_steps"></a>Installation steps for first time usage
-* Download one click executable `OCI_Auditing_Tool-vX.exe` from [RELEASES](https://github.com/KsiriCreations/oci-auditing/releases)
-    - Place exe file in your preferred directory
+* Download direct, one click executable for your platform, from [RELEASES](https://github.com/KsiriCreations/oci-auditing/releases)
+    - Place executable file in your preferred directory
     - On first run under `configurations` folder [`tool.ini`](https://github.com/KsiriCreations/oci-auditing/raw/master/configurations/tool.ini) a initial configuration will be automatically placed
 * Configure tenancies authentication and if required optional configurations.
 \{[how to configure](#config) and [prerequisite](#prereq)\}
@@ -93,9 +99,10 @@ CLI can be used for schedulers/automations.
             instances    = lists instances created for all the OCI services supported
             events       = list & analyse Audit Events, alerts for all create/modify/terminate events
             networks     = list & analyse VCN and all of it's sub-components, audits CIDR, Protocols
-                           [planned to include all other network components in next release]
+            cloudGuard   = lists all Cloud Guard findings, with graphs and colorings as per Severity
+            cloudAdvisor = lists all Cloud Advisor Recommendations, with estimated savings
             all          = all these audits
-			[select only required audits, to save big run-times. Using optimization options in configurations can save run-times.]
+			[select only required audits, to save big run-times. Also use optimization options in configurations.]
             *Mandatory argument
 
     Arg 3 : Options available as of now: sendMail
@@ -487,7 +494,7 @@ Shows a list of all the subnets configured.
 
 ![](./doc/images/image034.jpg)
 
- Rows are color coded as below:
+ Risks highlighted as below:
 
 ![](./doc/images/network-coloring-rules.png)
 
