@@ -1,6 +1,11 @@
 # OCI Auditing
 
-![](./doc/images/oci-auditing-banner.jpg)
+<img src=./doc/images/oci-auditing-banner.jpg width=500>
+&nbsp;
+
+## DOWNLOAD
+[LINUX package <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
+[WINDOWS executable <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/OCI_Auditing_Tool-v3.6.16.exe)
 
 &nbsp;
 &nbsp;
@@ -20,12 +25,6 @@
 [FAQs <img src=./doc/images/semicolon-512.webp width=20>](./doc/FAQs.md)
 [Roadmap <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/projects/1)
 
-&nbsp;  
-&nbsp;
-
-## DOWNLOAD
-[LINUX package <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
-[WINDOWS executable <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/OCI_Auditing_Tool-v3.6.16.exe)
 
 &nbsp;
 

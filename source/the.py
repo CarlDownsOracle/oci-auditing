@@ -34,6 +34,7 @@ def init(a,b):
     xfi='xtraFieldsInfo' # Upto 4 extra fields
     ociServices = {
         'Compute': {xfi:['Shape, RAM(GB)', 'Region, Lifecycle State']},
+        'Custom Image': {xfi:['Size(MB)', 'Mode', 'Lifecycle State']},
         'Boot Volume': {xfi:['Size', 'Availability Domain']},
         'Boot Volume Backup': {xfi:['Size, Backup Type:Manual/Scheduled, Type:Full/Incremental', 'Region, Expiration Time']},
         'Dedicated VM Host': {xfi:['Dedicated VM Host Shape', 'Availability Domain']},
@@ -127,11 +128,12 @@ def resetGlobalVariables():
     startTime = datetime.now().strftime('%Y%m%d_%H%M%S')
     gaugeValue=0 # initial gauge value
 
+# Date Time pattern update
+# Examples:
+# 2019-08-01 06:33:51.715+0000 => 2019-08-01 06:33:51
+# 2019-08-01T06:33:51.715Z => 2019-08-01 06:33:51
 def dateFormat(dateTime):
-    if dateTime:
-        return re.sub(r' (\d\d:\d\d:\d\d).*$',r' \1',str(dateTime)) # Date Time pattern update, Ex: 2019-08-01T06:33:51.715+0000 => 2019-08-01 06:33:51
-    else:
-        return ''
+    return re.sub(r'[T ](\d\d:\d\d:\d\d).*$',r' \1',str(dateTime)) if dateTime else '-'
 def commaJoin(*vals):
     ret=str(vals[0])
     for v in vals[1:len(vals)]:
@@ -184,9 +186,9 @@ def raiseInternetIssue(retryCount):
             showPopup=False
         else:
             break
-    if showPopup:
+    if showPopup and ui:
         wx=ui.wx
-        dlg=wx.MessageDialog(self, msg, 'Unstable Connection', wx.OK | wx.CANCEL | wx.OK_DEFAULT | wx.ICON_EXCLAMATION)
+        dlg=wx.MessageDialog(None, msg, 'Unstable Connection', wx.OK | wx.CANCEL | wx.OK_DEFAULT | wx.ICON_EXCLAMATION)
         dlg.SetOKCancelLabels("&Proceed Now", "&Abort")
         with lock: internetIssuePopup=True
         ans=dlg.ShowModal()
@@ -211,6 +213,14 @@ def getOciData(ociFunc, *argv, **kwargv):
             raiseInternetIssue(i)
     log.error('Failed with all retries.. # Many mechanisms handled, this error should never come # !!!')
     return False # failed with all retries
+
+currency=''
+def getCurrency():
+    global currency
+    if currency: return currency
+    else:
+        #getOciData()
+        return 'INR :-)'
 
 def setMsg(txt):
     if ui: ui.parentWindow.SetStatusText(str(txt))

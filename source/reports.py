@@ -278,7 +278,7 @@ def generateReport():
     
     if the.getSelection('audits', 'events'):
         addTab('Events', colWidths=[14,20,15,40,30,30,30,19])
-        writeHeader('Tenancy','Compartment','Region','User','Event Source','Event Name','Resource Name','Event Time')
+        writeHeader('Tenancy','Compartment','Region / AD','User Details','Event Source','Event Name','Network Access','Event Time')
         ws.freeze_panes(row,0)
         
         showAll=False
@@ -294,7 +294,7 @@ def generateReport():
                     if evt[0]: auditIssuesFound=True
                     writeRow(data=[t,evt[1],evt[2],evt[3],event_source,event_name,evt[6],evt[7]], style=getStyle(risk=evt[0]))
         ws.autofilter(0, 0, row-1, 7)
-        row+=2; ws.write(row,0, 'Audit Events, selected start & end dates:',format['bold_underlined'])
+        row+=2; ws.write(row,0, 'Audit Events, selected start & end dates [UTC format]:',format['bold_underlined'])
         row+=1
         ws.write(row,0, str(the.eventDates['start']), format['italic'])
         ws.write(row,2, str(the.eventDates['end']), format['italic'])
@@ -642,7 +642,9 @@ def generateReport():
     workbook.close()
     reportsString='Audit Report placed at "' + reportPath + '"'
     the.setInfo('Job Completed.\n' + reportsString)
-        
+    the.setGauge(99)
+    the.increamentGauge(1)
+    
     if not ui: # Commandline Mode
         if the.sendMail:
             sendMail=False
@@ -656,7 +658,6 @@ def generateReport():
         sleep(5)
         os._exit(0)
     else: # Normal GUI mode
-        ui.parentWindow.gauge.SetValue(100)
         wx=ui.wx
         dlg=wx.MessageDialog(ui.parentWindow, "Job Completed.\n\n" + reportsString, 'Done', wx.YES_NO | wx.CANCEL | wx.NO_DEFAULT | wx.ICON_INFORMATION)
         dlg.SetYesNoCancelLabels("&OK", "Open &Report", "&Close")

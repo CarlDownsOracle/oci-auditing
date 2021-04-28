@@ -1,6 +1,7 @@
-import re, os
+import re, os, json
 from datetime import datetime
 from time import sleep
+import tester
 
 def init(a):
     global ui,the,conf,log,oci
@@ -356,7 +357,7 @@ def usageFn(config, tenName): # This functionality always returning None for OU 
     tenancyOcid = config['tenancy']
     usgCl = oci.usage_api.UsageapiClient(config)
     reqObj = oci.usage_api.models.RequestSummarizedUsagesDetails(tenant_id=tenancyOcid, granularity='DAILY', query_type='USAGE', 
-        time_usage_started=datetime(2020,7,1, 0,0), time_usage_ended=datetime(2020,7,16,0,0))
+        time_usage_started=datetime(2021,4,1, 0,0), time_usage_ended=datetime(2021,4,12,0,0))
     usgAggr = the.getOciData(usgCl.request_summarized_usages, reqObj)
     for usg in usgAggr.data.items:
         log.debug(usg)
@@ -454,7 +455,7 @@ def cgRecommendations(rc, tenName, srv):
     initKeyIfNew(the.cloudGuard[srv][tenName],comp,[])
     the.cloudGuard[srv][tenName][comp].append([state,type,risk,rc.problem_count,name,details,created,updated])
 
-def auditEventsOfRegion(config, tenName, start='', end=''):
+def auditEventsOfRegion_old(config, tenName, start='', end=''):
     region=config['region']
     auditCl = oci.audit.AuditClient(config)
     loopCompartments(auditCl.list_events, eventsOfComp, tenName, region, 'Event', f1X=f11_parms, start_time=start, end_time=end)
@@ -472,6 +473,72 @@ def eventsOfComp(evt, compName, tenName, region):
     if re.search(r'Detach|Delete|Terminate|Create', name, re.IGNORECASE): risk='High'
     elif re.search(r'Modify|Update', name, re.IGNORECASE): risk='Medium'
     the.events[tenName][key]=[risk, compName, region, usr, src, name, resName, time]
+def auditEventsOfRegion(config, tenName, start='', end=''):
+    region=config['region']
+    logCl = oci.loggingsearch.LogSearchClient(config)
+    regionsSubscribed=len(getRegionsSubscribed(tenName))
+    incGaugePerRegion=(the.gaugeIncNum*gaugeBreaks['allCompartments'])/regionsSubscribed
+    # Creates Thread for Each Compartment
+    incGaugePerComp=incGaugePerRegion/len(the.compartments[tenName])
+    maxComps=10; n=1; comps=''
+    for key in the.compartments[tenName]:
+        compName  =the.compartments[tenName][key][0]
+        compId    =the.compartments[tenName][key][1]
+        the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > Audit-Events ...')
+        comps += ' "' + compId + '/_Audit"'
+        if n<=maxComps:
+            n+=1
+        else:
+            searchObj = oci.loggingsearch.models.SearchLogsDetails(
+                time_start=start.isoformat()[:-4]+'Z', time_end=end.isoformat()[:-4]+'Z', #time_start='2021-04-17T05:11:07.03Z', time_end='2021-04-18T05:11:07.04Z',
+                search_query='search ' + comps + " | (data.request.action='POST' or data.request.action='PUT' or data.request.action='DELETE') | sort by datetime desc"
+            )
+            n=1; comps=''
+            the.createThread_5belowMaxThreads(logsOfComp, logCl.search_logs, searchObj, tenName, region)        
+        the.increamentGauge(incGaugePerComp)
+def logsOfComp(ociFunc, searchObj, tenName, region):
+    page=None
+    while True:
+        res=the.getOciData(ociFunc, search_logs_details=searchObj, page=page)
+        if res:
+            if the.getSelection('audits', 'interuptRaised'): break
+            for i in res.data.results:
+                log.debug(i.data['logContent']['id'] +'\n'+ json.dumps(i.data, indent=4))
+                addEventLog(i.data, tenName, region)
+        if res and res.has_next_page: page=res.next_page
+        else: break
+def addXtraData(*dat):
+    ret=[]
+    for d in dat:
+        if d: ret.append(str(d))
+    return ' / '.join(ret) if ret else '-'
+def getNetworkMetaData(hdr):
+    key='X-OCI-LB-NetworkMetadata'
+    if(hdr and key in hdr):
+        net=hdr[key]
+        if isinstance(net, list):
+            net = json.loads(net[0])
+            if 'originalConnection' in net: return str(net['originalConnection'])
+        return str(net)
+    return '-'
+def addEventLog(evt, tenName, region):
+    compName=getCompartmentName(evt['oracle.compartmentid'])
+    time = addXtraData(dateFormat(evt['time']), evt['id'])
+    src  = addXtraData(evt['source'], evt['type'])
+    dat = evt['logContent']['data']
+    idt = dat['identity']
+    hdr = dat['request']['headers']
+    usr = addXtraData(idt['callerName'], idt['callerId'], idt['principalName'], idt['principalId'], idt['userAgent'])
+    name = giveAdashOnNothing(dat['eventName'])
+    netlog = getNetworkMetaData(hdr)
+    key = compName+region+src+name+time+evt['id']
+    # Auditing
+    risk=''
+    if re.search(r'Detach|Delete|Terminate|Create', name, re.IGNORECASE): risk='High'
+    elif re.search(r'Modify|Update', name, re.IGNORECASE): risk='Medium'
+    #todo remove tester call
+    #tester.terminateIfList(evt['id'], risk, compName, addXtraData(region, dat['availabilityDomain']), usr, src, name, netlog, time)
+    the.events[tenName][key]=[risk, compName, addXtraData(region, dat['availabilityDomain']), usr, src, name, netlog, time] 
 
 def networksOfRegion(config, tenName):
     region=config['region']
@@ -658,14 +725,23 @@ def networkSecurityGroups(nsg, compName, tenName, srv, region, vnCl):
     scanNSG('nsg_security_rules', vnCl.list_network_security_group_security_rules, securityRules, nsg.id)
     scanNSG('nsg_vnics', vnCl.list_network_security_group_vnics, vnics, nsg.id)
 
-def scanCompartment(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
+def scanCompartment(ociFunc, locFunc, compId, compName, tenName, region, service, loopOciData=True, argsTo='local-function', **kwargs):
     try:
         the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
-        res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId)
+        if argsTo=='oci-function':
+            ociArgs={**kwargs}
+            locArgs={}
+        else:
+            ociArgs={}
+            locArgs={**kwargs}
+        res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId, **ociArgs)
         if res:
-            log.debug('Count: '+str(len(res.data)))
-            for srv in res.data:
-                locFunc(srv, compName, tenName, service, region, **kwargs)
+            if loopOciData:
+                log.debug('Count: '+str(len(res.data)))
+                for srv in res.data:
+                    locFunc(srv, compName, tenName, service, region, **locArgs)
+            else:
+                locFunc(res.data, compName, tenName, service, region, **locArgs)
     except Exception:
         log.exception('Something Error happened !!') # send to log
         raise # send also to console
@@ -718,15 +794,6 @@ def f12(ociFunc, locFunc, compId, compName, tenName, region, service): # Loops t
     except Exception:
         log.exception('Something Error happened !!') # send to log
         raise # send also to console
-def f13(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs): # non-iterable listing
-    try:
-        the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
-        res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId, **kwargs)
-        if res:
-            locFunc(res.data, compName, tenName, service, region)
-    except Exception:
-        log.exception('Something Error happened !!') # send to log
-        raise # send also to console
 def loopCompartments(ociFunc, locFunc, tenName, region, service='', f1X=f11, **kwargv):
     regionsSubscribed=len(getRegionsSubscribed(tenName))
     incGaugePerRegion=(the.gaugeIncNum*gaugeBreaks['allCompartments'])/regionsSubscribed
@@ -773,7 +840,7 @@ def listInstancesOfRegion(config, tenName):
     dbSrvcs     = ['DB System','Autonomous Database','Autonomous Container Database','Autonomous Exadata Infrastructure','Exadata Infrastructure','VM Cluster']
     blkStrgSrvcs= ['Boot Volume','Boot Volume Backup','Block Volume','Block Volume Backup','Volume Group','Volume Group Backup']
     filStrgSrvcs= ['File System','Mount Target']
-    compSrvcs   = ['Compute','Dedicated VM Host']
+    compSrvcs   = ['Compute','Dedicated VM Host','Custom Image']
     compMngSrvcs= ['Cluster Network','Instance Pool']
     hltChkSrvcs = ['Health Check (HTTP)','Health Check (Ping)']
     
@@ -798,6 +865,7 @@ def listInstancesOfRegion(config, tenName):
         elif service=='Block Volume Backup': f1(blkStrgCl.list_volume_backups, volumesBackup, tenName, region, service)
         elif service=='Volume Group': f1(blkStrgCl.list_volume_groups, volumes, tenName, region, service)
         elif service=='Volume Group Backup': f1(blkStrgCl.list_volume_group_backups, volumeGroupBackups, tenName, region, service)
+        elif service=='Custom Image': f1(compCl.list_images, customImages, tenName, region, service, argsTo='oci-function', operating_system='Custom')
         elif service=='Compute':
             vnCl=None
             if 'show_compute_ips' in conf.keys:
@@ -815,7 +883,7 @@ def listInstancesOfRegion(config, tenName):
         elif service=='Autonomous Exadata Infrastructure': f1(dbCl.list_autonomous_exadata_infrastructures, autoExaDB, tenName, region, service)
         elif service=='Exadata Infrastructure': f1(dbCl.list_exadata_infrastructures, exaDB, tenName, region, service)
         elif service=='VM Cluster': f1(dbCl.list_vm_clusters, vmCluster, tenName, region, service)
-        elif service=='NoSQL Table': f1(noSqlCl.list_tables, noSqlTables, tenName, region, service, f1X=f13)
+        elif service=='NoSQL Table': f1(noSqlCl.list_tables, noSqlTables, tenName, region, service, loopOciData=False)
         elif service=='MySQL DB System': f1(mySqlDbCl.list_db_systems, mySqlDbSystem, tenName, region, service)
         elif service=='Load Balancer': f1(ldBalCl.list_load_balancers, loadBalancer, tenName, region, service)
         elif service=='Analytics Instance': f1(anlyCl.list_analytics_instances, analytics, tenName, region, service)
@@ -895,14 +963,9 @@ def instancePool(ip, compName, tenName, serviceName, region):
 def dedicatedVmHost(dvh, compName, tenName, serviceName, region):
     key=compName+region+serviceName+dvh.display_name
     toServices(key, tenName, compName, serviceName, dvh.display_name, dateFormat(dvh.time_created), dvh.dedicated_vm_host_shape, dvh.availability_domain)
-def customImages(cmp, compName, tenName, serviceName, region): #Todo: Pending
-    ## This is listing custom images, along with all other oracle images, not getting right filter from docs
-    ## Submitted MyHelp Ticket 200615-001123
-    # res = compCl.list_images(compId, lifecycle_state='AVAILABLE', page=page)
-    # for cmp in res.data:
-        # key=compName+region+serviceName+cmp.display_name
-        # toServices(key, tenName, compName, serviceName, cmp.display_name+' / '+cmp.launch_mode, cmp.operating_system+' ['+cmp.operating_system_version+']', dateFormat(cmp.time_created))
-    dummy='remove this'
+def customImages(cmp, compName, tenName, serviceName, region):
+    key=compName+region+serviceName+cmp.display_name
+    toServices(key, tenName, compName, serviceName, cmp.display_name, dateFormat(cmp.time_created), str(cmp.size_in_mbs) + ' MB', cmp.launch_mode, cmp.lifecycle_state)
 def dbSystem(db, compName, tenName, serviceName, region):
     key=compName+region+serviceName+db.display_name
     toServices(key, tenName, compName, serviceName, db.display_name, dateFormat(db.time_created), db.database_edition, db.version)
