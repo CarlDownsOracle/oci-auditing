@@ -70,7 +70,7 @@ def init(a,b):
                 "Load Balancers [pending],IP Management [pending],DNS Management [pending]").split(',')
     additionalNetworkComponents=['route_rules','sl_egress_security_rules','sl_ingress_security_rules','nsg_security_rules','nsg_vnics']
 
-    validServicesInManagedCompartmentForPaaS=['Boot Volume','Block Volume','Compute','Boot Volume Backup','Block Volume Backup',
+    validServicesInManagedCompartmentForPaaS=['Boot Volume','Block Volume','Compute','VNIC Attachments','Boot Volume Backup','Block Volume Backup',
         'DB System','File System','Mount Target','Health Check (HTTP)','Health Check (Ping)','Load Balancer']
 
     log = conf.log

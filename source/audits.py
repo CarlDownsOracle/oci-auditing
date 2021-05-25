@@ -794,7 +794,7 @@ def f12(ociFunc, locFunc, compId, compName, tenName, region, service): # Loops t
     except Exception:
         log.exception('Something Error happened !!') # send to log
         raise # send also to console
-def loopCompartments(ociFunc, locFunc, tenName, region, service='', f1X=f11, **kwargv):
+def loopCompartments(ociFunc, locFunc, tenName, region, service='', f1X=f11, waitForThreads=False, **kwargv):
     regionsSubscribed=len(getRegionsSubscribed(tenName))
     incGaugePerRegion=(the.gaugeIncNum*gaugeBreaks['allCompartments'])/regionsSubscribed
     if service and (service in conf.serviceNotinRegions) and (region in conf.serviceNotinRegions[service]):
@@ -819,7 +819,10 @@ def loopCompartments(ociFunc, locFunc, tenName, region, service='', f1X=f11, **k
             t=the.createThread_5belowMaxThreads(f1X, ociFunc, locFunc, compId, compName, tenName, region, service, **kwargv)
             threads.append(t)
         the.increamentGauge(incGaugePerComp)
-    return threads
+    if waitForThreads:
+        for t in threads: t.join() # wait for threads to complete
+    else:
+        return threads
 f1=loopCompartments
 def loopRegions(fn, config, tenName, **kwargs): # Loops through all subscribed regions
     if ui: ui.parentWindow.m_staticField1.Show()
@@ -870,7 +873,7 @@ def listInstancesOfRegion(config, tenName):
             vnCl=None
             if 'show_compute_ips' in conf.keys:
                 vnCl = oci.core.VirtualNetworkClient(config)
-                f1(compCl.list_vnic_attachments, vnicAttachment, tenName, region, 'VNIC Attachments')
+                f1(compCl.list_vnic_attachments, vnicAttachment, tenName, region, 'VNIC Attachments', waitForThreads=True)
             f1(compCl.list_instances, compute, tenName, region, service, vnCl=vnCl)
         elif service=='File System': f1(filStrgCl.list_file_systems, fileSystem, tenName, region, service, f1X=f12)
         elif service=='Mount Target': f1(filStrgCl.list_mount_targets, mountTarget, tenName, region, service, f1X=f12)
@@ -926,27 +929,30 @@ def volumeGroupBackups(vol, compName, tenName, serviceName, region):
 def volumes(vol, compName, tenName, serviceName, region): # Same used for: Block Volumes & Volume Groups
     key=compName+region+serviceName+vol.display_name
     toServices(key, tenName, compName, serviceName, vol.display_name, dateFormat(vol.time_created), str(vol.size_in_gbs)+' GB', vol.availability_domain)
-def vnicAttachment(va, compName, tenName, serviceName, region):
+def vnicAttachment(va, compName, tenName, serviceName, region): # VNIC resides in same compartment as compute instance
     theVa = the.vnicAttachments
-    if va.instance_id not in theVa: theVa[va.instance_id]={}
-    theVaI=theVa[va.instance_id]
-    if 'VNICs' not in theVaI: theVaI['VNICs']=[]
-    theVaI['VNICs'].append(va.vnic_id)
-    log.debug("instance's vnic: " + va.instance_id + ' > ' + va.vnic_id)
+    if va.instance_id not in theVa: theVa[va.instance_id]=[]
+    theVa[va.instance_id].append(va.vnic_id)
+    log.debug("instance's vnic: " +  compName + ' > ' + va.instance_id + ' > ' + va.vnic_id)
 def compute(cmp, compName, tenName, serviceName, region, vnCl):
     name=getDisplayName(cmp)
     key=compName+region+serviceName+name
     fld1=cmp.shape + ', ' + str(cmp.shape_config.memory_in_gbs)
     fld2=cmp.region + ', ' + cmp.lifecycle_state
     fld3='-'
-    if 'show_compute_ips' in conf.keys:
+    if vnCl:
         ips=[]
-        vnics = [vnCl.get_vnic(vnicId).data for vnicId in the.vnicAttachments[cmp.id]['VNICs']]
-        for vnic in vnics:
-            ip=vnic.private_ip
-            if vnic.public_ip: ip+='/'+vnic.public_ip
-            ips.append(ip)
-        fld3=' | '.join(ips)
+        try:
+            vnics = [vnCl.get_vnic(vnicId).data for vnicId in the.vnicAttachments[cmp.id]]
+            for vnic in vnics:
+                ip=vnic.private_ip
+                if vnic.hostname_label: ip=vnic.hostname_label+'/'+ip
+                if vnic.public_ip: ip+='/'+vnic.public_ip
+                ips.append(ip)
+            fld3=' | '.join(ips)
+        except oci.exceptions.ServiceError as e:
+            log.warning('Unable to get VNIC details for Instance: ' + name + ' [' + str(e) + ']')
+            fld3='#Err'
     toServices(key, tenName, compName, serviceName, name, dateFormat(cmp.time_created), fld1, fld2, fld3)
 def fileSystem(fs, compName, tenName, serviceName, ad):
     key=compName+ad+serviceName+fs.display_name

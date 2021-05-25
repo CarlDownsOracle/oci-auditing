@@ -3,7 +3,7 @@
 # Purpose   : Auditing Tool, for OCI tenancies
 # - - - - - - - - - - - - - - - - - - - - - - - -
 #
-version='3.6.18' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
+version='3.6.19' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
 tool_name='OCI Auditing'
 
 # Todo:
