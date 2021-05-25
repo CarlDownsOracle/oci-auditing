@@ -17,7 +17,6 @@
 
 [Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
 [Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro)
-[Tool GUI <img src=./doc/images/semicolon-512.webp width=20>](#ui)
 [Command-line options <img src=./doc/images/semicolon-512.webp width=20>](#cli)
 [Prerequisite <img src=./doc/images/semicolon-512.webp width=20>](#prerequisite)
 [Configurations <img src=./doc/images/semicolon-512.webp width=20>](#config)
@@ -63,21 +62,6 @@ While the Audit service provides the necessary governance, however, managing it 
 * schedule daily, monthly or as needed for reporting/archiving tenancies details.
 * email reports & lot more features.
 * with GUI, and also command-line access.
-
-[TOC](#toc)
-
-<br />
-
-# <a name="ui"></a>Tool GUI
-The interface would look like this:
-
-![](./doc/images/gui.jpg)
-
-<p></p>
-
-GUI options are self-explorable, person who manages OCI, can understand UI easily.
-
-Further how to provide tenancies list into configuration, and all other simple steps are explained in [first time usge steps](#installation_steps)
 
 [TOC](#toc)
 
@@ -186,15 +170,17 @@ Once the configuration is complete, open "OCI_Auditing_Tool.exe" to launch the t
 
 <br />
 
-To test the connectivity, select required tenancies, click on "Options > Connection Check"
-
+### To test the connectivity, select required tenancies, click on "Options > Connection Check"
 ![](./doc/images/image012.jpg)
 
+<br />
 
-To gather audit details:
+### To gather audit details:
 * Select the tenancy/s on left.
 * Select the type of audits required on right.
 * Click on the green arrow button at the bottom.
+
+![](./doc/images/gui.jpg)
 
 This will fetch the required information from OCI and generate an audit report in .xlsx format.
 
@@ -361,49 +347,9 @@ _Note: These policies configuration parameters are just a trial implementation!_
 
 Shows all services created by users, scanning in to every regions, availability domains and, compartments.
 
-
-These OCI services are supported: 
-* Compute [--extra details](./doc/services_created.md)
-* Boot Volume, and Backups
-* Block Volume, and Backups
-* Volume Group, and Backups
-* Dedicated VM Host
-* Cluster Network
-* Instance Pool
-* File System, Mount Target
-* Analytics Instance
-* Integration Instance
-* Load Balancer
-* Health Check: HTTP, and Ping
-* DB Systems
-* Autonomous Databases
-* Autonomous Container Databases
-* Autonomous Exadata Infrastructure
-* Exadata Infrastructure
-* VM Cluster
-* NoSQL Table
-* MySQL DB System
-
-_You can send request for additional services to get added in to the Tool_
-
 ![](./doc/images/image024.jpg)
 
-### Optional configurations:
-
-```ini
-# Region Specific, Service Not Availability [mentioning this will save process time]
-# Format: service_notin_region=Service Name/region-names in comma seperated
-service_notin_region= MySQL DB System / ap-seoul-1, me-jeddah-1, ap-chuncheon-1, ca-montreal-1, eu-frankfurt-1, us-phoenix-1, uk-london-1, ap-tokyo-1, ap-sydney-1, ap-osaka-1, ap-melbourne-1, eu-amsterdam-1
-service_notin_region= Cluster Network / ca-toronto-1, sa-saopaulo-1, eu-zurich-1, ap-mumbai-1, ap-hyderabad-1, ap-seoul-1, me-jeddah-1, ap-chuncheon-1, ca-montreal-1
-# show private & public IPs of Compute Instances
-show_compute_ips=x
-# disable_compartments, provide list of compartments which should not be scanned
-disable_compartments=C101,C102,CompartmentABC,XYZ
-; disable_compartments=Lina_Comp,tenancy05 (root),Network_Comp
-
-```
-
- _Note: These options can also be used for tool runtime optimizations._
+[>> more details](./doc/services_created.md)
 
  [TOC](#toc)
 

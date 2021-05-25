@@ -871,9 +871,11 @@ def listInstancesOfRegion(config, tenName):
         elif service=='Custom Image': f1(compCl.list_images, customImages, tenName, region, service, argsTo='oci-function', operating_system='Custom')
         elif service=='Compute':
             vnCl=None
-            if 'show_compute_ips' in conf.keys:
+            if 'show_compute_vnics' in conf.keys:
                 vnCl = oci.core.VirtualNetworkClient(config)
-                f1(compCl.list_vnic_attachments, vnicAttachment, tenName, region, 'VNIC Attachments', waitForThreads=True)
+                global show_compute_vnics
+                show_compute_vnics=conf.keys['show_compute_vnics']
+                f1(compCl.list_vnic_attachments, vnicAttachment, tenName, region, 'VNIC Attachment', waitForThreads=True)
             f1(compCl.list_instances, compute, tenName, region, service, vnCl=vnCl)
         elif service=='File System': f1(filStrgCl.list_file_systems, fileSystem, tenName, region, service, f1X=f12)
         elif service=='Mount Target': f1(filStrgCl.list_mount_targets, mountTarget, tenName, region, service, f1X=f12)
@@ -941,15 +943,17 @@ def compute(cmp, compName, tenName, serviceName, region, vnCl):
     fld2=cmp.region + ', ' + cmp.lifecycle_state
     fld3='-'
     if vnCl:
-        ips=[]
+        vnicDetails=[]
         try:
             vnics = [vnCl.get_vnic(vnicId).data for vnicId in the.vnicAttachments[cmp.id]]
             for vnic in vnics:
-                ip=vnic.private_ip
-                if vnic.hostname_label: ip=vnic.hostname_label+'/'+ip
-                if vnic.public_ip: ip+='/'+vnic.public_ip
-                ips.append(ip)
-            fld3=' | '.join(ips)
+                details=[]
+                if 'VNIC_OCID' in show_compute_vnics: details.append(vnic.id)
+                if 'HOSTNAME' in show_compute_vnics and vnic.hostname_label: details.append(vnic.hostname_label)
+                if 'PRIVATE_IP' in show_compute_vnics and vnic.private_ip: details.append(vnic.private_ip)
+                if 'PUBLIC_IP' in show_compute_vnics and vnic.public_ip: details.append(vnic.public_ip)
+                vnicDetails.append('/'.join(details))
+            fld3=' | '.join(vnicDetails)
         except oci.exceptions.ServiceError as e:
             log.warning('Unable to get VNIC details for Instance: ' + name + ' [' + str(e) + ']')
             fld3='#Err'
