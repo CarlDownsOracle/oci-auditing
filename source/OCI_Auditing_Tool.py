@@ -3,8 +3,9 @@
 # Purpose   : Auditing Tool, for OCI tenancies
 # - - - - - - - - - - - - - - - - - - - - - - - -
 #
-version='3.6.20' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
+version='3.6.22' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
 tool_name='OCI Auditing'
+copyright="Karthik Kumar Hiraskar\n©2019-2021"
 
 # Todo:
 # * Optimization for few return status to stop further processing on each compartment looping
@@ -68,7 +69,7 @@ elif (argLen>1 and argLen<argLen_min) or argLen>argLen_max:
 else:
     try:
         import the
-        the.init(version,tool_name) # after this initialization only, import ui
+        the.init(version,tool_name, copyright) # after this initialization only, import ui
         conf=the.conf
         if os.name=='nt' and argLen==1: # Windows UI mode
             import wx

@@ -86,4 +86,4 @@ if multiple VNICs attached, then this set will be seperated by pipe symbol.
 
 <br />
 
-> _NOTE: `show_compute_vnics` configuration tag has replaced previous `show_compute_ips` and is discontinued from v3.6.20_
+> _NOTE: configuration tag `show_compute_vnics` has replaced previous `show_compute_ips` and is discontinued from v3.6.20_

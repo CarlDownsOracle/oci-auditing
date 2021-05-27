@@ -11,12 +11,13 @@ maxThreads=18 # cannot be less than 10
 maxThreads=25
 oci=None # oci module will be assigned with audits iniitialization
 
-def init(a,b):
+def init(a,b, c):
     global gaugeBreaks,ociServices,networkComponents,additionalNetworkComponents,sendMail,justConnectionCheck
-    global validServicesInManagedCompartmentForPaaS,log,tinyDB_file,db,qry,version,tool_name,ui
+    global validServicesInManagedCompartmentForPaaS,log,tinyDB_file,db,qry,version,tool_name,copyright,ui
     global consoleWidth
     version=a
     tool_name=b
+    copyright=c
     ui=None # will be set to ui module, only in GUI runs
     sendMail=False
     justConnectionCheck=False

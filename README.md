@@ -17,10 +17,10 @@
 
 [Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
 [Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro)
-[Command-line options <img src=./doc/images/semicolon-512.webp width=20>](#cli)
+[Command-line options <img src=./doc/images/semicolon-512.webp width=20>](./doc/cmd_line_options.md)
+[Windows GUI options <img src=./doc/images/semicolon-512.webp width=20>](./doc/gui_options.md.md)
 [Prerequisite <img src=./doc/images/semicolon-512.webp width=20>](#prerequisite)
 [Configurations <img src=./doc/images/semicolon-512.webp width=20>](#config)
-[Tool Demo <img src=./doc/images/semicolon-512.webp width=20>](#demo)
 [Audit Details <img src=./doc/images/semicolon-512.webp width=20>](#report_details)
 [Email Notifications <img src=./doc/images/semicolon-512.webp width=20>](#email)
 
@@ -66,41 +66,6 @@ While the Audit service provides the necessary governance, however, managing it 
 [TOC](#toc)
 
 <br />
-
-# <a name="cli"></a>Command-line options
-CLI can be used for schedulers/automations.
-
-    Commandline Usage of "OCI Auditing Tool":
-
-    Arg 1 = Tenancy Names, each separated by a space
-            complete list should be as single argument, so use double-quotes to cover the complete list
-            *Mandatory argument
-
-    Arg 2 = Type of analysis:
-            compartments = list & analyse Compartments, audits naming formats
-            users        = list & analyse Users, audits naming formats
-            groups       = list & analyse Groups, audits naming formats
-            limits       = list & analyse Service Limits, warnings on near to limits
-            policies     = list & analyse Policies, audits for mandatory policies, missing policies, additional policies
-            instances    = lists instances created for all the OCI services supported
-            events       = list & analyse Audit Events, alerts for all create/modify/terminate events
-            networks     = list & analyse VCN and all of it's sub-components, audits CIDR, Protocols
-            cloudGuard   = lists all Cloud Guard findings, with graphs and colorings as per Severity
-            cloudAdvisor = lists all Cloud Advisor Recommendations, with estimated savings
-            all          = all these audits
-			[select only required audits, to save big run-times. Also use optimization options in configurations.]
-            *Mandatory argument
-
-    Arg 3 : Options available as of now: sendMail
-            -Optional argument
-
-Note: 
-   * All alerts are normally highlighted with suitable background colors.
-   * selected analysis will always list all respective OCI components in to the report, plus auditing, unless if some components are avoided by user configurations.
-
-[TOC](#toc)
-
-&nbsp;   
 
 # <a name="prerequisite"></a><a name="prereq"></a>Prerequisite
 
@@ -161,32 +126,6 @@ __IMPORTANT NOTE:__
 > _All configuration values like OCIDs, Names etc., are shown dummy in this document, seems like originals, for clear understanding._
 
 > _Replace with right values in your configurations!_
-
-<br />
-
-# <a name="demo">Tool Demo</a>
-
-Once the configuration is complete, open "OCI_Auditing_Tool.exe" to launch the tool.
-
-<br />
-
-### To test the connectivity, select required tenancies, click on "Options > Connection Check"
-![](./doc/images/image012.jpg)
-
-<br />
-
-### To gather audit details:
-* Select the tenancy/s on left.
-* Select the type of audits required on right.
-* Click on the green arrow button at the bottom.
-
-![](./doc/images/gui.jpg)
-
-This will fetch the required information from OCI and generate an audit report in .xlsx format.
-
-The audit report along with an execution log will be stored in `results` folder.
-
-[TOC](#toc)
 
 <br />
 
