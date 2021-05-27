@@ -17,8 +17,8 @@
 
 [Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
 [Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro)
-[Command-line options <img src=./doc/images/semicolon-512.webp width=20>](./doc/cmd_line_options.md)
-[Windows GUI options <img src=./doc/images/semicolon-512.webp width=20>](./doc/gui_options.md.md)
+[Commandline <img src=./doc/images/semicolon-512.webp width=20>](./doc/cmd_line_options.md)
+[Windows GUI <img src=./doc/images/semicolon-512.webp width=20>](./doc/gui_options.md)
 [Prerequisite <img src=./doc/images/semicolon-512.webp width=20>](#prerequisite)
 [Configurations <img src=./doc/images/semicolon-512.webp width=20>](#config)
 [Audit Details <img src=./doc/images/semicolon-512.webp width=20>](#report_details)
@@ -39,7 +39,7 @@
 
 <br />
 
-[TOC](#toc)
+[INDEX](#toc)
 
 &nbsp; 
 
@@ -63,7 +63,7 @@ While the Audit service provides the necessary governance, however, managing it 
 * email reports & lot more features.
 * with GUI, and also command-line access.
 
-[TOC](#toc)
+[INDEX](#toc)
 
 <br />
 
@@ -79,7 +79,7 @@ While the Audit service provides the necessary governance, however, managing it 
 * Tenancy OCID, user OCID and fingerprint obtained after adding the public key.
 * SMTP/TLS configurations for mail notifications (optional).
 
-[TOC](#toc)
+[INDEX](#toc)
 
 &nbsp;  
 
@@ -118,7 +118,7 @@ Get User configuration details following as steps in: [User configurations on OC
 
 \* Further additional configurations are shown along with individual report snaps.
 
-[TOC](#toc)
+[INDEX](#toc)
 
 <br />
 
@@ -213,7 +213,7 @@ Shows all compartments, sub-compartments up to any level.
 
 <br />
 
-[TOC](#toc)
+[INDEX](#toc)
 
 <br />
 
@@ -278,7 +278,7 @@ _Note: These policies configuration parameters are just a trial implementation!_
 
 <br />
 
-[TOC](#toc)
+[INDEX](#toc)
 
 <br />
 
@@ -290,7 +290,7 @@ Shows all services created by users, scanning in to every regions, availability 
 
 [>> more details](./doc/services_created.md)
 
- [TOC](#toc)
+ [INDEX](#toc)
 
 <br />
 
@@ -322,7 +322,7 @@ _Note: By default audit events identified for alert will only be listed, use `ev
 
 <br />
 
-[TOC](#toc)
+[INDEX](#toc)
 
 <br />
 
@@ -388,7 +388,7 @@ Shows a list of all the subnets configured.
 
 <br />
 
-[TOC](#toc)
+[INDEX](#toc)
 
 <br />
 
@@ -420,7 +420,7 @@ _Note:_
 > _Email Notifications are required only when we run on scheduler_
     - _With GUI, reports will be right on your system, so email feature is only enabled for CLI runs._
 
-[TOC](#toc)
+[INDEX](#toc)
 
 <br />
 <br />

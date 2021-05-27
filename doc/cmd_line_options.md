@@ -26,7 +26,8 @@ CLI can be used for schedulers/automations.
             -Optional argument
 
 Note: 
+   * applicable for both Windows and Linux platforms.
    * All alerts are normally highlighted with suitable background colors.
    * selected analysis will always list all respective OCI components in to the report, plus auditing, unless if some components are avoided by user configurations.
 
-[TOC](../README.md#toc)
+[INDEX](../README.md#toc)
