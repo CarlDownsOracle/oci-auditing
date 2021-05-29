@@ -3,7 +3,7 @@
 # Purpose   : Auditing Tool, for OCI tenancies
 # - - - - - - - - - - - - - - - - - - - - - - - -
 #
-version='3.6.22' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
+version='3.7.2' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
 tool_name='OCI Auditing'
 copyright="Karthik Kumar Hiraskar\n©2019-2021"
 
@@ -23,23 +23,22 @@ COMMANDLINE USAGE:
 
     Arg 2    [*Mandatory argument]
         Use one or more of these below options seperated by space, and enclosed by quotes
-            ex: "users groups"
+            ex: "usersAndGroups limits"
                 "networks"
                 "limits policies networks"
 
         Type of analysis:
         ------------------
-        compartments = list & analyse Compartments, audits naming formats
-        users        = list & analyse Users, audits naming formats
-        groups       = list & analyse Groups, audits naming formats
-        limits       = list & analyse Service Limits, warnings on near to limits
-        policies     = list & analyse Policies, audits for mandatory policies, missing policies, additional policies
-        instances    = lists instances created for all the OCI services supported
-        events       = list & analyse Audit Events from last run, alerts for all create/modify/terminate events
-        networks     = list & analyse VCN and all of it's sub-components, audits CIDR, Protocols
-        cloudGuard   = lists all Cloud Guard findings, with graphs and colorings as per Severity
-        cloudAdvisor = lists all Cloud Advisor Recommendations, with estimated savings
-        all          = all these audits
+        compartments  = list & analyse Compartments, audits naming formats
+        usersAndGroups= list & analyse Users and Groups, audits naming formats
+        limits        = list & analyse Service Limits, warnings on near to limits
+        policies      = list & analyse Policies, audits for mandatory policies, missing policies, additional policies
+        instances     = lists instances created for all the OCI services supported
+        events        = list & analyse Audit Events from last run, alerts for all create/modify/terminate events
+        networks      = list & analyse VCN and all of it's sub-components, audits CIDR, Protocols
+        cloudGuard    = lists all Cloud Guard findings, with graphs and colorings as per Severity
+        cloudAdvisor  = lists all Cloud Advisor Recommendations, with estimated savings
+        all           = all these audits
             Note: select only required audits, to save big run-times.
                   optimization in configurations can also save longer run-times.
 
@@ -90,7 +89,7 @@ else:
                 if tenancy in commandlineTenancies: selectedTenancies.append(tenancy)
             the.updateSelection('domains', 'selection', selectedTenancies)
             if len(selectedTenancies)>0: # if more than one valid tenancies selected
-                for audt in ['users','groups','limits','policies','instances','events','networks','cloudGuard','cloudAdvisor']:
+                for audt in ['usersAndGroups','limits','policies','instances','events','networks','cloudGuard','cloudAdvisor']:
                     if 'all' in analysisType or audt in analysisType:
                         the.updateSelection('audits', audt, True)
                         selectedAudits.append(audt)

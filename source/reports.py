@@ -109,15 +109,17 @@ def generateReport():
     ws.autofilter(0, 0, row-1, 6)
     addCountSummary(row+2, the.compartments)
 
-    if the.getSelection('audits','users'):
-        addTab('Users', colWidths=[14,30,30,30,65,20,30])
-        writeHeader('Tenancy','User Name','Description','Email','OCID','Created','Report Comments')
+    if the.getSelection('audits','usersAndGroups'):
+        ### Users
+        addTab('Users', colWidths=[14,30,30,30,65,20,30,20])
+        writeHeader('Tenancy','User Name','Description','Email','OCID','Created','Report Comments','Last Login Time')
         ws.freeze_panes(row,0)
         
         for t in sortedTenancies:
             for k in sorted(the.users[t].keys()):
                 # Date Time pattern update, Ex: 2019-08-01T06:33:51.715+0000 => 2019-08-01 06:33:51
                 creatDate=the.dateFormat(the.users[t][k][4])
+                lastLoginTime=the.dateFormat(the.users[t][k][6])
                 cmnt=the.users[t][k][5]
                 cl_format = format['tblCell']
                 cl_format_small = format['tblCell_f8']
@@ -131,11 +133,12 @@ def generateReport():
                 ws.write(row,4, the.users[t][k][3], cl_format_small)
                 ws.write(row,5, creatDate,      cl_format)
                 ws.write(row,6, cmnt,           cl_format_small)
+                ws.write(row,7, lastLoginTime, cl_format)
                 row+=1
-        ws.autofilter(0, 0, row-1, 6)
+        ws.autofilter(0, 0, row-1, 7)
         addCountSummary(row+2, the.users)
     
-    if the.getSelection('audits','groups'):
+        ### Groups
         addTab('Groups', colWidths=[14,30,30,65,20,30])
         writeHeader('Tenancy','Group Name','Description','OCID','Created','Report Comments')
         ws.freeze_panes(row,0)
@@ -151,13 +154,50 @@ def generateReport():
                     cl_format_small = format['tblCell_hig_f8']
                 ws.write(row,0, t, cl_format)
                 ws.write(row,1, the.groups[t][k][0], cl_format)
-                ws.write(row,2, the.groups[t][k][1], cl_format)
+                ws.write(row,2, the.groups[t][k][1], cl_format_small)
                 ws.write(row,3, the.groups[t][k][2], cl_format_small)
                 ws.write(row,4, creationDate, cl_format)
                 ws.write(row,5, cmnt, cl_format_small)
                 row+=1
         ws.autofilter(0, 0, row-1, 5)
         addCountSummary(row+2, the.groups)
+
+        ### Group Members
+        addTab('GroupMembers', colWidths=[14,30,30,10,20])
+        writeHeader('Tenancy','Group Name','User Name','Status','Created')
+        ws.freeze_panes(row,0)
+        
+        for t in sortedTenancies:
+            for k in sorted(the.groupMembers[t].keys()):
+                creationDate=the.dateFormat(the.groupMembers[t][k][3])
+                cl_format = format['tblCell']
+                ws.write(row,0, t, cl_format)
+                ws.write(row,1, the.groupMembers[t][k][0], cl_format)
+                ws.write(row,2, the.groupMembers[t][k][1], cl_format)
+                ws.write(row,3, the.groupMembers[t][k][2], cl_format)
+                ws.write(row,4, creationDate, cl_format)
+                row+=1
+        ws.autofilter(0, 0, row-1, 4)
+        addCountSummary(row+2, the.groupMembers)
+
+        ### Dynamic Groups
+        addTab('DynamicGroups', colWidths=[14,30,30,65,20])
+        writeHeader('Tenancy','Dynamic Group Name','Description','OCID','Created')
+        ws.freeze_panes(row,0)
+        
+        for t in sortedTenancies:
+            for grp in sorted(the.dynamicGroups[t].keys()):
+                creationDate=the.dateFormat(the.dynamicGroups[t][grp][2])
+                cl_format = format['tblCell']
+                cl_format_small = format['tblCell_f8']
+                ws.write(row,0, t, cl_format)
+                ws.write(row,1, grp, cl_format)
+                ws.write(row,2, the.dynamicGroups[t][grp][0], cl_format_small)
+                ws.write(row,3, the.dynamicGroups[t][grp][1], cl_format_small)
+                ws.write(row,4, creationDate, cl_format)
+                row+=1
+        ws.autofilter(0, 0, row-1, 4)
+        addCountSummary(row+2, the.dynamicGroups)
         
     if the.getSelection('audits', 'limits'):
         addTab('Service Limits', colWidths=[14,22,22,25,30,18,18,18])

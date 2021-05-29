@@ -97,7 +97,7 @@ def resetGlobalVariables():
     global tenancies
     global issueTenancies
     global users
-    global groups
+    global groups, dynamicGroups, groupMembers, userGroupIds
     global compartments,compartmentIds
     global limits
     global policies
@@ -114,7 +114,7 @@ def resetGlobalVariables():
     tenancies = {}
     issueTenancies = []
     users = {}
-    groups = {}
+    groups = {}; dynamicGroups={}; groupMembers={}; userGroupIds={}
     compartments={}; compartmentIds={}
     limits = {}
     policies = {}
@@ -143,7 +143,7 @@ def commaJoin(*vals):
     return ret
 
 def initTenancyDicts(tenancyName):
-    users[tenancyName]={};groups[tenancyName]={};compartments[tenancyName]={};limits[tenancyName]={}
+    users[tenancyName]={};groups[tenancyName]={};dynamicGroups[tenancyName]={};groupMembers[tenancyName]={};compartments[tenancyName]={};limits[tenancyName]={}
     policies[tenancyName]={};instances[tenancyName]={};events[tenancyName]={}
 
 def createThread(func, *argv, max=maxThreads, **kwargv):

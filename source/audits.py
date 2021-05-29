@@ -55,7 +55,11 @@ def init(a):
         backoff_type=oci.retry.BACKOFF_FULL_JITTER_EQUAL_ON_THROTTLE_VALUE
     ).get_retry_strategy()
 
-def listUsers(idty, tenName, tenOcid):
+def listUserGroups(idty, tenName, tenOcid):
+    ### Users   : get in this thread
+    the.createThread(getGroups, idty, tenName, tenOcid)
+    the.createThread(getDynamicGroups, idty, tenName, tenOcid)
+
     the.setInfo(tenName + ': Getting Users...')
     allowedNamedUsers = conf.allowedNamedUsers # Work on local variable
     
@@ -82,7 +86,8 @@ def listUsers(idty, tenName, tenOcid):
                         usrNum = int(res.group(5))
                         if usrNum > conf.allowed_username_max_number:
                             cmnt = 'allowed username cannot exceed ' + conf['allowed_username_max_number']
-            the.users[tenName][usr.name] = [usrName, usr.description, usr.email, usr.id, usr.time_created, cmnt]
+            the.users[tenName][usr.name] = [usrName, usr.description, usr.email, usr.id, usr.time_created, cmnt, usr.last_successful_login_time]
+            the.userGroupIds[usr.id]=usrName
         
         if not response.has_next_page: break
         page = response.next_page
@@ -92,7 +97,7 @@ def listUsers(idty, tenName, tenOcid):
             the.users[tenName]['#Missing#' + nu] = [nu, '--NA--', '--NA--', '--NA--', '--NA--', 'Mandatory Named User Missing']
     the.increamentGauge(the.gaugeIncNum)
 
-def listGroups(idty, tenName, tenOcid):
+def getGroups(idty, tenName, tenOcid):
     the.setInfo(tenName + ': Getting Groups...')
     allowedNamedGroups = conf.allowedNamedGroups
     
@@ -117,6 +122,8 @@ def listGroups(idty, tenName, tenOcid):
                         if grpNum>conf.allowed_groupname_max_number:
                             cmnt='Group Number cannot exceed ' + conf.allowed_groupname_max_number
             the.groups[tenName][grp.name] = [grpName, grp.description, grp.id, grp.time_created, cmnt]
+            the.userGroupIds[grp.id]=grpName
+            getGroupMembers(idty, tenName, tenOcid, grp.id)
         
         if not response.has_next_page: break
         page = response.next_page
@@ -125,6 +132,28 @@ def listGroups(idty, tenName, tenOcid):
         for ng in allowedNamedGroups:
             the.groups[tenName]['#Missing#' + ng] = [ng, '--NA--', '--NA--', '--NA--', 'Mandatory Group Missing']
     the.increamentGauge(the.gaugeIncNum)
+
+def getDynamicGroups(idty, tenName, tenOcid):
+    the.setInfo(tenName + ': Getting Dynamic Groups ...')
+    response = the.getOciData(oci.pagination.list_call_get_all_results, idty.list_dynamic_groups, tenOcid)
+    grps = response.data
+    log.debug('Got Dynamic Groups: ' + str(len(grps)))
+    for grp in grps:
+        the.dynamicGroups[tenName][grp.name] = [grp.description, grp.id, grp.time_created]
+        the.userGroupIds[grp.id]=grp.name
+    the.increamentGauge(the.gaugeIncNum*2)
+
+def getGroupMembers(idty, tenName, tenOcid, grpOcid):
+    response = the.getOciData(oci.pagination.list_call_get_all_results, idty.list_user_group_memberships, tenOcid, group_id=grpOcid)
+    #if response:
+    gms = response.data
+    log.debug('Got Group Members: ' + str(len(gms)))
+    grp = the.userGroupIds[grpOcid]
+    the.setInfo(tenName + ': Group Members: ' + grp)
+    for gm in gms:
+        usr = the.userGroupIds[gm.user_id]
+        key = grp+usr+grpOcid+gm.user_id
+        the.groupMembers[tenName][key] = [grp, usr, gm.lifecycle_state, gm.time_created]
 
 def listPolicies(idty, tenName):
     gaugeIncNumFor1Compartment = (the.gaugeIncNum*gaugeBreaks['allCompartments'])/len(the.compartments[tenName])
@@ -945,7 +974,7 @@ def compute(cmp, compName, tenName, serviceName, region, vnCl):
     if vnCl:
         vnicDetails=[]
         try:
-            vnics = [vnCl.get_vnic(vnicId).data for vnicId in the.vnicAttachments[cmp.id]]
+            vnics = [the.getOciData(vnCl.get_vnic, vnicId).data for vnicId in the.vnicAttachments[cmp.id]]
             for vnic in vnics:
                 details=[]
                 if 'VNIC_OCID' in show_compute_vnics: details.append(vnic.id)
