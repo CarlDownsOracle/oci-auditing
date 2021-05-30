@@ -284,13 +284,40 @@ _Note: These policies configuration parameters are just a trial implementation!_
 
 ## Services Created / Instances
 
-Shows all services created by users, scanning in to every regions, availability domains and, compartments.
+Shows all services created by users, scanning in to every regions, availability domains, and compartments.
+
+These OCI services are supported: 
+* Compute Instances
+* Custom Images
+* Boot Volume, and Backups
+* Block Volume, and Backups
+* Volume Group, and Backups
+* Dedicated VM Host
+* Cluster Network
+* Instance Pool
+* File System, Mount Target
+* Analytics Instance
+* Integration Instance
+* Load Balancer
+* Health Check: HTTP, and Ping
+* DB Systems
+* Autonomous Databases
+* Autonomous Container Databases
+* Autonomous Exadata Infrastructure
+* Exadata Infrastructure
+* VM Cluster
+* NoSQL Table
+* MySQL DB System
+* Load Balancer
+* Data Science
 
 ![](./doc/images/image024.jpg)
 
+_You can [submit request](https://github.com/KsiriCreations/oci-auditing/issues/new?title=New%20Service:%20%3CReplace%20with%20Feature%20Title%3E&body=%3CReplace%20with%20your%20detailed%20comments%20of%20any%20new%20feature%20or%20enhancements%20that%20need%20to%20be%20incorporated%20in%20OCI%20Auditing%20Tool%3E) for additional services to get added in to the Tool_
+
 [>> more details](./doc/services_created.md)
 
- [INDEX](#toc)
+[INDEX](#toc)
 
 <br />
 
@@ -327,64 +354,22 @@ _Note: By default audit events identified for alert will only be listed, use `ev
 <br />
 
 ## <a name="networks">Networking</a>
-
-### Virtual Cloud Network:
-VCN [When networking is selected - by default listing]
-
-Route Table
-
-Subnet
-
-Security List
-
-Network Security Group
-
-Internet Gateway
-
-NAT Gateway
-
-Service Gateway
-
-DRG attachments to VCN
-
-Local Peering Gateway
-
-DRG
-
-<br />
-
-Shows VCN details such as VCN name, OCID, CIDR, etc.
+Get fine reporting with audits on these supported network components:
+* VCN
+* Route Table
+* Subnet
+* Security List
+* Network Security Group
+* Internet Gateway
+* NAT Gateway
+* Service Gateway
+* DRG attachments to VCN
+* Local Peering Gateway
+* DRG
 
 ![](./doc/images/image027.jpg)
 
-### Route Table:
-Shows Route Tables available along with the implemented route rules.
-
-![](./doc/images/image028.jpg)
-
-![](./doc/images/image029.jpg)
-
-### Subnet:
-Shows a list of all the subnets configured.
-
-![](./doc/images/image030.jpg)
-
-### Security List:
-
-![](./doc/images/image031.jpg)
-
-![](./doc/images/image032.jpg)
-
-### Network Security Groups:
-
-![](./doc/images/image033.jpg)
-
-![](./doc/images/image034.jpg)
-
- Risks highlighted as below:
-
-![](./doc/images/network-coloring-rules.png)
-
+[>> more details](./doc/networking.md)
 
 <br />
 

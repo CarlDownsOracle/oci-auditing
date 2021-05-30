@@ -6,6 +6,7 @@ import tester
 def init(a):
     global ui,the,conf,log,oci
     global networkServiceSelection,dateFormat,gaugeBreaks
+    global securityListDetails
     the=a
     oci=the.oci
     ui=the.ui
@@ -14,6 +15,7 @@ def init(a):
     log=conf.log
     gaugeBreaks=the.gaugeBreaks
     networkServiceSelection=the.getSelection('audits', 'networkComponents')
+    securityListDetails={}
 
     # These errors are handled, with this "RETRY STRATEGY"
     # Notepad++ search pattern to see if any new error came: 
@@ -580,15 +582,16 @@ def networksOfRegion(config, tenName):
     
     for t in vcnThreads: t.join() # wait for VCN listings to complete
     if (tenName in the.networks['VCN']) and (region in the.networks['VCN'][tenName]):
+        subnetThreads = call_vcnComponents('Subnet', vnCl.list_subnets, subnets, tenName, region)
         call_vcnComponents('Route Table', vnCl.list_route_tables, routeTables, tenName, region)
-        call_vcnComponents('Subnet', vnCl.list_subnets, subnets, tenName, region)
-        call_vcnComponents('Security List', vnCl.list_security_lists, securityLists, tenName, region)
-        call_vcnComponents('Network Security Group', vnCl.list_network_security_groups, networkSecurityGroups, tenName, region, f1X=f11, vnCl=vnCl)
         call_vcnComponents('Internet Gateway', vnCl.list_internet_gateways, internetGateways, tenName, region)
         call_vcnComponents('NAT Gateway', vnCl.list_nat_gateways, natGateways, tenName, region)
         call_vcnComponents('Service Gateway', vnCl.list_service_gateways, serviceGateways, tenName, region)
         call_vcnComponents("VCN's DRG", vnCl.list_drg_attachments, drgAttachments, tenName, region)
         call_vcnComponents('Local Peering Gateway', vnCl.list_local_peering_gateways, localPeeringGateways, tenName, region)
+        for t in subnetThreads: t.join() # waits for subnets completion
+        call_vcnComponents('Security List', vnCl.list_security_lists, securityLists, tenName, region)
+        call_vcnComponents('Network Security Group', vnCl.list_network_security_groups, networkSecurityGroups, tenName, region, f1X=f11, vnCl=vnCl)
     else:
         log.debug('IGNORE VCN SUB-COMPONENTS: No VCN in : ' + tenName + ' > ' + region)
         regionsSubscribed=len(getRegionsSubscribed(tenName))
@@ -630,6 +633,9 @@ def subnets(sn, compName, tenName, srv, region):
     pr_pb = 'Private' if sn.prohibit_public_ip_on_vnic else 'Public'
     access = pr_pb+' ('+ad+')'
     secLists = '\n'.join(sn.security_list_ids)
+    for slId in sn.security_list_ids:
+        if pr_pb=='Public': addDict2KeyVal(securityListDetails, slId, 'isHavingPublicSubnet', True)
+        else: addDict2KeyVal(securityListDetails, slId, 'isHavingPrivateSubnet', True)
     the.networks[srv][vcnID].append([name, sn.id, sn.cidr_block, access, secLists, dateFormat(sn.time_created)])
 
 def routeTables(rt, compName, tenName, srv, region):
@@ -646,7 +652,14 @@ def routeTables(rt, compName, tenName, srv, region):
 def securityLists(sl, compName, tenName, srv, region):
     name=getDisplayName(sl)
     vcnID=getVcnId(srv,sl)
-    the.networks[srv][vcnID].append([name, sl.id, dateFormat(sl.time_created)])
+    subnetPrivacy=''
+    if not sl.id in securityListDetails:
+        subnetPrivacy='OrphanSecurityList/NoSubnet'
+    else:
+        if 'isHavingPublicSubnet' in securityListDetails[sl.id]: subnetPrivacy='Public'
+        if 'isHavingPrivateSubnet' in securityListDetails[sl.id]:
+            subnetPrivacy = 'InBoth PublicPrivate' if subnetPrivacy else 'Private'
+    the.networks[srv][vcnID].append([name, sl.id, dateFormat(sl.time_created), subnetPrivacy])
         
     srv='sl_egress_security_rules'
     the.networks[srv][sl.id]=[]
@@ -656,7 +669,8 @@ def securityLists(sl, compName, tenName, srv, region):
         dst=egr.destination
         # Auditing
         risk=''
-        if dst=='0.0.0.0/0': risk = 'High' if protocol=='all' else 'Medium'
+        if dst=='0.0.0.0/0': 
+            risk = 'High' if protocol=='all' and 'Public' in subnetPrivacy else 'Medium'
         the.networks[srv][sl.id].append([risk, stateless, egr.destination_type, dst, protocol, fld1, fld2, egr.description])
     
     srv='sl_ingress_security_rules'
@@ -667,7 +681,8 @@ def securityLists(sl, compName, tenName, srv, region):
         src=ing.source
         # Auditing
         risk=''
-        if src=='0.0.0.0/0': risk='High'
+        if src=='0.0.0.0/0':
+            risk = 'High' if 'Public' in subnetPrivacy else 'Medium'
         elif src=='10.0.0.0/16' and protocol=='all': risk='Medium'
         elif (src=='10.0.0.0/16' and protocol=='ICMP') or (src=='10.0.0.0/24' and protocol=='TCP'): risk='Low'
         the.networks[srv][sl.id].append([risk, stateless, ing.source_type, src, protocol, fld1, fld2, ing.description])
@@ -791,7 +806,7 @@ def f11_networkComponents(ociFunc, locFunc, compId, compName, tenName, region, s
 def call_vcnComponents(service, ociFunc, locFunc, tenName, region, f1X=f11_networkComponents, **kwargs):
     if service in networkServiceSelection:
         log.info('Scanning "'+service+'" in: '+tenName+' > '+region+' ...')
-        loopCompartments(ociFunc, locFunc, tenName, region, service, f1X=f1X, **kwargs)
+        return loopCompartments(ociFunc, locFunc, tenName, region, service, f1X=f1X, **kwargs)
 def f11_parms(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
     try:
         the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
@@ -1064,6 +1079,10 @@ def getCompartmentID(tenName, compName): return the.compartments[tenName][compNa
 def getRegionsSubscribed(tenName): return the.tenancies[tenName][1]
 def initKeyIfNew(dict,key,init):
     if key not in dict: dict[key]=init
+def addDict2KeyVal(dict,key1,key2,val):
+    if not key1 in dict: dict[key1]={}
+    #if not key2 in dict[key1] or dict[key1][key2]!=val: dict[key1][key2]=val
+    if not key2 in dict[key1]: dict[key1][key2]=val
 def giveAdashOnNothing(str):
     if str: return str
     else: return '-'

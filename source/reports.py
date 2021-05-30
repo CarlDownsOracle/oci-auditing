@@ -353,7 +353,7 @@ def generateReport():
                     for n in sorted(the.networks[srvc][t][r][c].keys()):
                         v=the.networks[srvc][t][r][c][n]
                         writeRow(data=[t,r,c,n,v[0],v[1],v[2]], style=getStyle(f6=[4]))
-                        lnk[srvc][v[0]] = n + ' . ' + c + ' . ' + t # vcn-ocid = name,comp,tenancy
+                        lnk[srvc][v[0]] = n+' ['+t+'/'+c+']' # vcn-ocid = name [tenancy/comp]
         finalTouchTable()
         
         if len(conf.disableCompartments)>0:
@@ -394,9 +394,9 @@ def generateReport():
         if service in nwSerSel:
             addTab(service+'s', colWidths=[20,30,20,15,18,20,18], tabColor='#632523')
             addHeading2(service+'s')
-            generateHeaderList('VCN OCID','Name','OCID','CIDR','Access','Security List OCIDs','Created Time')
+            generateHeaderList('VCN [Tenancy/Compartment] ~','Name','OCID','CIDR','Access','Security List OCIDs','Created Time')
             for vcnID in the.networks[service].keys():
-                for sn in the.networks[service][vcnID]: data.append([vcnID, sn[0], sn[1], sn[2], sn[3], sn[4], sn[5]])
+                for sn in the.networks[service][vcnID]: data.append([getLnk('VCN',vcnID), sn[0], sn[1], sn[2], sn[3], sn[4], sn[5]])
             addTable()
                 
         service='Security List'
@@ -405,10 +405,10 @@ def generateReport():
             lnk[srvc]={}
             addTab(srvc, colWidths=[25,20,20,20,20,12,20,20,20], tabColor='#632523')
             addHeading2(service+'s')
-            writeHeader('VCN . Compartment . Tenancy','SL Name','SL OCID','Created Time')
+            writeHeader('VCN [Tenancy/Compartment]','SL Name','SL OCID','Created Time',"Subnet's Privacy")
             for vcnID in the.networks[service].keys():
                 for sl in the.networks[service][vcnID]:
-                    writeRow(data=[getLnk('VCN',vcnID), sl[0], sl[1], sl[2]], style=getStyle(f6=[0]))
+                    writeRow(data=[getLnk('VCN',vcnID), sl[0], sl[1], sl[2], sl[3]], style=getStyle(f6=[0,2,4]))
                     lnk[srvc][sl[1]]=sl[0] # sl-ocid = name
             finalTouchTable()
             
@@ -422,7 +422,7 @@ def generateReport():
             for slID in the.networks[service].keys():
                 for egr in the.networks[service][slID]:
                     if egr[0]: auditIssuesFound=True
-                    writeRow(data=[getLnk('SL',slID), 'Egress', egr[1], egr[2], egr[3], egr[4], egr[5], egr[6], egr[7]], style=getStyle(risk=egr[0], f6=[0]))
+                    writeRow(data=[getLnk('SL',slID), 'Egress', egr[1], egr[2], egr[3], egr[4], egr[5], egr[6], egr[7]], style=getStyle(risk=egr[0], f6=[0,2]))
             service='sl_ingress_security_rules'
             for slID in the.networks[service].keys():
                 for ing in the.networks[service][slID]:
@@ -714,7 +714,7 @@ def generateHeaderList(*headers):
     head=[]
     for h in headers:
         f={'header': h,'header_format':format['tbl_head'],'format':format['tblCell']} #format['font_10']
-        if 'OCID' in h: f['format']=format['tblCell_f6']
+        if 'OCID' in h or '~' in h: f['format']=format['tblCell_f6']
         head.append(f)
     #print('Debug| Service1: ' + service)
     #print(head)

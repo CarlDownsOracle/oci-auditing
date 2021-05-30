@@ -1,34 +1,3 @@
-# List of services
-
-These OCI services are supported: 
-* Compute Instances
-* Custom Images
-* Boot Volume, and Backups
-* Block Volume, and Backups
-* Volume Group, and Backups
-* Dedicated VM Host
-* Cluster Network
-* Instance Pool
-* File System, Mount Target
-* Analytics Instance
-* Integration Instance
-* Load Balancer
-* Health Check: HTTP, and Ping
-* DB Systems
-* Autonomous Databases
-* Autonomous Container Databases
-* Autonomous Exadata Infrastructure
-* Exadata Infrastructure
-* VM Cluster
-* NoSQL Table
-* MySQL DB System
-* Load Balancer
-* Data Science
-
-_You can [submit request](https://github.com/KsiriCreations/oci-auditing/issues/new) for additional services to get added in to the Tool_
-
-&nbsp;
-&nbsp;
 
 # Configurations
 
