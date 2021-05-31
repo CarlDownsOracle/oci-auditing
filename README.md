@@ -335,9 +335,7 @@ Shows each and every Events performed.
 
     all options available on UI, command-line always selects events from last run
 
-_Marks row,_
-* Red upon creating or deleting a resource
-* Yellow upon updating a resource
+> ![](./doc/images/events-coloring-rules.jpg)
  
 ### Optional configurations:
 
