@@ -201,7 +201,7 @@ def getRegionsAndADs(rgn,conf):
 	rName=rgn.region_name
 	avDs=[]; conf['region']=rName
 	idnty = oci.identity.IdentityClient(conf)
-	avlDomains = idnty.list_availability_domains(conf['tenancy']).data
+	avlDomains = the.getOciData(idnty.list_availability_domains, conf['tenancy']).data
 	for a in avlDomains: avDs.append(a.name)
 	ads[rName]=avDs
 	rgns.insert(0,rName) if rgn.is_home_region else rgns.append(rName)

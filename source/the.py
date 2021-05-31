@@ -86,13 +86,22 @@ def init(a,b, c):
     qry = Query()
 
 def updateSelection(type, key ,value):
-    ret = db.update({key : value}, qry.ui==type)
-    if len(ret)==0: db.insert({'ui': type, key : value})
+    ret = db.update({key : value}, qry.x==type)
+    if len(ret)==0: db.insert({'x': type, key : value})
 def getSelection(type, key):
     try:
-        return db.search(qry.ui==type)[0][key]
+        return db.search(qry.x==type)[0][key]
     except: # if not found returns boolean false
         return False
+def getAuditSelections():
+    ret=[]
+    try:
+        sel=db.search(qry.x=='audits')[0]
+        for a in sel.keys():
+            if sel[a]==True: ret.append(a)
+    except:
+        pass
+    return sorted(ret)
 def resetGlobalVariables():
     global tenancies
     global issueTenancies
@@ -148,8 +157,8 @@ def initTenancyDicts(tenancyName):
 
 def createThread(func, *argv, max=maxThreads, **kwargv):
     waitSeconds=1
-    msgInterval=40 # seconds
-    maxIntervals=2
+    msgInterval=20 # seconds
+    maxIntervals=100 # seconds
     bypassWait=False
     while True:
         threadCount = threading.active_count()
@@ -161,10 +170,10 @@ def createThread(func, *argv, max=maxThreads, **kwargv):
                 return t
         else:
             sleep(1); waitSeconds+=1
-            if waitSeconds%msgInterval:
+            if not waitSeconds%msgInterval:
                 setInfo(threading.current_thread().name + ': All ' + str(threadCount) + ' threads busy.. waited ' + str(waitSeconds) + 'secs..')
                 log.debug('Current Running Threads: ' + str(getActiveThreadNames()))
-                if waitSeconds >= msgInterval*maxIntervals: bypassWait=True
+                if waitSeconds >= maxIntervals: bypassWait=True
 
 def getActiveThreadNames():
     thrds=[]

@@ -143,7 +143,7 @@ def getDynamicGroups(idty, tenName, tenOcid):
     for grp in grps:
         the.dynamicGroups[tenName][grp.name] = [grp.description, grp.id, grp.time_created]
         the.userGroupIds[grp.id]=grp.name
-    the.increamentGauge(the.gaugeIncNum*2)
+    the.increamentGauge(the.gaugeIncNum)
 
 def getGroupMembers(idty, tenName, tenOcid, grpOcid):
     response = the.getOciData(oci.pagination.list_call_get_all_results, idty.list_user_group_memberships, tenOcid, group_id=grpOcid)
@@ -582,16 +582,16 @@ def networksOfRegion(config, tenName):
     
     for t in vcnThreads: t.join() # wait for VCN listings to complete
     if (tenName in the.networks['VCN']) and (region in the.networks['VCN'][tenName]):
-        subnetThreads = call_vcnComponents('Subnet', vnCl.list_subnets, subnets, tenName, region)
+        subnetThread = call_vcnComponents('Subnet', vnCl.list_subnets, subnets, tenName, region)
+        call_vcnComponents('Network Security Group', vnCl.list_network_security_groups, networkSecurityGroups, tenName, region, f1X=f11, vnCl=vnCl)
         call_vcnComponents('Route Table', vnCl.list_route_tables, routeTables, tenName, region)
         call_vcnComponents('Internet Gateway', vnCl.list_internet_gateways, internetGateways, tenName, region)
         call_vcnComponents('NAT Gateway', vnCl.list_nat_gateways, natGateways, tenName, region)
         call_vcnComponents('Service Gateway', vnCl.list_service_gateways, serviceGateways, tenName, region)
         call_vcnComponents("VCN's DRG", vnCl.list_drg_attachments, drgAttachments, tenName, region)
         call_vcnComponents('Local Peering Gateway', vnCl.list_local_peering_gateways, localPeeringGateways, tenName, region)
-        for t in subnetThreads: t.join() # waits for subnets completion
+        if subnetThread: subnetThread.join()# waits for subnets completion
         call_vcnComponents('Security List', vnCl.list_security_lists, securityLists, tenName, region)
-        call_vcnComponents('Network Security Group', vnCl.list_network_security_groups, networkSecurityGroups, tenName, region, f1X=f11, vnCl=vnCl)
     else:
         log.debug('IGNORE VCN SUB-COMPONENTS: No VCN in : ' + tenName + ' > ' + region)
         regionsSubscribed=len(getRegionsSubscribed(tenName))
@@ -806,7 +806,7 @@ def f11_networkComponents(ociFunc, locFunc, compId, compName, tenName, region, s
 def call_vcnComponents(service, ociFunc, locFunc, tenName, region, f1X=f11_networkComponents, **kwargs):
     if service in networkServiceSelection:
         log.info('Scanning "'+service+'" in: '+tenName+' > '+region+' ...')
-        return loopCompartments(ociFunc, locFunc, tenName, region, service, f1X=f1X, **kwargs)
+        return the.createThread(loopCompartments, ociFunc, locFunc, tenName, region, service, f1X=f1X, useThreads=False, **kwargs)
 def f11_parms(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargs):
     try:
         the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
@@ -838,7 +838,7 @@ def f12(ociFunc, locFunc, compId, compName, tenName, region, service): # Loops t
     except Exception:
         log.exception('Something Error happened !!') # send to log
         raise # send also to console
-def loopCompartments(ociFunc, locFunc, tenName, region, service='', f1X=f11, waitForThreads=False, **kwargv):
+def loopCompartments(ociFunc, locFunc, tenName, region, service='', f1X=f11, waitForThreads=False, useThreads=True, **kwargv):
     regionsSubscribed=len(getRegionsSubscribed(tenName))
     incGaugePerRegion=(the.gaugeIncNum*gaugeBreaks['allCompartments'])/regionsSubscribed
     if service and (service in conf.serviceNotinRegions) and (region in conf.serviceNotinRegions[service]):
@@ -860,8 +860,11 @@ def loopCompartments(ociFunc, locFunc, tenName, region, service='', f1X=f11, wai
         elif service and (compName=='ManagedCompartmentForPaaS') and (service not in the.validServicesInManagedCompartmentForPaaS): # This compartment is returning 404 & 401 errors for unsupported services
             pass #log.debug('IGNORE: Unsupported Service in Managed Compartment: ' + tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's')
         else:
-            t=the.createThread_5belowMaxThreads(f1X, ociFunc, locFunc, compId, compName, tenName, region, service, **kwargv)
-            threads.append(t)
+            if useThreads:
+                t=the.createThread_5belowMaxThreads(f1X, ociFunc, locFunc, compId, compName, tenName, region, service, **kwargv)
+                threads.append(t)
+            else:
+                f1X(ociFunc, locFunc, compId, compName, tenName, region, service, **kwargv)
         the.increamentGauge(incGaugePerComp)
     if waitForThreads:
         for t in threads: t.join() # wait for threads to complete

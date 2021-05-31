@@ -392,7 +392,7 @@ def generateReport():
         
         service='Subnet'
         if service in nwSerSel:
-            addTab(service+'s', colWidths=[20,30,20,15,18,20,18], tabColor='#632523')
+            addTab(service, colWidths=[20,30,20,15,18,20,18], tabColor='#632523')
             addHeading2(service+'s')
             generateHeaderList('VCN [Tenancy/Compartment] ~','Name','OCID','CIDR','Access','Security List OCIDs','Created Time')
             for vcnID in the.networks[service].keys():
@@ -422,7 +422,7 @@ def generateReport():
             for slID in the.networks[service].keys():
                 for egr in the.networks[service][slID]:
                     if egr[0]: auditIssuesFound=True
-                    writeRow(data=[getLnk('SL',slID), 'Egress', egr[1], egr[2], egr[3], egr[4], egr[5], egr[6], egr[7]], style=getStyle(risk=egr[0], f6=[0,2]))
+                    writeRow(data=[getLnk('SL',slID), 'Egress', egr[1], egr[2], egr[3], egr[4], egr[5], egr[6], egr[7]], style=getStyle(risk=egr[0], f6=[0]))
             service='sl_ingress_security_rules'
             for slID in the.networks[service].keys():
                 for ing in the.networks[service][slID]:
@@ -434,9 +434,9 @@ def generateReport():
         if service in nwSerSel:
             srvc='NSG'
             lnk[srvc]={}
-            addTab(srvc, colWidths=[30,20,20,20,20,12,20,20,20,18], tabColor='#632523')
+            addTab(srvc, colWidths=[20,20,20,20,20,12,20,20,20,18], tabColor='#632523')
             addHeading2(service+'s')
-            generateHeaderList('VCN . Compartment . Tenancy','NSG Name','NSG OCID','Created Time')
+            generateHeaderList('VCN [Tenancy/Compartment] ~','NSG Name','NSG OCID','Created Time')
             for vcnID in the.networks[service].keys():
                 for nsg in the.networks[service][vcnID]:
                     data.append([getLnk('VCN',vcnID), nsg[0], nsg[1], nsg[2]])
@@ -446,10 +446,10 @@ def generateReport():
             service='nsg_security_rules'
             row+=1
             ws.merge_range(row,0,row,3,'NSG - Security Rules',format['h3'])
-            ws.write(row,7,'type / source_port_range',format['normal_small'])
-            ws.write(row,8,'code / destination_port_range',format['normal_small'])
+            ws.write(row,6,'type / source-port-range',format['normal_small'])
+            ws.write(row,7,'code / destination-port-range',format['normal_small'])
             row+=1
-            writeHeader('NSG','Stateless','Direction','Type Source/Destination','Source/Destination','Protocol','Field-1','Field-2','Description','Created Time')
+            writeHeader('NSG ~','Stateless','Direction','Type Source/Destination','Source/Destination','Protocol','Field-1','Field-2','Description','Created Time')
             for nsgID in the.networks[service].keys():
                 for sr in the.networks[service][nsgID]:
                     if sr[0]: auditIssuesFound=True
@@ -457,9 +457,9 @@ def generateReport():
             finalTouchTable()
                 
             service='nsg_vnics'
-            row+=1
+            #row+=1
             addHeading2('NSG - VNICs', hx='h3')
-            generateHeaderList('NSG','Parent resource OCID','VNIC OCID','Time Associated')
+            generateHeaderList('NSG ~','Parent resource OCID','VNIC OCID','Time Associated')
             for nsgID in the.networks[service].keys():
                 for v in the.networks[service][nsgID]: data.append([getLnk('NSG',nsgID), v[0], v[1], v[2]])
             addTable()
@@ -632,7 +632,7 @@ def generateReport():
             'name': 'CloudAdvisor Recommendations',
             'categories': [tabName,startRow,0,row-2,0],
             'values':     [tabName,startRow,6,row-2,6],
-            'data_labels': {'percentage': True},
+            'data_labels': {'percentage':True, 'value':True},
         })
         prblmsChart.set_title({'name': 'Recommendations'})
         prblmsChart.set_style(10)
@@ -695,6 +695,8 @@ def generateReport():
                 import mail
                 mail.init(conf, the)
                 mail.sendMail(attachmentDir=reportDirPath, attachmentName=reportName, tenancies=sortedTenancies)
+            else:
+                the.setWarn("E-mail not sent!!, as no audit issues found. If you still wish to get email, disable config tag 'sendmail_onlyif_audit_issues'")
         sleep(5)
         os._exit(0)
     else: # Normal GUI mode
