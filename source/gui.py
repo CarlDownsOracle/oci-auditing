@@ -2,6 +2,7 @@
 
 import wx
 import wx.xrc
+import wx.adv
 
 
 class mainGui ( wx.Frame ):
@@ -21,15 +22,22 @@ class mainGui ( wx.Frame ):
 		self.m_menuItem_connection.SetBitmap( wx.ArtProvider.GetBitmap( wx.ART_TICK_MARK, wx.ART_MENU ) )
 		self.m_menu_options.Append( self.m_menuItem_connection )
 
-		self.m_menuItem_openConfigs = wx.MenuItem( self.m_menu_options, wx.ID_ANY, u"&Open Configurations", u"Open \"configurations/tool.ini\" file in your default editor.\n\nfor better experience associate \"ini\" file extensions in your system to advanced editors.", wx.ITEM_NORMAL )
-		self.m_menuItem_openConfigs.SetBitmap( wx.ArtProvider.GetBitmap( wx.ART_FILE_OPEN, wx.ART_MENU ) )
-		self.m_menu_options.Append( self.m_menuItem_openConfigs )
-
-		self.m_menuItem_reloadConfigs = wx.MenuItem( self.m_menu_options, wx.ID_ANY, u"&Reload Configurations", u"If \"tool.ini\" is modified while UI is open, this will reload to update configurations.", wx.ITEM_NORMAL )
-		self.m_menuItem_reloadConfigs.SetBitmap( wx.ArtProvider.GetBitmap( wx.ART_REDO, wx.ART_MENU ) )
-		self.m_menu_options.Append( self.m_menuItem_reloadConfigs )
-
 		self.m_menubar.Append( self.m_menu_options, u"&Options" )
+
+		self.m_menu_conf = wx.Menu()
+		self.m_menuItem_openConfigs = wx.MenuItem( self.m_menu_conf, wx.ID_ANY, u"&Open Configurations", u"Open \"configurations/tool.ini\" file in your default editor.\n\nfor better experience associate \"ini\" file extensions in your system to advanced editors.", wx.ITEM_NORMAL )
+		self.m_menuItem_openConfigs.SetBitmap( wx.ArtProvider.GetBitmap( wx.ART_FILE_OPEN, wx.ART_MENU ) )
+		self.m_menu_conf.Append( self.m_menuItem_openConfigs )
+
+		self.m_menuItem_reloadConfigs = wx.MenuItem( self.m_menu_conf, wx.ID_ANY, u"&Reload Configurations", u"If \"tool.ini\" is modified while UI is open, this will reload to update configurations.", wx.ITEM_NORMAL )
+		self.m_menuItem_reloadConfigs.SetBitmap( wx.ArtProvider.GetBitmap( wx.ART_REDO, wx.ART_MENU ) )
+		self.m_menu_conf.Append( self.m_menuItem_reloadConfigs )
+
+		self.m_menuItem_tenancies = wx.MenuItem( self.m_menu_conf, wx.ID_ANY, u"&Tenancies", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuItem_tenancies.SetBitmap( wx.ArtProvider.GetBitmap( wx.ART_LIST_VIEW, wx.ART_MENU ) )
+		self.m_menu_conf.Append( self.m_menuItem_tenancies )
+
+		self.m_menubar.Append( self.m_menu_conf, u"&Configurations" )
 
 		self.m_menu_shortcuts = wx.Menu()
 		self.m_menuItem_servicesWindow = wx.MenuItem( self.m_menu_shortcuts, wx.ID_ANY, u"&Services Window"+ u"\t" + u"Ctrl+S", wx.EmptyString, wx.ITEM_NORMAL )
@@ -291,7 +299,7 @@ class mainGui ( wx.Frame ):
 
 		bSizer6.Add( bSizer64, 0, 0, 5 )
 
-		self.m_checkBox_CloudGuard = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"&Cloud Guard", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_checkBox_CloudGuard = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"Cloud &Guard", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_checkBox_CloudGuard.SetFont( wx.Font( 12, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Courier New" ) )
 		self.m_checkBox_CloudGuard.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
 
@@ -384,6 +392,7 @@ class mainGui ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.TenanciesConnectionCheck, id = self.m_menuItem_connection.GetId() )
 		self.Bind( wx.EVT_MENU, self.OpenConfigurations, id = self.m_menuItem_openConfigs.GetId() )
 		self.Bind( wx.EVT_MENU, self.ReloadConfigurations, id = self.m_menuItem_reloadConfigs.GetId() )
+		self.Bind( wx.EVT_MENU, self.OpenTenancyConfigWizard, id = self.m_menuItem_tenancies.GetId() )
 		self.Bind( wx.EVT_MENU, self.openInstancesSelection, id = self.m_menuItem_servicesWindow.GetId() )
 		self.Bind( wx.EVT_MENU, self.openNetworkingSelection, id = self.m_menuItem_networkingWindow.GetId() )
 		self.Bind( wx.EVT_MENU, self.startConnectionAndreporting, id = self.m_menuItem_startAudit.GetId() )
@@ -427,6 +436,9 @@ class mainGui ( wx.Frame ):
 		event.Skip()
 
 	def ReloadConfigurations( self, event ):
+		event.Skip()
+
+	def OpenTenancyConfigWizard( self, event ):
 		event.Skip()
 
 	def openInstancesSelection( self, event ):
@@ -666,5 +678,80 @@ class networkingDialog ( wx.Dialog ):
 	def keyPressOnNetworksList( self, event ):
 		event.Skip()
 
+
+
+
+class configWizard ( wx.adv.Wizard ):
+
+	def __init__( self, parent ):
+		wx.adv.Wizard.__init__ ( self, parent, id = wx.ID_ANY, title = u"Configurations", bitmap = wx.NullBitmap, pos = wx.DefaultPosition, style = wx.DEFAULT_DIALOG_STYLE )
+
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+		self.m_pages = []
+
+		self.m_wizPage1 = wx.adv.WizardPageSimple( self  )
+		self.add_page( self.m_wizPage1 )
+
+		bSizer12 = wx.BoxSizer( wx.VERTICAL )
+
+
+		bSizer12.Add( ( 0, 50), 0, wx.EXPAND, 5 )
+
+		self.m_staticText_Config1 = wx.StaticText( self.m_wizPage1, wx.ID_ANY, u"Tenancies Configuration:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_Config1.Wrap( -1 )
+
+		self.m_staticText_Config1.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText_Config1.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHT ) )
+
+		bSizer12.Add( self.m_staticText_Config1, 0, wx.ALL, 5 )
+
+
+		bSizer12.Add( ( 0, 5), 0, wx.EXPAND, 5 )
+
+		self.m_staticText8 = wx.StaticText( self.m_wizPage1, wx.ID_ANY, u"Before proceeding to next screen, make sure your tenancy/s information like,\n    tenancy name, tenancy ocid, home region\n    user ocid, key file, fingerprint\nare ready with you !\n\n", wx.DefaultPosition, wx.Size( 500,-1 ), 0 )
+		self.m_staticText8.Wrap( -1 )
+
+		bSizer12.Add( self.m_staticText8, 0, wx.ALL, 5 )
+
+
+		bSizer12.Add( ( 0, 30), 0, wx.EXPAND, 0 )
+
+		self.m_button8 = wx.Button( self.m_wizPage1, wx.ID_ANY, u"&Help to get these information", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer12.Add( self.m_button8, 0, wx.ALL, 5 )
+
+
+		self.m_wizPage1.SetSizer( bSizer12 )
+		self.m_wizPage1.Layout()
+		bSizer12.Fit( self.m_wizPage1 )
+		self.m_wizPage2 = wx.adv.WizardPageSimple( self  )
+		self.add_page( self.m_wizPage2 )
+
+		bSizer13 = wx.BoxSizer( wx.VERTICAL )
+
+		self.m_notebook1 = wx.Notebook( self.m_wizPage2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+
+		bSizer13.Add( self.m_notebook1, 1, wx.EXPAND |wx.ALL, 5 )
+
+
+		self.m_wizPage2.SetSizer( bSizer13 )
+		self.m_wizPage2.Layout()
+		bSizer13.Fit( self.m_wizPage2 )
+		self.Centre( wx.BOTH )
+
+
+		self.m_button8.Bind( wx.EVT_BUTTON, self.OpenUserConfiguratinsHelp )
+	def add_page(self, page):
+		if self.m_pages:
+			previous_page = self.m_pages[-1]
+			page.SetPrev(previous_page)
+			previous_page.SetNext(page)
+		self.m_pages.append(page)
+
+	def __del__( self ):
+		pass
+
+
+	def OpenUserConfiguratinsHelp( self, event ):
+		event.Skip()
 
 

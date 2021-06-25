@@ -1,7 +1,7 @@
 import wx,sys,os,re,locale
 uio=sys.modules[__name__]
 from wx.lib.embeddedimage import PyEmbeddedImage
-from gui import mainGui,instancesDialog,eventsDialog,networkingDialog
+import gui
 import the, start
 the.ui=uio
 threading=the.threading
@@ -98,7 +98,7 @@ app_icon = PyEmbeddedImage(
 
 locale.setlocale(locale.LC_ALL, 'C')
 #inherit from the MainFrame created in wxFowmBuilder and create MainFrame
-class MainFrame(mainGui):
+class MainFrame(gui.mainGui):
     #constructor
     def __init__(self,parent):
         #initialize parent class
@@ -164,12 +164,7 @@ class MainFrame(mainGui):
         msg = the.tool_name + "\nVersion " + the.version + details + the.copyright
         wx.MessageBox(msg, 'About - ' + the.tool_name, wx.OK | wx.ICON_INFORMATION)
     def ShowCreditsMessage(self,event):
-        details="""\n
-Thanks to Oracle University, for initiative of OCI Auditing Tool and framing audits on Users, Groups, Compartments, Policies, Limits.\n
-Oracle Consulting, has helped in taking this tool to next level including wide Networking and EventLog audits.\n
-Also many thanks to all users and collaborators for your suggestions and discussions in improving this tool.\n
-Github is used to maintain product releases, documents and issues.\n
-\n\n"""
+        details = creditsMessage
         msg = the.tool_name + "\nVersion " + the.version + details + the.copyright
         wx.MessageBox(msg, 'Credits - ' + the.tool_name, wx.OK | wx.ICON_INFORMATION)
     def CheckForUpdates(self,event):
@@ -194,6 +189,8 @@ Github is used to maintain product releases, documents and issues.\n
             ans=dlg.ShowModal()
             if ans==wx.ID_OK:
                 openLinkOnBrowser('Get Stable-Releases / Pre-Released versions', 'https://github.com/KsiriCreations/oci-auditing/releases')
+    def OpenUserConfiguratinsHelp(self,event):
+        openLinkOnBrowser('How to get Tenancy & Users details?', 'https://github.com/KsiriCreations/oci-auditing/blob/master/doc/user_configurations_on_oci.md#user-configurations-on-oci')
     def OpenDocumentPage(self,event):
         openLinkOnBrowser('OCI Auditing Tool Document', 'https://github.com/KsiriCreations/oci-auditing#oci-auditing')
     def OpenCloudGuardPage(self,event):
@@ -243,6 +240,9 @@ Github is used to maintain product releases, documents and issues.\n
     def openNetworkingSelection(self,event):
         d = NetworkingDialog(self)
         d.SetIcon(appIcon); d.ShowModal()
+    def OpenTenancyConfigWizard(self,event):
+        d = ConfigWizard(self)
+        d.SetIcon(appIcon); d.RunWizard(d.m_wizPage1)
     def onClose(self,event):
         self.Destroy()
 
@@ -262,9 +262,15 @@ class wxTimedDialog(wx.Dialog):
     def onTimer(self, event):
         self.Destroy()
 
-class InstancesDialog(instancesDialog):
+class ConfigWizard(gui.configWizard):
     def __init__(self, parent):
-        instancesDialog.__init__(self,parent)
+        gui.configWizard.__init__(self,parent)
+        self.next = self.prev = None
+    def onClose(self,event):
+        self.Destroy()
+class InstancesDialog(gui.instancesDialog):
+    def __init__(self, parent):
+        gui.instancesDialog.__init__(self,parent)
         # Fill services list
         self.m_services_listCtrl.InsertColumn(0, "Cloud Services")
         self.m_services_listCtrl.SetColumnWidth(0, 370)
@@ -306,9 +312,9 @@ class InstancesDialog(instancesDialog):
             parentWindow.m_checkBox_Instances.SetValue(False)
         parentWindow.m_panel.Show()
         self.Destroy()
-class EventsDialog(eventsDialog):
+class EventsDialog(gui.eventsDialog):
     def __init__(self, parent):
-        eventsDialog.__init__(self,parent)
+        gui.eventsDialog.__init__(self,parent)
         parentWindow.m_panel.Hide() # Hide Main Screen
         # load previous selection
         opt = the.getSelection('audits', 'eventsDateRange')
@@ -328,9 +334,9 @@ class EventsDialog(eventsDialog):
         parentWindow.eventsSelectionChanged(event,openSubUI=False)
         parentWindow.m_panel.Show()
         self.Destroy()
-class NetworkingDialog(networkingDialog):
+class NetworkingDialog(gui.networkingDialog):
     def __init__(self, parent):
-        networkingDialog.__init__(self,parent)
+        gui.networkingDialog.__init__(self,parent)
         # Fill list
         self.m_networkComponents_listCtrl.InsertColumn(0, "Network Components")
         self.m_networkComponents_listCtrl.SetColumnWidth(0, 370)
@@ -436,3 +442,9 @@ def disableUIwhileWorking(enable=False):
     parentWindow.m_checkBox_CloudAdvisor.Enable(enable)
     # parentWindow.m_checkBox_Billing.Enable(enable)
 
+creditsMessage = """\n
+Thanks to Oracle University, for initiative of OCI Auditing Tool and framing audits on Users, Groups, Compartments, Policies, Limits.\n
+Oracle Consulting, has helped in taking this tool to next level including wide Networking and EventLog audits.\n
+Also many thanks to all users and collaborators for your suggestions and discussions in improving this tool.\n
+Github is used to maintain product releases, documents and issues.\n
+\n\n"""
