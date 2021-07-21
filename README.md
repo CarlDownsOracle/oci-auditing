@@ -18,7 +18,7 @@
 &nbsp;
 &nbsp;
 
-## <a name="toc">Index
+## <a name="toc">INDEX
 
 [Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
 [Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro)
@@ -44,7 +44,7 @@
 
 <br />
 
-[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
+<!--[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)-->
 
 &nbsp; 
 
