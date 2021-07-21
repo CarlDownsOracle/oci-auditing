@@ -1,12 +1,21 @@
 # OCI Auditing
 
+<!--
 <div style="text-align:center"><img src=./doc/images/oci-auditing-banner.jpg width=600 alt="OCI Auditing Tool - Banner">
 &nbsp;
+-->
+
+<div align="left">
+      <a href="https://www.youtube.com/watch?v=8gThuja2fzo">
+         <img src="https://img.youtube.com/vi/8gThuja2fzo/0.jpg" style="width:100%;">
+      </a>
+</div>
+
 &nbsp;
 
 ## DOWNLOAD
-[LINUX package <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
-[WINDOWS executable <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.7/OCI_Auditing_Tool-v3.7.exe)
+[![](https://img.shields.io/badge/Linux-Package-red?style=for-the-badge&logo=linux&logoColor=white) <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
+[![](https://img.shields.io/badge/Windows-Executable-blue?style=for-the-badge&logo=windows&logoColor=white) <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.7/OCI_Auditing_Tool-v3.7.exe)
 
 </div>
 
