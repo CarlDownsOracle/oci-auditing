@@ -1,19 +1,24 @@
 # OCI Auditing
 
+<!--
 <div style="text-align:center"><img src=./doc/images/oci-auditing-banner.jpg width=600 alt="OCI Auditing Tool - Banner">
 &nbsp;
+-->
+
+<div align="left"><a href="https://www.youtube.com/watch?v=8gThuja2fzo"><img src="https://img.youtube.com/vi/8gThuja2fzo/0.jpg" style="width:100%;"></a></div>
+
 &nbsp;
 
 ## DOWNLOAD
-[LINUX package <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
-[WINDOWS executable <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.7/OCI_Auditing_Tool-v3.7.exe)
+[![](https://img.shields.io/badge/Linux-Package-red?style=for-the-badge&logo=linux&logoColor=white) <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
+[![](https://img.shields.io/badge/Windows-Executable-blue?style=for-the-badge&logo=windows&logoColor=white) <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.7/OCI_Auditing_Tool-v3.7.exe)
 
 </div>
 
 &nbsp;
 &nbsp;
 
-## <a name="toc">Index
+## <a name="toc">INDEX
 
 [Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
 [Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro)
@@ -39,7 +44,7 @@
 
 <br />
 
-[INDEX](#toc)
+<!--[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)-->
 
 &nbsp; 
 
@@ -63,7 +68,7 @@ While the Audit service provides the necessary governance, however, managing it 
 * email reports & lot more features.
 * with GUI, and also command-line access.
 
-[INDEX](#toc)
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 <br />
 
@@ -79,7 +84,7 @@ While the Audit service provides the necessary governance, however, managing it 
 * Tenancy OCID, user OCID and fingerprint obtained after adding the public key.
 * SMTP/TLS configurations for mail notifications (optional).
 
-[INDEX](#toc)
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 &nbsp;  
 
@@ -118,7 +123,7 @@ Get User configuration details following as steps in: [User configurations on OC
 
 \* Further additional configurations are shown along with individual report snaps.
 
-[INDEX](#toc)
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 <br />
 
@@ -213,7 +218,7 @@ Shows all compartments, sub-compartments up to any level.
 
 <br />
 
-[INDEX](#toc)
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 <br />
 
@@ -278,7 +283,7 @@ _Note: These policies configuration parameters are just a trial implementation!_
 
 <br />
 
-[INDEX](#toc)
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 <br />
 
@@ -317,7 +322,7 @@ _You can [submit request](https://github.com/KsiriCreations/oci-auditing/issues/
 
 [>> more details](./doc/services_created.md)
 
-[INDEX](#toc)
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 <br />
 
@@ -347,7 +352,7 @@ _Note: By default audit events identified for alert will only be listed, use `ev
 
 <br />
 
-[INDEX](#toc)
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 <br />
 
@@ -371,7 +376,7 @@ Get fine reporting with audits on these supported network components:
 
 <br />
 
-[INDEX](#toc)
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 <br />
 
@@ -403,7 +408,7 @@ _Note:_
 > _Email Notifications are required only when we run on scheduler_
     - _With GUI, reports will be right on your system, so email feature is only enabled for CLI runs._
 
-[INDEX](#toc)
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 <br />
 <br />
