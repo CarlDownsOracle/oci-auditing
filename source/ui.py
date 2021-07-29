@@ -1,4 +1,4 @@
-import wx,sys,os,re,locale
+import wx,sys,os,re,locale,webbrowser
 uio=sys.modules[__name__]
 from wx.lib.embeddedimage import PyEmbeddedImage
 import gui
@@ -130,7 +130,7 @@ class MainFrame(gui.mainGui):
                 # Initiate Gauge with initial start value
                 self.gauge.SetValue(1) #the.setGauge(1)
                 start.init(the)
-                ret=start.start()
+                ret=start.start(wx=wx)
                 if ret:
                     if ret[0]=='warn': wx.MessageBox(ret[2], ret[1], wx.OK | wx.ICON_WARNING)
                     elif ret[0]=='error': wx.MessageBox(ret[2], ret[1], wx.OK | wx.ICON_ERROR)
@@ -169,7 +169,7 @@ class MainFrame(gui.mainGui):
         wx.MessageBox(msg, 'Credits - ' + the.tool_name, wx.OK | wx.ICON_INFORMATION)
     def CheckForUpdates(self,event):
         the.setInfo('Checking for updates ... ..')
-        import requests, webbrowser
+        import requests
         from distutils.version import LooseVersion
         url = requests.get('https://github.com/KsiriCreations/oci-auditing/releases/latest').url
         latestVersion = url.split('/')[-1]
@@ -189,8 +189,6 @@ class MainFrame(gui.mainGui):
             ans=dlg.ShowModal()
             if ans==wx.ID_OK:
                 openLinkOnBrowser('Get Stable-Releases / Pre-Released versions', 'https://github.com/KsiriCreations/oci-auditing/releases')
-    def OpenUserConfiguratinsHelp(self,event):
-        openLinkOnBrowser('How to get Tenancy & Users details?', 'https://github.com/KsiriCreations/oci-auditing/blob/master/doc/user_configurations_on_oci.md#user-configurations-on-oci')
     def OpenDocumentPage(self,event):
         openLinkOnBrowser('OCI Auditing Tool Document', 'https://github.com/KsiriCreations/oci-auditing#oci-auditing')
     def OpenCloudGuardPage(self,event):
@@ -200,7 +198,7 @@ class MainFrame(gui.mainGui):
     def SubmitFeedback(self,event):
         openLinkOnBrowser('Submit Feedback', 'https://github.com/KsiriCreations/oci-auditing/issues/new?title=Feedback:%20%3CReplace%20with%20Feedback%20Title%3E&body=%3CReplace%20with%20your%20expirience%20and%20feedbacks%20on%20OCI%20Auditing%20Tool%3E')
     def SubmitFeature(self,event):
-        openLinkOnBrowser('Request Enhancements or New Feature', 'https://github.com/KsiriCreations/oci-auditing/issues/new?title=Request%20Feature:%20%3CReplace%20with%20Feature%20Title%3E&body=%3CReplace%20with%20your%20detailed%20comments%20of%20any%20new%20feature%20or%20enhancements%20that%20need%20to%20be%20incorporated%20in%20OCI%20Auditing%20Tool%3E')
+        openLinkOnBrowser('Request Enhancements or New Feature', 'https://github.com/KsiriCreations/oci-auditing/issues/new?title=Feature%20Request:%20%3CReplace%20with%20Feature%20Title%3E&body=%3CReplace%20with%20your%20detailed%20comments%20of%20any%20new%20feature%20or%20enhancements%20that%20need%20to%20be%20incorporated%20in%20OCI%20Auditing%20Tool%3E')
     def SubmitDefect(self,event):
         openLinkOnBrowser('Submit a Defect with details', 'https://github.com/KsiriCreations/oci-auditing/issues/new?title=Defect:%20%3CReplace%20with%20Defect%20Title%3E&body=%3CReplace%20with%20your%20detailed%20findings,%20explanations,%20investigations%20or%20resolutions%20if%20anything%20already%20done%3E')
     def domainsSelectionChanged(self,event):
@@ -261,11 +259,11 @@ class wxTimedDialog(wx.Dialog):
         self.ShowModal()
     def onTimer(self, event):
         self.Destroy()
-
 class ConfigWizard(gui.configWizard):
     def __init__(self, parent):
         gui.configWizard.__init__(self,parent)
-        self.next = self.prev = None
+    def OpenUserConfigurationsHelp(self,event):
+        openLinkOnBrowser('How to get Tenancy & Users details?', 'https://github.com/KsiriCreations/oci-auditing/blob/master/doc/user_configurations_on_oci.md#user-configurations-on-oci')
     def onClose(self,event):
         self.Destroy()
 class InstancesDialog(gui.instancesDialog):
@@ -377,7 +375,6 @@ class NetworkingDialog(gui.networkingDialog):
         self.Destroy()
 
 def openLinkOnBrowser(name, link):
-    import webbrowser
     msg= name + '\n\n' + link[:80] + '\n(opens in your default browser)'
     dlg=wx.MessageDialog(None, msg, 'Browser Switch', wx.OK | wx.CANCEL | wx.OK_DEFAULT | wx.ICON_INFORMATION)
     dlg.SetOKCancelLabels("&Open", "&Cancel")

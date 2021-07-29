@@ -3,6 +3,7 @@
 import wx
 import wx.xrc
 import wx.adv
+import wx.html
 
 
 class mainGui ( wx.Frame ):
@@ -36,6 +37,7 @@ class mainGui ( wx.Frame ):
 		self.m_menuItem_tenancies = wx.MenuItem( self.m_menu_conf, wx.ID_ANY, u"&Tenancies", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menuItem_tenancies.SetBitmap( wx.ArtProvider.GetBitmap( wx.ART_LIST_VIEW, wx.ART_MENU ) )
 		self.m_menu_conf.Append( self.m_menuItem_tenancies )
+		self.m_menuItem_tenancies.Enable( False )
 
 		self.m_menubar.Append( self.m_menu_conf, u"&Configurations" )
 
@@ -686,14 +688,17 @@ class configWizard ( wx.adv.Wizard ):
 	def __init__( self, parent ):
 		wx.adv.Wizard.__init__ ( self, parent, id = wx.ID_ANY, title = u"Configurations", bitmap = wx.NullBitmap, pos = wx.DefaultPosition, style = wx.DEFAULT_DIALOG_STYLE )
 
-		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+		self.SetSizeHints( wx.Size( 630,460 ), wx.DefaultSize )
 		self.m_pages = []
 
 		self.m_wizPage1 = wx.adv.WizardPageSimple( self  )
 		self.add_page( self.m_wizPage1 )
 
+		self.m_wizPage1.SetMinSize( wx.Size( -630,460 ) )
+
 		bSizer12 = wx.BoxSizer( wx.VERTICAL )
 
+		bSizer12.SetMinSize( wx.Size( 630,460 ) )
 
 		bSizer12.Add( ( 0, 50), 0, wx.EXPAND, 5 )
 
@@ -722,24 +727,50 @@ class configWizard ( wx.adv.Wizard ):
 
 		self.m_wizPage1.SetSizer( bSizer12 )
 		self.m_wizPage1.Layout()
-		bSizer12.Fit( self.m_wizPage1 )
 		self.m_wizPage2 = wx.adv.WizardPageSimple( self  )
 		self.add_page( self.m_wizPage2 )
 
+		self.m_wizPage2.SetMinSize( wx.Size( 630,460 ) )
+
 		bSizer13 = wx.BoxSizer( wx.VERTICAL )
 
-		self.m_notebook1 = wx.Notebook( self.m_wizPage2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer13.SetMinSize( wx.Size( 630,460 ) )
 
-		bSizer13.Add( self.m_notebook1, 1, wx.EXPAND |wx.ALL, 5 )
+		bSizer13.Add( ( 0, 50), 0, wx.EXPAND, 5 )
+
+		self.m_staticText_Config11 = wx.StaticText( self.m_wizPage2, wx.ID_ANY, u"Open, Update and Save Configurations:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_Config11.Wrap( -1 )
+
+		self.m_staticText_Config11.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText_Config11.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHT ) )
+
+		bSizer13.Add( self.m_staticText_Config11, 0, wx.ALL, 5 )
+
+
+		bSizer13.Add( ( 0, 5), 0, wx.EXPAND, 5 )
+
+		self.m_staticText81 = wx.StaticText( self.m_wizPage2, wx.ID_ANY, u"1. Click below button to open configuration file.\n2. Locate this, add required OCI tenancy details here.", wx.DefaultPosition, wx.Size( 500,-1 ), 0 )
+		self.m_staticText81.Wrap( -1 )
+
+		bSizer13.Add( self.m_staticText81, 0, wx.ALL, 5 )
+
+		self.m_htmlWin1 = wx.html.HtmlWindow( self.m_wizPage2, wx.ID_ANY, wx.DefaultPosition, wx.Size( 500,100 ), wx.html.HW_SCROLLBAR_AUTO )
+		bSizer13.Add( self.m_htmlWin1, 0, wx.ALL, 5 )
+
+		self.m_button81 = wx.Button( self.m_wizPage2, wx.ID_ANY, u"Open Configuration file in your default Text Editor", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer13.Add( self.m_button81, 0, wx.ALL, 5 )
+
+
+		bSizer13.Add( ( 0, 30), 0, wx.EXPAND, 0 )
 
 
 		self.m_wizPage2.SetSizer( bSizer13 )
 		self.m_wizPage2.Layout()
-		bSizer13.Fit( self.m_wizPage2 )
 		self.Centre( wx.BOTH )
 
 
-		self.m_button8.Bind( wx.EVT_BUTTON, self.OpenUserConfiguratinsHelp )
+		self.m_button8.Bind( wx.EVT_BUTTON, self.OpenUserConfigurationsHelp )
+		self.m_button81.Bind( wx.EVT_BUTTON, self.OpenUserConfigurationsHelp )
 	def add_page(self, page):
 		if self.m_pages:
 			previous_page = self.m_pages[-1]
@@ -751,7 +782,8 @@ class configWizard ( wx.adv.Wizard ):
 		pass
 
 
-	def OpenUserConfiguratinsHelp( self, event ):
+	def OpenUserConfigurationsHelp( self, event ):
 		event.Skip()
+
 
 

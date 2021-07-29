@@ -8,7 +8,7 @@ def init(a):
     threading=the.threading
     gaugeBreaks=the.gaugeBreaks
 
-def start():
+def start(wx=None):
     try:
         the.setInfo('Preparing OCI connections ...')
         the.resetGlobalVariables()
@@ -126,7 +126,10 @@ def start():
                 if the.getSelection('audits', 'networks'):
                     the.createThread(audits.loopRegions, audits.networksOfRegion, config.copy(), tenancyName)
                 if the.getSelection('audits', 'cloudGuard'):
-                    the.createThread(audits.cloudGuard, config.copy(), tenancyName)
+                    if 'scan_all_regions' in conf.keys: #31, if CG enabled only for specific compartments in regions, then need to loop through all
+                        the.createThread(audits.loopRegions, audits.cloudGuard, config.copy(), tenancyName)
+                    else: # when CG enabled on root compartment, then all regions issue will be consolidated
+                        the.createThread(audits.cloudGuard, config.copy(), tenancyName)
                 if the.getSelection('audits', 'cloudAdvisor'):
                     the.createThread(audits.cloudAdvisor, config.copy(), tenancyName)
                 if False: #Not working for OU internal tenancies
@@ -134,16 +137,16 @@ def start():
             except (IOError,OSError) as e:
                 err=str(e)
                 if('No such file' in err):
-                    err = "Private Key file not found\n\n" + err + "\n\n"
+                    err = "Private Key file not found\n" + err + "\n\n"
                     head = 'Key File Not Available !'
                 elif('ConnectionError' in err):
-                    err = "Check URL or Internet Connection !\n\n" + err
+                    err = "Check URL or Internet Connection !\n" + err
                     head = 'Connection issue !'
                 elif('read timeout' in err):
-                    err = "Internet Connection Time out !\n\n" + err
+                    err = "Internet Connection Time out !\n" + err
                     head = 'Connection issue !'
                 else:
-                    err = "Unhandled IOError:\n\n" + err
+                    err = "Unhandled IOError:\n" + err
                     head = 'Unhandled IOError'
                 the.setError(err)
                 if the.ui: wx.MessageBox(err, head, wx.OK | wx.ICON_ERROR)
