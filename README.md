@@ -1,7 +1,7 @@
 # OCI Auditing
 <!--
 <div style="text-align:center"><img src=./doc/images/oci-auditing-banner.jpg width=600 alt="OCI Auditing Tool - Banner">
-&nbsp;
+</div>
 -->
 <div align="left"><a href="https://www.youtube.com/watch?v=8gThuja2fzo"><img src="https://img.youtube.com/vi/8gThuja2fzo/0.jpg" style="width:100%;"></a></div>
 
@@ -11,21 +11,25 @@
 [![](https://img.shields.io/badge/Linux-Package-red?style=for-the-badge&logo=linux&logoColor=white) <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
 [![](https://img.shields.io/badge/Windows-Executable-blue?style=for-the-badge&logo=windows&logoColor=white) <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.7/OCI_Auditing_Tool-v3.7.exe)
 
-</div>
 &nbsp;
 
 <details>
 <summary><h2>Read this in other Language</h2></summary>
 <a href="https://translate.google.com/translate?sl=en&tl=hi&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing">Hindi</a><br/>
 <a href="https://translate.google.com/translate?sl=en&tl=kn&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing">Kannada</a><br/>
-<a href="https://translate.google.com/translate?sl=en&tl=pt&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing">Portuguese </a><a href="https://translate.google.com/translate?sl=en&tl=pt-br&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing"> [Brazilian]</a><br/>
+<a href="https://translate.google.com/translate?sl=en&tl=mr&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing">Marathi</a><br/>
+<a href="https://translate.google.com/translate?sl=en&tl=pt&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing">Portuguese</a>, <a href="https://translate.google.com/translate?sl=en&tl=pt-br&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing"> Brazilian Portuguese</a><br/>
 <a href="https://translate.google.com/translate?sl=en&tl=es&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing">Spanish</a><br/>
+<a href="https://translate.google.com/translate?sl=en&tl=ta&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing">Tamil</a><br/>
 <a href="https://translate.google.com/translate?sl=en&tl=te&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing">Telugu</a><br/>
+<a href="https://translate.google.com/translate?sl=en&tl=ur&u=https://github.com/KsiriCreations/oci-auditing%23oci-auditing">Urdu</a><br/>
+<i>Select the language in which you prefer to read this OCI Auditing manual.<br/>
+Do not click language translations, from already translated page, which results in multiple translator headings!</i>
 </details>
+
 &nbsp;
 
 ## <a name="toc">INDEX
-
 [Installation Steps <img src=./doc/images/semicolon-512.webp width=20>](#installation_steps)
 [Introduction <img src=./doc/images/semicolon-512.webp width=20>](#intro)
 [Commandline <img src=./doc/images/semicolon-512.webp width=20>](./doc/cmd_line_options.md)
