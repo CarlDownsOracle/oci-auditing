@@ -52,9 +52,9 @@ Do not click language translations, from already translated page, which results 
 * Configure tenancies authentication and if required optional configurations.
 \{[how to configure](#config) and [prerequisite](#prereq)\}
 
+<!--
 <br />
-
-<!--[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)-->
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)-->
 
 &nbsp; 
 
@@ -81,22 +81,6 @@ While the Audit service provides the necessary governance, however, managing it 
 [![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
 
 <br />
-
-# <a name="prerequisite"></a><a name="prereq"></a>Prerequisite
-
-* A Windows system (cloud or local) to setup the tool.
-* An advanced text editor is preferred. `example: notepad++`
-* Oracle Cloud Infrastructure, OCI account.
-    - An OCI user.
-        - security best practice is to create a new user with minimal permissions required
-        - `allow group <grp_name> read all-resources in tenancy`
-* RSA key pair in PEM format, to form API authentication.
-* Tenancy OCID, user OCID and fingerprint obtained after adding the public key.
-* SMTP/TLS configurations for mail notifications (optional).
-
-[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
-
-&nbsp;  
 
 # <a name="config">Configurations - "tool.ini"</a>
 
@@ -143,6 +127,22 @@ __IMPORTANT NOTE:__
 > _Replace with right values in your configurations!_
 
 <br />
+
+# <a name="prerequisite"></a><a name="prereq"></a>Prerequisite
+
+* A Windows system (cloud or local) to setup the tool.
+* An advanced text editor is preferred. `example: notepad++`
+* Oracle Cloud Infrastructure, OCI account.
+    - An OCI user.
+        - security best practice is to create a new user with minimal permissions required
+        - `allow group <grp_name> read all-resources in tenancy`
+* RSA key pair in PEM format, to form API authentication.
+* Tenancy OCID, user OCID and fingerprint obtained after adding the public key.
+* SMTP/TLS configurations for mail notifications (optional).
+
+[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)
+
+&nbsp;  
 
 # <a name="report_details">Report Details</a>
 
