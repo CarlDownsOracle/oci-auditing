@@ -53,10 +53,6 @@ Do not click language translations, from already translated page, which results 
 * Configure tenancies authentication and if required optional configurations.
 \{[how to configure](#config) and [prerequisite](#prereq)\}
 
-<!--
-<br />
-[![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)-->
-
 &nbsp; 
 
 # <a name="intro"></a>Introduction
