@@ -3,6 +3,7 @@
 <div style="text-align:center"><img src=./doc/images/oci-auditing-banner.jpg width=600 alt="OCI Auditing Tool - Banner">
 </div>
 -->
+
 <div align="left"><a href="https://www.youtube.com/watch?v=8gThuja2fzo"><img src="https://img.youtube.com/vi/8gThuja2fzo/0.jpg" style="width:100%;"></a></div>
 
 &nbsp;
