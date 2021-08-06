@@ -174,7 +174,7 @@ class mainGui ( wx.Frame ):
 
 		fgSizerInputs.Add( ( 0, 0), 1, wx.EXPAND, 5 )
 
-		self.m_domains_listCtrl = wx.ListCtrl( self.m_panel, wx.ID_ANY, wx.DefaultPosition, wx.Size( 220,330 ), wx.LC_NO_HEADER|wx.LC_REPORT|wx.BORDER_NONE )
+		self.m_domains_listCtrl = wx.ListCtrl( self.m_panel, wx.ID_ANY, wx.DefaultPosition, wx.Size( 240,330 ), wx.LC_NO_HEADER|wx.LC_REPORT|wx.BORDER_NONE )
 		self.m_domains_listCtrl.SetFont( wx.Font( 11, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Courier New" ) )
 		self.m_domains_listCtrl.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
 		self.m_domains_listCtrl.SetBackgroundColour( wx.Colour( 32, 32, 32 ) )
@@ -370,6 +370,9 @@ class mainGui ( wx.Frame ):
 		self.gauge.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		SizerOuter.Add( self.gauge, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 2 )
+
+
+		SizerOuter.Add( ( 0, 0), 1, wx.EXPAND, 5 )
 
 
 		self.m_panel.SetSizer( SizerOuter )

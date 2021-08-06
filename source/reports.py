@@ -554,9 +554,9 @@ def generateReport():
             'name': 'CloudGuard Detected Risks',
             'categories': [tabName,3,0,row-2,0],
             'values':     [tabName,3,1,row-2,1],
-            'data_labels': {'percentage': True},
+            'data_labels': {'percentage': True, 'value':True},
         })
-        prblmsChart.set_title({'name': 'PROBLEMS'})
+        prblmsChart.set_title({'name': 'CloudGuard PROBLEMS'})
         prblmsChart.set_style(10)
         prblmsChart.set_chartarea({'border': {'none': True}})
         ws.insert_chart('C1', prblmsChart, {'x_offset': 1, 'y_offset': 0})
@@ -631,10 +631,10 @@ def generateReport():
         prblmsChart.add_series({
             'name': 'CloudAdvisor Recommendations',
             'categories': [tabName,startRow,0,row-2,0],
-            'values':     [tabName,startRow,6,row-2,6],
+            'values':     [tabName,startRow,1,row-2,1],
             'data_labels': {'percentage':True, 'value':True},
         })
-        prblmsChart.set_title({'name': 'Recommendations'})
+        prblmsChart.set_title({'name': 'CloudAdvisor Recommendations'})
         prblmsChart.set_style(10)
         prblmsChart.set_chartarea({'border': {'none': True}})
         ws.insert_chart('A1', prblmsChart, {'x_offset': 1, 'y_offset': 0})

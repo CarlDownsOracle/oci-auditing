@@ -10,7 +10,7 @@
 
 ## DOWNLOAD
 [![](https://img.shields.io/badge/Linux-Package-red?style=for-the-badge&logo=linux&logoColor=white) <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.6.16/oci-auditing-v3616)
-[![](https://img.shields.io/badge/Windows-Executable-blue?style=for-the-badge&logo=windows&logoColor=white) <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.7/OCI_Auditing_Tool-v3.7.exe)
+[![](https://img.shields.io/badge/Windows-Executable-blue?style=for-the-badge&logo=windows&logoColor=white) <img src=./doc/images/semicolon-512.webp width=20>](https://github.com/KsiriCreations/oci-auditing/releases/download/3.7.11/OCI_Auditing_Tool-v3.7.11.exe)
 
 &nbsp;
 

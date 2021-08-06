@@ -108,6 +108,12 @@ class MainFrame(gui.mainGui):
         self.SetIcon(appIcon)
         wx.CallLater(1, self.onActivate) # After 1ms of GUI Draw completed
         self.Show(True)
+        try:
+            import pyi_splash
+            pyi_splash.update_text('UI Loaded ...')
+            pyi_splash.close()
+        except:
+            pass
     def onActivate(self): # called after 1ms from __init__
         self.m_logo_bitmap.SetIcon(appIcon)
         self.statusBar.SetStatusText('Ready')
@@ -383,7 +389,7 @@ def openLinkOnBrowser(name, link):
         webbrowser.open_new_tab(link)
 def fillDomainsList(pw): # parent window
     pw.m_domains_listCtrl.InsertColumn(0, "Tenancy Name")
-    pw.m_domains_listCtrl.SetColumnWidth(0, 200)
+    pw.m_domains_listCtrl.SetColumnWidth(0, 220)
     
     for i in range(len(conf.tenancyNames)):
         tenancyName = conf.tenancyNames[i]
@@ -401,10 +407,8 @@ def loadSelections(pw): # parent window
     except: # if false is returned on no information
         pass
     pw.m_checkBox_UserGroups.SetValue(the.getSelection('audits', 'usersAndGroups'))
-    pw.m_checkBox_Compartments.SetValue(the.getSelection('audits', 'compartments'))
     pw.m_checkBox_serviceLimits.SetValue(the.getSelection('audits', 'limits'))
     pw.m_checkBox_Policies.SetValue(the.getSelection('audits', 'policies'))
-    pw.m_checkBox_Billing.SetValue(the.getSelection('audits', 'billing'))
     pw.m_checkBox_Instances.SetValue(the.getSelection('audits', 'instances'))
     pw.m_checkBox_Events.SetValue(the.getSelection('audits', 'events'))
     pw.m_checkBox_Networking.SetValue(the.getSelection('audits', 'networks'))

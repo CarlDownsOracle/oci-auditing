@@ -83,11 +83,14 @@ def start(wx=None):
 
             try:
                 idnty = oci.identity.IdentityClient(config)
-                regions = idnty.list_region_subscriptions(tenancyOcid).data
+                tenancyObj = idnty.get_tenancy(tenancyOcid).data
                 the.setInfo("Connection Success: " + tenancyName)
                 if the.justConnectionCheck:
                     the.increamentGauge(gaugeIncNumPerTenancy)
                     continue
+
+                #tenancyNameConfigured = tenancyName # if Configured name required anywhere, then use this 
+                tenancyName = tenancyObj.name # Actual Tenancy Name
 
                 global rgns, ads
                 rgns = []; ads = {}
@@ -96,6 +99,7 @@ def start(wx=None):
                 the.increamentGauge(gaugeIncNumForRegion)
                 thrds=[]
                 the.setInfo(tenancyName + ": Getting Regions & Availability Domains . . .")
+                regions = idnty.list_region_subscriptions(tenancyOcid).data
                 for r in regions: thrds.append(the.createThread(getRegionsAndADs, r, config.copy())) # pass config's copy, modifying same dictionary parallely in threads creates uncertain results
                 the.increamentGauge(gaugeIncNumForRegion)
                 #if the.getSelection('audits', 'compartments'): #Default always find compartments

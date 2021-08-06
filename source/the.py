@@ -9,7 +9,7 @@ import start
 
 maxThreads=18 # cannot be less than 10
 maxThreads=25
-oci=None # oci module will be assigned with audits iniitialization
+oci=None # oci module will be assigned in start.py when oci is late loaded..
 
 def init(a,b, c):
     global gaugeBreaks,ociServices,networkComponents,additionalNetworkComponents,sendMail,justConnectionCheck
@@ -206,6 +206,8 @@ def raiseInternetIssue(retryCount):
         with lock: internetIssuePopup=False
     setInfo('[' + str(retryCount+1) + '] Retrying connection..')
 
+def getOciData_all(ociFunc, *argv, **kwargv):
+    return getOciData(oci.pagination.list_call_get_all_results, ociFunc, *argv, **kwargv)
 def getOciData(ociFunc, *argv, **kwargv):
     for i in range(4): # retry on issues
         try:

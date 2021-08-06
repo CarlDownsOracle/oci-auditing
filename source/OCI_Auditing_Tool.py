@@ -3,9 +3,9 @@
 # Purpose   : Auditing Tool, for OCI tenancies
 # - - - - - - - - - - - - - - - - - - - - - - - -
 #
-version='3.7.8' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
+version='3.7.11' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
 tool_name='OCI Auditing'
-copyright="Karthik Kumar Hiraskar\n©2019-2021"
+copyright="KK Hiraskar\n©2019-2021"
 
 # Todo:
 # * Optimization for few return status to stop further processing on each compartment looping
@@ -27,7 +27,7 @@ COMMANDLINE USAGE:
                 "networks"
                 "limits policies networks"
 
-        Type of analysis:
+        Types of analysis:
         ------------------
         compartments  = list & analyse Compartments, audits naming formats
         usersAndGroups= list & analyse Users and Groups, audits naming formats
@@ -39,12 +39,13 @@ COMMANDLINE USAGE:
         cloudGuard    = lists all Cloud Guard findings, with graphs and colorings as per Severity
         cloudAdvisor  = lists all Cloud Advisor Recommendations, with estimated savings
         all           = all these audits
-            Note: select only required audits, to save big run-times.
-                  optimization in configurations can also save longer run-times.
+        
+        Note: select only required audits, to save big run-times.
+              optimization in configurations can also save longer run-times.
 
     Arg 3    [-Optional argument]
-        sendMail = sends report generated directly to your mail inbox
-                   [as per SMTP/TLS configurations]
+        sendMail      = send report generated directly to mailbox
+                        [as per SMTP/TLS configurations]
 
 Note: 
    * all configurations to be done in file "configurations\\tool.ini"
@@ -56,7 +57,7 @@ argLen_min=3; argLen_max=4
 if argLen==2:
     if sys.argv[1] in ['-v','-V','--version']:
         print('OCI Auditing Tool, version '+version)
-    elif sys.argv[1] in ['--help','-?']:
+    elif sys.argv[1] in ['--help','-?','-h']:
         print('OCI Auditing Tool, version '+version)
         print(help)
     else:

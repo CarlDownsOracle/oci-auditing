@@ -58,42 +58,36 @@ def init(a):
     ).get_retry_strategy()
 
 def listUserGroups(idty, tenName, tenOcid):
-    ### Users   : get in this thread
-    the.createThread(getGroups, idty, tenName, tenOcid)
-    the.createThread(getDynamicGroups, idty, tenName, tenOcid)
-
     the.setInfo(tenName + ': Getting Users...')
     allowedNamedUsers = conf.allowedNamedUsers # Work on local variable
     
-    page=None
-    while True:
-        response = the.getOciData(idty.list_users, tenOcid, page=page)
-        usrs = response.data
-        log.debug('Got Users: ' + str(len(usrs)))
-        
-        for usr in usrs:
-            cmnt=''
-            usrName=usr.name
-            if conf.validate['USERS']:
-                if '@' in usrName: # Named user
-                    if usrName in allowedNamedUsers:
-                        allowedNamedUsers.remove(usrName)
-                    else:
-                        cmnt='This Named-User not allowed'
-                else:
-                    res = re.search(conf.allowed_username_pattern, usrName)
-                    if res==None:
-                        cmnt='Naming format not followed'
-                    else:
-                        usrNum = int(res.group(5))
-                        if usrNum > conf.allowed_username_max_number:
-                            cmnt = 'allowed username cannot exceed ' + conf['allowed_username_max_number']
-            the.users[tenName][usr.name] = [usrName, usr.description, usr.email, usr.id, usr.time_created, cmnt, usr.last_successful_login_time]
-            the.userGroupIds[usr.id]=usrName
-        
-        if not response.has_next_page: break
-        page = response.next_page
+    response = the.getOciData_all(idty.list_users, tenOcid)
+    usrs = response.data
+    log.debug('Got Users: ' + str(len(usrs)))
     
+    for usr in usrs:
+        cmnt=''
+        usrName=usr.name
+        if conf.validate['USERS']:
+            if '@' in usrName: # Named user
+                if usrName in allowedNamedUsers:
+                    allowedNamedUsers.remove(usrName)
+                else:
+                    cmnt='This Named-User not allowed'
+            else:
+                res = re.search(conf.allowed_username_pattern, usrName)
+                if res==None:
+                    cmnt='Naming format not followed'
+                else:
+                    usrNum = int(res.group(5))
+                    if usrNum > conf.allowed_username_max_number:
+                        cmnt = 'allowed username cannot exceed ' + conf['allowed_username_max_number']
+        the.users[tenName][usr.name] = [usrName, usr.description, usr.email, usr.id, usr.time_created, cmnt, usr.last_successful_login_time]
+        the.userGroupIds[usr.id]=usrName
+    
+    the.createThread(getGroups, idty, tenName, tenOcid)
+    the.createThread(getDynamicGroups, idty, tenName, tenOcid)
+
     if conf.validate['USERS']:
         for nu in allowedNamedUsers: # List Missing Named Users
             the.users[tenName]['#Missing#' + nu] = [nu, '--NA--', '--NA--', '--NA--', '--NA--', 'Mandatory Named User Missing']
@@ -104,7 +98,7 @@ def getGroups(idty, tenName, tenOcid):
     allowedNamedGroups = conf.allowedNamedGroups
     
     page=None
-    while True:
+    while True: # Manual way of pagination
         response = the.getOciData(idty.list_groups, tenOcid, page=page)
         grps = response.data
         log.debug('Got Groups: ' + str(len(grps)))
@@ -137,7 +131,7 @@ def getGroups(idty, tenName, tenOcid):
 
 def getDynamicGroups(idty, tenName, tenOcid):
     the.setInfo(tenName + ': Getting Dynamic Groups ...')
-    response = the.getOciData(oci.pagination.list_call_get_all_results, idty.list_dynamic_groups, tenOcid)
+    response = the.getOciData_all(idty.list_dynamic_groups, tenOcid)
     grps = response.data
     log.debug('Got Dynamic Groups: ' + str(len(grps)))
     for grp in grps:
@@ -146,12 +140,11 @@ def getDynamicGroups(idty, tenName, tenOcid):
     the.increamentGauge(the.gaugeIncNum)
 
 def getGroupMembers(idty, tenName, tenOcid, grpOcid):
-    response = the.getOciData(oci.pagination.list_call_get_all_results, idty.list_user_group_memberships, tenOcid, group_id=grpOcid)
-    #if response:
-    gms = response.data
-    log.debug('Got Group Members: ' + str(len(gms)))
     grp = the.userGroupIds[grpOcid]
     the.setInfo(tenName + ': Group Members: ' + grp)
+    response = the.getOciData_all(idty.list_user_group_memberships, tenOcid, group_id=grpOcid)
+    gms = response.data
+    log.debug('Got Group Members: ' + str(len(gms)))
     for gm in gms:
         usr = the.userGroupIds[gm.user_id]
         key = grp+usr+grpOcid+gm.user_id
@@ -275,7 +268,7 @@ def listLimits(config, tenName):
     
     ## Getting Service Definitions, with ready OCI pagination functions
     serviceDefs = {}
-    response = the.getOciData(oci.pagination.list_call_get_all_results, lmts.list_limit_definitions, tenancyOcid)
+    response = the.getOciData_all(lmts.list_limit_definitions, tenancyOcid)
     limitDefs = response.data
     log.debug('Got Limit Definitions: ' + str(len(limitDefs)))
     for defn in limitDefs: serviceDefs[defn.name] = {'service': defn.service_name,  'desc': defn.description}
@@ -297,7 +290,7 @@ def listLimitsForRegion(config, tenName, serviceDefs={}, serviceNames={}, gaugeI
 def listLimitsFor1RegionService(tenancyOcid, tenName, region, lmts, serviceDefs, serviceName, serviceDesc):
     the.setInfo(tenName + ' > ' + region + ': Getting Service Limits - ' + serviceDesc + ' ...')
     
-    res1 = the.getOciData(oci.pagination.list_call_get_all_results, lmts.list_limit_values, tenancyOcid, service_name=serviceName)
+    res1 = the.getOciData_all(lmts.list_limit_values, tenancyOcid, service_name=serviceName)
     limitValues = res1.data
     log.debug('Got Limits: ' + str(len(limitValues)))
     
@@ -408,10 +401,10 @@ def cloudAdvisor(config, tenName):
     caCl = oci.optimizer.OptimizerClient(config)
     the.setInfo(tenName + ': Cloud Advisor Recommendations ...')
     the.cloudAdvisor[tenName]=[]
-    cat=the.getOciData(oci.pagination.list_call_get_all_results, caCl.list_categories, rootCompId, compartment_id_in_subtree=True)
+    cat=the.getOciData_all(caCl.list_categories, rootCompId, compartment_id_in_subtree=True)
     if cat:
         for c in cat.data: # typically only one category in list, however looping through list
-            res=the.getOciData(oci.pagination.list_call_get_all_results, caCl.list_recommendations, rootCompId, compartment_id_in_subtree=True, category_id=c.id)
+            res=the.getOciData_all(caCl.list_recommendations, rootCompId, compartment_id_in_subtree=True, category_id=c.id)
             for rec in res.data: # list
                 caRecommendations(rec, tenName)
     else:
@@ -454,7 +447,7 @@ def cloudGuard(config, tenName):
 def callCgService(tenName, rootCompId, service, ociFunc, locFunc, incGaugeCG):
     the.setInfo(tenName + ': ' + service + ' ...')
     the.cloudGuard[service][tenName]={}
-    res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, rootCompId, compartment_id_in_subtree=True, access_level='ACCESSIBLE')
+    res=the.getOciData_all(ociFunc, rootCompId, compartment_id_in_subtree=True, access_level='ACCESSIBLE')
     the.increamentGauge(incGaugeCG)
     if res:
         # log.debug(res.data)
@@ -727,7 +720,7 @@ def dynamicRoutingGateways(drg, compName, tenName, srv, region):
     
 def scanNSG(service, ociFunc, locFunc, nsgId):
     try:
-        res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, nsgId)
+        res=the.getOciData_all(ociFunc, nsgId)
         if res:
             log.debug('Count: '+str(len(res.data)))
             for obj in res.data:
@@ -778,7 +771,7 @@ def scanCompartment(ociFunc, locFunc, compId, compName, tenName, region, service
         else:
             ociArgs={}
             locArgs={**kwargs}
-        res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId, **ociArgs)
+        res=the.getOciData_all(ociFunc, compId, **ociArgs)
         if res:
             if loopOciData:
                 log.debug('Count: '+str(len(res.data)))
@@ -794,7 +787,7 @@ def f11_networkComponents(ociFunc, locFunc, compId, compName, tenName, region, s
     try:
         if compName in the.networks['VCN'][tenName][region]:
             the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
-            res=the.getOciData(oci.pagination.list_call_get_all_results, ociFunc, compId)
+            res=the.getOciData_all(ociFunc, compId)
             if res:
                 log.debug('Count: '+str(len(res.data)))
                 for srv in res.data:
