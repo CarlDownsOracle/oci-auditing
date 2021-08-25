@@ -1,3 +1,6 @@
+# Copyright (c) 2019-2021, Oracle and/or its affiliates
+# Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl
+
 from datetime import datetime,timedelta
 
 def init(a):
@@ -28,8 +31,9 @@ def start(wx=None):
             if the.getSelection('audits', 'networks'): totalGaugeBreaks+=gaugeBreaks['allCompartments'] * (len(the.getSelection('audits', 'networkComponents'))+1) # +1 for VCN itself
             if the.getSelection('audits', 'cloudGuard'): totalGaugeBreaks+=gaugeBreaks['simple']*2
             if the.getSelection('audits', 'cloudAdvisor'): totalGaugeBreaks+=gaugeBreaks['simple']
+            if the.getSelection('audits', 'usage'): totalGaugeBreaks+=gaugeBreaks['simple']
             
-            if totalGaugeBreaks==gaugeBreaks['simple+']:
+            if False and totalGaugeBreaks==gaugeBreaks['simple+']: # Disabled this validation
                 err="No valid Audits Selected !!\n\nSelect required Audits and try again.\n\n"
                 the.setError(err)
                 if the.ui: wx.MessageBox(err, 'Select required Audits', wx.OK | wx.ICON_EXCLAMATION)
@@ -49,6 +53,12 @@ def start(wx=None):
         the.oci=oci
         audits.init(the)
         reports.init(the)
+
+        now = datetime.utcnow()
+        today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        firstOfLast3rdMonth = (today-timedelta(days=90)).replace(day=1)
+        the.usageDates = {'start': firstOfLast3rdMonth, 'end': today} # used in reports
+        the.eventDates = {'start': getAuditEventsStartDate(now), 'end': now}
 
         for tenancyName in the.getSelection('domains', 'selection'):
             tenancyOcid = conf.tenancyOcids[tenancyName]
@@ -73,13 +83,12 @@ def start(wx=None):
             the.setInfo("Connecting: " + tenancyName + "  . . .")
 
             config = {
+                "log_requests": False, # set this to true, if required more details on requests and responses
                 "tenancy": tenancyOcid,
                 "user": userOcid,
                 "key_file": key_file,
                 "fingerprint": fingerprint,
-                "region": region,
-                "log_requests": False # set this to true, if required more details on requests and responses
-            }
+                "region": region}
 
             try:
                 idnty = oci.identity.IdentityClient(config)
@@ -120,13 +129,8 @@ def start(wx=None):
                 if the.getSelection('audits', 'instances'):
                     the.createThread(audits.loopRegions, audits.listInstancesOfRegion, config.copy(), tenancyName)
                 if the.getSelection('audits', 'events'):
-                    eventEnd = datetime.utcnow()
-                    eventStart = getAuditEventsStartDate(eventEnd)
-                    #eventEnd   = datetime.strptime('2021-04-18 05:11:07.035284', '%Y-%m-%d %H:%M:%S.%f')
-                    #eventStart = datetime.strptime('2021-04-17 05:11:07.035284', '%Y-%m-%d %H:%M:%S.%f')
-                    the.updateSelection('audits', 'eventsLastRun', str(eventEnd))
-                    the.eventDates = {'start':eventStart,'end':eventEnd} # used in reports
-                    the.createThread(audits.loopRegions, audits.auditEventsOfRegion, config.copy(), tenancyName, start=eventStart, end=eventEnd)
+                    the.updateSelection('audits', 'eventsLastRun', str(the.eventDates['end']))
+                    the.createThread(audits.loopRegions, audits.auditEventsOfRegion, config.copy(), tenancyName)
                 if the.getSelection('audits', 'networks'):
                     the.createThread(audits.loopRegions, audits.networksOfRegion, config.copy(), tenancyName)
                 if the.getSelection('audits', 'cloudGuard'):
@@ -136,8 +140,8 @@ def start(wx=None):
                         the.createThread(audits.cloudGuard, config.copy(), tenancyName)
                 if the.getSelection('audits', 'cloudAdvisor'):
                     the.createThread(audits.cloudAdvisor, config.copy(), tenancyName)
-                if False: #Not working for OU internal tenancies
-                    the.createThread(usageFn, config.copy(), tenancyName)
+                if the.getSelection('audits', 'usage'): #Not working for Oracle internal tenancies
+                    the.createThread(audits.usageFn, config.copy(), tenancyName)
             except (IOError,OSError) as e:
                 err=str(e)
                 if('No such file' in err):

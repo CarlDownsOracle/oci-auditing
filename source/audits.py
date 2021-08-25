@@ -1,3 +1,6 @@
+# Copyright (c) 2019-2021, Oracle and/or its affiliates
+# Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl
+
 import re, os, json
 from datetime import datetime
 from time import sleep
@@ -373,29 +376,30 @@ def listCompartments(idty, tenName, tenancyOcid):
         the.compartmentIds[id]=[tenName,key]
     the.increamentGauge(the.gaugeIncNum)
 
-# Todo: incomplete/untested functionality
-def usageFn(config, tenName): # This functionality always returning None for OU internal tenancies, may work for other.
-    global usages
-    usages = {}
-    usages[tenName] = {}
+def usageFn(config, tenName): # This functionality always returning None for Oracle internal tenancies, may work for other.
     tenancyOcid = config['tenancy']
     usgCl = oci.usage_api.UsageapiClient(config)
-    reqObj = oci.usage_api.models.RequestSummarizedUsagesDetails(tenant_id=tenancyOcid, granularity='DAILY', query_type='USAGE', 
-        time_usage_started=datetime(2021,4,1, 0,0), time_usage_ended=datetime(2021,4,12,0,0))
+    reqObj = oci.usage_api.models.RequestSummarizedUsagesDetails(tenant_id=tenancyOcid, granularity='MONTHLY', query_type='USAGE', 
+        time_usage_started=the.usageDates['start'], time_usage_ended=the.usageDates['end'])
+        #time_usage_started=datetime(2021,7,1,0,0), time_usage_ended=datetime(2021,8,12,0,0))
     usgAggr = the.getOciData(usgCl.request_summarized_usages, reqObj)
+    if not usgAggr:
+        log.error('usageFn skipped: '+tenName)
+        return
     for usg in usgAggr.data.items:
         log.debug(usg)
-        ad = str(usg.ad)
         comp = str(usg.compartment_name)
-        # compPath = usg.compartment_path
-        qty = str(usg.computed_quantity)
-        amt = str(usg.computed_amount) + ' ' + usg.currency
-        rgn = str(usg.region)
+        compPath = usg.compartment_path
+        rgn_ad = str(usg.region) + ' / ' + str(usg.ad)
         name = str(usg.resource_name)
         srv = str(usg.service)
         shape = str(usg.shape)
-        key = rgn+ad+comp+srv+name
-        usages[tenName][key] = [comp, rgn+' / '+ad, srv, name, amt, qty+' / '+shape]
+        unit = str(usg.unit)
+        qty = str(usg.computed_quantity)
+        amt = str(usg.computed_amount) + ' ' + usg.currency
+        usgTime = dateFormat(usg.time_usage_started) + ' to ' + dateFormat(usg.time_usage_ended)
+        key = unit+qty+amt+usgTime
+        the.usages[tenName][key] = [unit, qty, amt, usgTime]
 def cloudAdvisor(config, tenName):
     rootCompId=config['tenancy'] # or with getRootCompartmentID(tenName)
     caCl = oci.optimizer.OptimizerClient(config)
@@ -497,7 +501,9 @@ def eventsOfComp(evt, compName, tenName, region):
     if re.search(r'Detach|Delete|Terminate|Create', name, re.IGNORECASE): risk='High'
     elif re.search(r'Modify|Update', name, re.IGNORECASE): risk='Medium'
     the.events[tenName][key]=[risk, compName, region, usr, src, name, resName, time]
-def auditEventsOfRegion(config, tenName, start='', end=''):
+def auditEventsOfRegion(config, tenName):
+    start = the.eventDates['start']
+    end = the.eventDates['end']
     region=config['region']
     logCl = oci.loggingsearch.LogSearchClient(config)
     regionsSubscribed=len(getRegionsSubscribed(tenName))
@@ -762,16 +768,14 @@ def networkSecurityGroups(nsg, compName, tenName, srv, region, vnCl):
     scanNSG('nsg_security_rules', vnCl.list_network_security_group_security_rules, securityRules, nsg.id)
     scanNSG('nsg_vnics', vnCl.list_network_security_group_vnics, vnics, nsg.id)
 
-def scanCompartment(ociFunc, locFunc, compId, compName, tenName, region, service, loopOciData=True, argsTo='local-function', **kwargs):
+def scanCompartment(ociFunc, locFunc, compId, compName, tenName, region, service,
+    loopOciData=True, argsTo='local-function', **kwargs):
     try:
         the.setInfo(tenName + ' > ' + region + ' > ' + compName + ' > ' + service + 's ...')
-        if argsTo=='oci-function':
-            ociArgs={**kwargs}
-            locArgs={}
-        else:
-            ociArgs={}
-            locArgs={**kwargs}
-        res=the.getOciData_all(ociFunc, compId, **ociArgs)
+        ociArgs={}; locArgs={}
+        if argsTo=='oci-function': ociArgs={**kwargs}
+        else: locArgs={**kwargs} #'local-function'
+        res = the.getOciData_all(ociFunc, compartment_id=compId, **ociArgs)
         if res:
             if loopOciData:
                 log.debug('Count: '+str(len(res.data)))

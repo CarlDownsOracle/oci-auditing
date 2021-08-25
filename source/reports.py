@@ -1,3 +1,6 @@
+# Copyright (c) 2019-2021, Oracle and/or its affiliates
+# Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl
+
 import os,re
 from datetime import datetime
 from time import gmtime, strftime, sleep
@@ -184,19 +187,14 @@ def generateReport():
         addTab('DynamicGroups', colWidths=[14,30,30,65,20])
         writeHeader('Tenancy','Dynamic Group Name','Description','OCID','Created')
         ws.freeze_panes(row,0)
-        
         for t in sortedTenancies:
             for grp in sorted(the.dynamicGroups[t].keys()):
-                creationDate=the.dateFormat(the.dynamicGroups[t][grp][2])
-                cl_format = format['tblCell']
-                cl_format_small = format['tblCell_f8']
-                ws.write(row,0, t, cl_format)
-                ws.write(row,1, grp, cl_format)
-                ws.write(row,2, the.dynamicGroups[t][grp][0], cl_format_small)
-                ws.write(row,3, the.dynamicGroups[t][grp][1], cl_format_small)
-                ws.write(row,4, creationDate, cl_format)
-                row+=1
-        ws.autofilter(0, 0, row-1, 4)
+                writeRow(data=[t,grp,
+                            the.dynamicGroups[t][grp][0],the.dynamicGroups[t][grp][1],
+                            the.dateFormat(the.dynamicGroups[t][grp][2])],
+                         style=getStyle(f8=[2,3])
+                        )
+        finalTouchTable()
         addCountSummary(row+2, the.dynamicGroups)
         
     if the.getSelection('audits', 'limits'):
@@ -639,45 +637,24 @@ def generateReport():
         prblmsChart.set_chartarea({'border': {'none': True}})
         ws.insert_chart('A1', prblmsChart, {'x_offset': 1, 'y_offset': 0})
     
-    if False:
-        # usages[tenName][key] = [comp,rgn+' / '+ad,srv,name,' / '.join(amt,qty,shape)]
-        # if True: #Todo pending # Not working for Oracle internal tenancies
-            # ws = workbook.add_worksheet('Usages')
-            # ws.hide_gridlines(2)
-            # ws.set_column(0,0,14)
-            # ws.set_column(1,1,25)
-            # ws.set_column(2,4,35)
-            # ws.set_column(5,5,40)
-            # ws.set_column(6,6,20)
-            
-            # row=0
-            # ws.write(row,0, 'Tenancy',format['tbl_head'])
-            # ws.write(row,1, 'Compartment',format['tbl_head'])
-            # ws.write(row,2, 'Region / AD',format['tbl_head'])
-            # ws.write(row,3, 'Service',format['tbl_head'])
-            # ws.write(row,4, 'Name',format['tbl_head'])
-            # ws.write(row,5, '-',format['tbl_head'])
-            # ws.write(row,6, '-',format['tbl_head'])
-            # row+=1
-            # ws.freeze_panes(row,0)
-            
-            # for t in sortedTenancies:
-                # for k in sorted(usages[t].keys()):
-                    # # creatDate=the.dateFormat(users[t][k][4])
-                    # cl_format = format['tblCell']
-                    # cl_format_small = format['tblCell_f8']
-                    # ws.write(row,0, t, cl_format)
-                    # ws.write(row,1, usages[t][k][0], cl_format)
-                    # ws.write(row,2, usages[t][k][1], cl_format)
-                    # ws.write(row,3, usages[t][k][2], cl_format)
-                    # ws.write(row,4, usages[t][k][3], cl_format)
-                    # ws.write(row,5, usages[t][k][4], cl_format)
-                    # ws.write(row,6, usages[t][k][5], cl_format)
-                    # row+=1
-            # ws.autofilter(0, 0, row-1, 6)
-            # addCountSummary(row+2, usages)
-        pass
-    
+    if the.getSelection('audits', 'usage'): #Todo pending # Not working for Oracle internal tenancies
+        addTab('UsagesCosts', colWidths=[14,30,15,20,40])
+        writeHeader('Tenancy','Unit','Quantity','Amount','Usage Time')
+        ws.freeze_panes(row,0)
+        data=[]
+        for t in sortedTenancies:
+            for k in sorted(the.usages[t].keys()):
+                usg = the.usages[t][k]
+                data.append([t,usg[0],usg[1],usg[2],usg[3]])
+        # custom sort logic on data
+        for x in sorted(sorted(data, key=lambda l:l[4]), key=lambda l:l[1]): writeRow(data=x)
+        finalTouchTable()
+        ws.write(row,0, 'Usage dates betweeen [UTC format]:',format['bold_underlined'])
+        row+=1
+        ws.write(row,0, str(the.usageDates['start']), format['italic'])
+        ws.write(row,2, str(the.usageDates['end']), format['italic'])
+        addCountSummary(row+2, the.usages)
+
     # if len(workbook.worksheets())>0: # If no worksheet created, then excel file will not be saved
     workbook.close()
     reportsString='Audit Report placed at "' + reportPath + '"'
@@ -731,11 +708,12 @@ def writeHeader(*headers, colStart=0):
     row+=1
 boldStyle_max15Cells=['tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold','tblCell_bold']
 normalStyle_max20Cells=['tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell','tblCell',]
-def getStyle(risk='', f6=[]):
+def getStyle(risk='', f6=[], f8=[]):
     rs = '_'+risk.lower()[0:3] if risk else '' # first three characters of, risk string
-    norm = 'tblCell'+rs; normS = norm+'_f6'
+    norm = 'tblCell'+rs
+    norm6 = norm+'_f6'; norm8 = norm+'_f8'
     style=[]
-    for i in range(0,cols): style.append(normS if i in f6 else norm)
+    for i in range(0,cols): style.append(norm6 if i in f6 else norm8 if i in f8 else norm)
     return style
 def writeRow(data=[], style=normalStyle_max20Cells, colStart=0):
     global row

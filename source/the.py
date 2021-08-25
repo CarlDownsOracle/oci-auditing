@@ -1,3 +1,6 @@
+# Copyright (c) 2019-2021, Oracle and/or its affiliates
+# Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl
+
 from time import sleep
 import threading, re, sys
 from tinydb import TinyDB, Query
@@ -112,6 +115,7 @@ def resetGlobalVariables():
     global policies
     global instances, vnicAttachments
     global events, eventDates
+    global usages
     global networks
     global cloudGuard, cloudAdvisor
     global mt
@@ -129,6 +133,7 @@ def resetGlobalVariables():
     policies = {}
     instances = {}; vnicAttachments={}
     events = {}; eventDates={}
+    usages = {}
     networks={}; networks['VCN']={}
     cloudGuard={}; cloudAdvisor={}
     for x in ['Problems','Recommendations']: cloudGuard[x]={}
@@ -152,7 +157,8 @@ def commaJoin(*vals):
     return ret
 
 def initTenancyDicts(tenancyName):
-    users[tenancyName]={};groups[tenancyName]={};dynamicGroups[tenancyName]={};groupMembers[tenancyName]={};compartments[tenancyName]={};limits[tenancyName]={}
+    users[tenancyName]={};groups[tenancyName]={};dynamicGroups[tenancyName]={};groupMembers[tenancyName]={}
+    compartments[tenancyName]={};limits[tenancyName]={};usages[tenancyName]={}
     policies[tenancyName]={};instances[tenancyName]={};events[tenancyName]={}
 
 def createThread(func, *argv, max=maxThreads, **kwargv):
@@ -207,6 +213,7 @@ def raiseInternetIssue(retryCount):
     setInfo('[' + str(retryCount+1) + '] Retrying connection..')
 
 def getOciData_all(ociFunc, *argv, **kwargv):
+    #print('---\n',ociFunc, *argv, **kwargv)
     return getOciData(oci.pagination.list_call_get_all_results, ociFunc, *argv, **kwargv)
 def getOciData(ociFunc, *argv, **kwargv):
     for i in range(4): # retry on issues

@@ -1,3 +1,6 @@
+# Copyright (c) 2019-2021, Oracle and/or its affiliates
+# Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl
+
 import wx,sys,os,re,locale,webbrowser
 uio=sys.modules[__name__]
 from wx.lib.embeddedimage import PyEmbeddedImage
@@ -166,7 +169,7 @@ class MainFrame(gui.mainGui):
         the.setInfo('Configurations Reloaded.')
     def ShowAboutMessage(self,event):
         details="\n\n"
-        details+="Tool used for auditing Oracle Cloud Infrastructure (OCI)\n\n\n"
+        details+="Tool used for auditing Oracle Cloud Infrastructure (OCI) tenancies\n\n\n"
         msg = the.tool_name + "\nVersion " + the.version + details + the.copyright
         wx.MessageBox(msg, 'About - ' + the.tool_name, wx.OK | wx.ICON_INFORMATION)
     def ShowCreditsMessage(self,event):
@@ -235,6 +238,8 @@ class MainFrame(gui.mainGui):
         the.updateSelection('audits', 'cloudGuard', self.m_checkBox_CloudGuard.GetValue())
     def cloudAdvisorSelectionChanged(self,event):
         the.updateSelection('audits', 'cloudAdvisor', self.m_checkBox_CloudAdvisor.GetValue())
+    def usageSelectionChanged(self,event):
+        the.updateSelection('audits', 'usage', self.m_checkBox_Usage.GetValue())
     def openInstancesSelection(self,event):
         d = InstancesDialog(self)
         d.SetIcon(appIcon); d.ShowModal()
@@ -414,6 +419,7 @@ def loadSelections(pw): # parent window
     pw.m_checkBox_Networking.SetValue(the.getSelection('audits', 'networks'))
     pw.m_checkBox_CloudGuard.SetValue(the.getSelection('audits', 'cloudGuard'))
     pw.m_checkBox_CloudAdvisor.SetValue(the.getSelection('audits', 'cloudAdvisor'))
+    pw.m_checkBox_Usage.SetValue(the.getSelection('audits', 'usage'))
 def disableUIwhileWorking(enable=False):
     if enable:# Show / Hides
         parentWindow.start_button.Show()
@@ -441,7 +447,8 @@ def disableUIwhileWorking(enable=False):
     parentWindow.m_button_networking.Enable(enable)
     parentWindow.m_checkBox_CloudGuard.Enable(enable)
     parentWindow.m_checkBox_CloudAdvisor.Enable(enable)
-    # parentWindow.m_checkBox_Billing.Enable(enable)
+    parentWindow.m_checkBox_Usage.Enable(enable)
+    parentWindow.m_staticText_Usage.Show(enable)
 
 creditsMessage = """\n
 Thanks to Oracle University, for initiative of OCI Auditing Tool and framing audits on Users, Groups, Compartments, Policies, Limits.\n

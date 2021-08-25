@@ -1,15 +1,13 @@
+copyright='''
+"Copyright (c) 2019-2021, Oracle and/or its affiliates"
+Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl
+'''
 # Author    : Karthik Kumar
-# Email     : Karthik.Hiraskar@Oracle.com
+# Email     : Karthik.Hiraskar@oracle.com
 # Purpose   : Auditing Tool, for OCI tenancies
 # - - - - - - - - - - - - - - - - - - - - - - - -
-#
-version='3.7.11' # In version file just use "version.subversion", # "x.x.minor_subversion" while development, just set in this file it should be enough
+version='3.7.15'
 tool_name='OCI Auditing'
-copyright="KK Hiraskar\n©2019-2021"
-
-# Todo:
-# * Optimization for few return status to stop further processing on each compartment looping
-
 
 # importing standard/open-source modules
 import sys,os
@@ -75,8 +73,6 @@ else:
         if os.name=='nt' and argLen==1: # Windows UI mode
             import wx
             import ui
-            #the.ui=ui, the.ui is assigned within ui module, so no need again here
-            # this variable can be used in any other modules to determine if UI mode
             app = wx.App(False) #mandatory in wx, create an app, False stands for not redirection stdin/stdout
             self = ui.MainFrame(None)
             app.MainLoop() #start the applications
@@ -91,7 +87,7 @@ else:
                 if tenancy in commandlineTenancies: selectedTenancies.append(tenancy)
             the.updateSelection('domains', 'selection', selectedTenancies)
             if len(selectedTenancies)>0: # if more than one valid tenancies selected
-                for audt in ['usersAndGroups','limits','policies','instances','events','networks','cloudGuard','cloudAdvisor']:
+                for audt in ['usersAndGroups','limits','policies','instances','events','networks','cloudGuard','cloudAdvisor','usage']:
                     if 'all' in analysisType or audt in analysisType:
                         the.updateSelection('audits', audt, True)
                         selectedAudits.append(audt)

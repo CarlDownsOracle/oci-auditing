@@ -398,10 +398,10 @@ If you are scheduling this tool for daily, weekly reports, then email notificati
 # # # - - - - - - - - - - - - - - - - - - - - - - - - -
 # # # SMTP [TLS] Email Configuration
 # # # - - - - - - - - - - - - - - - - - - - - - - - - -
-sendmail_onlyif_audit_issues=x
+;sendmail_onlyif_audit_issues=x
+# All these are mandatory if you are using OCI's Email Delivery Service
 smtp_tls_port=587
 smtp_tls_host=smtp.us-ashburn-1.oraclecloud.com
-# All these are mandatory if you are using OCI's Email Delivery Service
 smtp_tls_username=ocid1.user.oc1..aaaaaaaa6dno7kkiosss2klu6@ocid1.tenancy.oc1..aaax2cfa3r.fm.com
 smtp_tls_password=g>SDhuu
 smtp_tls_from=noreply@your-domain.com
@@ -410,9 +410,11 @@ smtp_tls_to=your-name@your-domain.com
 ```
 
 _Note:_
+> _Refer on [Setting up OCI "Email Delivery" Service](./doc/setup_oci_email_delivery.md)_
+
 > _Mailing functionality may give error if VPN or antivirus blocks the connection._
 
-> _Email Notifications are required only when we run on scheduler_
+> _Email Notifications are required only when we run on scheduler_  
     - _With GUI, reports will be right on your system, so email feature is only enabled for CLI runs._
 
 [![](https://img.shields.io/badge/go%20to-Index-white?style=for-the-badge&logo=ardour&logoColor=white)](#toc)

@@ -9,7 +9,7 @@ import wx.html
 class mainGui ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"OCI Auditing", pos = wx.DefaultPosition, size = wx.Size( 680,630 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"OCI Auditing", pos = wx.DefaultPosition, size = wx.Size( 700,650 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.Size( -1,-1 ), wx.Size( -1,-1 ) )
 		self.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
@@ -174,7 +174,7 @@ class mainGui ( wx.Frame ):
 
 		fgSizerInputs.Add( ( 0, 0), 1, wx.EXPAND, 5 )
 
-		self.m_domains_listCtrl = wx.ListCtrl( self.m_panel, wx.ID_ANY, wx.DefaultPosition, wx.Size( 240,330 ), wx.LC_NO_HEADER|wx.LC_REPORT|wx.BORDER_NONE )
+		self.m_domains_listCtrl = wx.ListCtrl( self.m_panel, wx.ID_ANY, wx.DefaultPosition, wx.Size( 240,350 ), wx.LC_NO_HEADER|wx.LC_REPORT|wx.BORDER_NONE )
 		self.m_domains_listCtrl.SetFont( wx.Font( 11, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Courier New" ) )
 		self.m_domains_listCtrl.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
 		self.m_domains_listCtrl.SetBackgroundColour( wx.Colour( 32, 32, 32 ) )
@@ -194,7 +194,7 @@ class mainGui ( wx.Frame ):
 
 		bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
-		bSizer6.SetMinSize( wx.Size( 200,-1 ) )
+		bSizer6.SetMinSize( wx.Size( 240,-1 ) )
 		self.m_staticline2 = wx.StaticLine( self.m_panel2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		self.m_staticline2.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_ACTIVEBORDER ) )
 		self.m_staticline2.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_ACTIVEBORDER ) )
@@ -249,7 +249,7 @@ class mainGui ( wx.Frame ):
 
 		bSizer62 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_checkBox_Instances = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"&Services Used", wx.DefaultPosition, wx.Size( 147,-1 ), 0 )
+		self.m_checkBox_Instances = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"&Services Used", wx.DefaultPosition, wx.Size( 160,-1 ), 0 )
 		self.m_checkBox_Instances.SetFont( wx.Font( 12, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Courier New" ) )
 		self.m_checkBox_Instances.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
 
@@ -267,7 +267,7 @@ class mainGui ( wx.Frame ):
 
 		bSizer63 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_checkBox_Events = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"&Events", wx.DefaultPosition, wx.Size( 147,-1 ), 0 )
+		self.m_checkBox_Events = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"&Events", wx.DefaultPosition, wx.Size( 160,-1 ), 0 )
 		self.m_checkBox_Events.SetFont( wx.Font( 12, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Courier New" ) )
 		self.m_checkBox_Events.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
 
@@ -285,7 +285,7 @@ class mainGui ( wx.Frame ):
 
 		bSizer64 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_checkBox_Networking = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"&Networking", wx.DefaultPosition, wx.Size( 147,-1 ), 0 )
+		self.m_checkBox_Networking = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"&Networking", wx.DefaultPosition, wx.Size( 160,-1 ), 0 )
 		self.m_checkBox_Networking.SetFont( wx.Font( 12, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Courier New" ) )
 		self.m_checkBox_Networking.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
 
@@ -313,6 +313,25 @@ class mainGui ( wx.Frame ):
 
 		bSizer6.Add( self.m_checkBox_CloudAdvisor, 0, wx.ALL, 5 )
 
+		bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_checkBox_Usage = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"&Usage and Costs", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_checkBox_Usage.SetFont( wx.Font( 12, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Courier New" ) )
+		self.m_checkBox_Usage.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
+
+		bSizer14.Add( self.m_checkBox_Usage, 0, wx.ALL, 5 )
+
+		self.m_staticText_Usage = wx.StaticText( self.m_panel2, wx.ID_ANY, u"3 months", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_Usage.Wrap( -1 )
+
+		self.m_staticText_Usage.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Lucida Calligraphy" ) )
+		self.m_staticText_Usage.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
+
+		bSizer14.Add( self.m_staticText_Usage, 0, wx.ALL, 5 )
+
+
+		bSizer6.Add( bSizer14, 1, wx.EXPAND, 5 )
+
 		self.m_checkBox_Billing = wx.CheckBox( self.m_panel2, wx.ID_ANY, u"Billing", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_checkBox_Billing.SetFont( wx.Font( 12, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Courier New" ) )
 		self.m_checkBox_Billing.SetForegroundColour( wx.Colour( 250, 205, 98 ) )
@@ -320,9 +339,6 @@ class mainGui ( wx.Frame ):
 		self.m_checkBox_Billing.Hide()
 
 		bSizer6.Add( self.m_checkBox_Billing, 0, wx.ALL, 5 )
-
-
-		bSizer6.Add( ( 0, 0), 1, wx.EXPAND, 5 )
 
 
 		self.m_panel2.SetSizer( bSizer6 )
@@ -424,6 +440,7 @@ class mainGui ( wx.Frame ):
 		self.m_button_networking.Bind( wx.EVT_BUTTON, self.openNetworkingSelection )
 		self.m_checkBox_CloudGuard.Bind( wx.EVT_CHECKBOX, self.cloudGuardSelectionChanged )
 		self.m_checkBox_CloudAdvisor.Bind( wx.EVT_CHECKBOX, self.cloudAdvisorSelectionChanged )
+		self.m_checkBox_Usage.Bind( wx.EVT_CHECKBOX, self.usageSelectionChanged )
 		self.m_checkBox_Billing.Bind( wx.EVT_CHECKBOX, self.billingSelectionChanged )
 		self.start_button.Bind( wx.EVT_BUTTON, self.startConnectionAndreporting )
 
@@ -516,6 +533,9 @@ class mainGui ( wx.Frame ):
 		event.Skip()
 
 	def cloudAdvisorSelectionChanged( self, event ):
+		event.Skip()
+
+	def usageSelectionChanged( self, event ):
 		event.Skip()
 
 	def billingSelectionChanged( self, event ):
